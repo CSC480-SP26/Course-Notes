@@ -165,7 +165,10 @@
 
 
   set cite(style: "association-for-computing-machinery")
+
   show bibliography: set par(spacing: 1em)
+
+  
 
   set enum(indent: 1em)
   set list(indent: 1em)
@@ -256,7 +259,7 @@
 
   doc
 
-  if bib != none { wideblock(bib) }
+  if (bib != none) { wideblock(bib) }
 }
 
 #let notecounter = counter("notecounter")
