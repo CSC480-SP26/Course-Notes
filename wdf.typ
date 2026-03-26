@@ -15,7 +15,7 @@
   title: none,
   title-short: none,
   authors: none,
-  authors-short:none,
+  authors-short: none,
   date: datetime.today().display("[day] [month repr:long] [year]"),
   abstract: none,
   title-extra: none,
@@ -47,25 +47,40 @@
     wideblock([
       #set align(left)
       #if exam {
-        columns(2,gutter: 1em)[
-          #if title != none { [#text(
-              size:18pt,
+        columns(2, gutter: 1em)[
+          #if title != none {
+            [#text(
+              size: 18pt,
               weight: "semibold",
-              [#title]) \ \ ] }
-          #if authors != none { [
-            #v(-1.5em)
-            #text(
-              size:11pt,
-              weight: "medium",
-              [#authors]) \ \ ] }
+              [#title],
+            ) \ \ ]
+          }
+          #if authors != none {
+            [
+              #v(-1.5em)
+              #text(
+                size: 11pt,
+                weight: "medium",
+                [#authors],
+              ) \ \ ]
+          }
 
           #colbreak()
 
-          #text(size:12pt,[
-              #text(weight:"medium",style:"italic")[Name:]
-              #box(width: 1fr, line(length: 100%, stroke: (thickness:1pt, dash:"dashed") ))
+          #text(size: 12pt, [
+            #text(weight: "medium", style: "italic")[Name:]
+            #box(width: 1fr, line(length: 100%, stroke: (
+              thickness: 1pt,
+              dash: "dashed",
+            )))
 
-              #text(weight:"medium",style:"italic")[CalPoly Email:]              #box(width: 1fr, line(length: 100%, stroke: (thickness:1pt, dash:"dashed") ))
+            #text(
+              weight: "medium",
+              style: "italic",
+            )[CalPoly Email:]              #box(width: 1fr, line(
+              length: 100%,
+              stroke: (thickness: 1pt, dash: "dashed"),
+            ))
 
           ])
         ]
@@ -77,11 +92,13 @@
 
         v(-2.5em)
       } else {
-
-        if title != none { [#text(
-            size:18pt,
+        if title != none {
+          [#text(
+            size: 18pt,
             weight: "semibold",
-            [#title]) \ \ ] }
+            [#title],
+          ) \ \ ]
+        }
         if authors != none {
           if type(authors) == array and authors.len() == 2 {
             [#authors.join(", ", last: " and ") \ ]
@@ -91,9 +108,15 @@
             [_#authors _ \ ]
           }
         }
-        if title-extra != none { [#text(size:10pt,[#title-extra]) \ ] }
-        if date != none { [#text(size:10pt,[#date]) \ ] }
-        if abstract != none { [\ #text(size:10pt,weight: "semibold", style: "italic")[Abstract] \ #abstract \ ] }
+        if title-extra != none { [#text(size: 10pt, [#title-extra]) \ ] }
+        if date != none { [#text(size: 10pt, [#date]) \ ] }
+        if abstract != none {
+          [\ #text(
+              size: 10pt,
+              weight: "semibold",
+              style: "italic",
+            )[Abstract] \ #abstract \ ]
+        }
         if toc { [\ #outline(indent: 1em, title: none, depth: 2) ] }
 
         // v(-1em)
@@ -101,37 +124,36 @@
         v(-1.25em)
         line(length: 100%, stroke: 0.5pt)
         v(-2.5em)
-
-    }
+      }
     ])
 
-
-    if title-page{
+    if title-page {
       pagebreak()
     }
   }
 
-  let headerblock(title, authors, date, header-content) = if header and header-content != none {
+  let headerblock(title, authors, date, header-content) = if (
+    header and header-content != none
+  ) {
     header-content
   } else if header {
     set text(
       size: 8pt,
-      weight: "light")
+      weight: "light",
+    )
     wideblock({
       if counter(page).get().first() > 1 [
 
         #if title-short != none {
-            [#emph[#title-short]]
+          [#emph[#title-short]]
         } else {
-            [#emph[#title]]
-
+          [#emph[#title]]
         }
         #h(1fr)
         #if authors-short != none {
-            [#emph[#authors-short]]
+          [#emph[#authors-short]]
         } else {
-            [#emph[#authors]]
-
+          [#emph[#authors]]
         }
         #h(5pt) #emph[#date]
 
@@ -156,19 +178,16 @@
     set document(title: title)
   }
 
-  set text(font: if serif{serif-fonts} else {sans-fonts}, fill: luma(15%))
+  set text(font: if serif { serif-fonts } else { sans-fonts }, fill: luma(15%))
 
   show ref: set text(blue)
   show link: set text(blue)
 
   set par(justify: true, spacing: 1.5em)
 
-
   set cite(style: "association-for-computing-machinery")
 
   show bibliography: set par(spacing: 1em)
-
-  
 
   set enum(indent: 1em)
   set list(indent: 1em)
@@ -188,12 +207,13 @@
     fill: luma(95%),
     inset: 1em,
     radius: 0pt,
-    stroke: (left: (
-            thickness: 0.25em,
-            paint: luma(25%),
-            )),
+    stroke: (
+      left: (
+        thickness: 0.25em,
+        paint: luma(25%),
+      ),
+    ),
     width: 100%,
-
   )
 
   // Equation and figure references
@@ -208,10 +228,12 @@
   }
 
   // Section headings
-  set heading(numbering: (..numbers) =>
-      if numbers.pos().len() <=  1 {
-        return numbering("I \t", ..numbers)
-      }, supplement: none)
+  set heading(
+    numbering: (..numbers) => if numbers.pos().len() <= 1 {
+      return numbering("I \t", ..numbers)
+    },
+    supplement: none,
+  )
   show heading.where(level: 1): it => {
     v(1.2em, weak: true)
     text(size: 14pt, weight: "semibold", it)
@@ -221,12 +243,12 @@
   }
   show heading.where(level: 2): it => {
     v(1.2em, weak: true)
-    text(size: 12pt, weight: "medium",style: "italic", it)
+    text(size: 12pt, weight: "medium", style: "italic", it)
     v(1em, weak: true)
   }
   show heading.where(level: 3): it => {
     v(1.2em, weak: true)
-    text(size: 12pt, fill: luma(40%),weight: "medium",style:"italic", it)
+    text(size: 12pt, fill: luma(40%), weight: "medium", style: "italic", it)
     v(1em, weak: true)
   }
 
@@ -307,7 +329,13 @@
 /// - `style: [csl] | auto | bytes | str = auto` Citation style.
 /// - `supplement: content | none = none` Citation supplement.
 /// - `key: cite-label` Required. The citation key.
-#let sidecite(dy: auto, form: "normal", style: auto, supplement: none, key) = context {
+#let sidecite(
+  dy: auto,
+  form: "normal",
+  style: auto,
+  supplement: none,
+  key,
+) = context {
   show cite: it => {
     show regex("\[\d\]"): set text(blue)
     it
@@ -341,12 +369,11 @@
   if inline {
     set text(fill: red, size: small_text, weight: "bold")
     box([TODO: #body
-    #place()[
-      #set text(size: 0pt)
-      #figure(kind: "todo", supplement: "", caption: body, [])
-    ]])
-  }
-  else {
+      #place()[
+        #set text(size: 0pt)
+        #figure(kind: "todo", supplement: "", caption: body, [])
+      ]])
+  } else {
     set text(size: 0pt) //to hide default figure text, figures is only used for outline as only headings and figures can used for outlining at this point
     figure(kind: "todo", supplement: "", outlined: true, caption: body)[
       #block()[
@@ -365,26 +392,29 @@
 
 //Function to insert TODOs outline
 #let todo_outline = outline(
-    title: [TODOs],
-    target: figure.where(kind: "todo")
+  title: [TODOs],
+  target: figure.where(kind: "todo"),
 )
 
 
 
-#let colorbox(body,color: luma(25%),title:none) = {
+#let colorbox(body, color: luma(25%), title: none) = {
   box(
     width: 100%,
-    inset: (left: 1em, bottom: 1em, rest: 1em, ),
-    stroke: (left: (
-            thickness: 0.25em,
-            paint:color,
-            )),
+    inset: (left: 1em, bottom: 1em, rest: 1em),
+    stroke: (
+      left: (
+        thickness: 0.25em,
+        paint: color,
+      ),
+    ),
     radius: 0.0em,
-    fill: color.lighten(95%),[
-      #text(fill: color,style: "italic",weight: "semibold",size: 11pt,title)
-      #text(body,9pt)
+    fill: color.lighten(95%),
+    [
+      #text(fill: color, style: "italic", weight: "semibold", size: 11pt, title)
+      #text(body, 9pt)
 
-    ]
+    ],
   )
 }
 
@@ -400,55 +430,52 @@
   let nums = args.pos()
   if nums.len() == 1 {
     numbering("1. ", nums.last())
-  }
-  else if nums.len() == 2 {
+  } else if nums.len() == 2 {
     numbering("(a) ", nums.last())
-  }
-  else if nums.len() == 3 {
+  } else if nums.len() == 3 {
     numbering("(i) ", nums.last())
   }
 }
 
 
 #let question(
-    points: none,
-    solution: none,
-    solution-color: green.darken(20%),
-    body) = {
+  points: none,
+  solution: none,
+  solution-color: green.darken(20%),
+  body,
+) = {
   question-number.step(level: 1)
 
-  question-point.update(p =>
-    {
-      if points == none { 0 }
-      else { points }
-    })
+  question-point.update(p => {
+    if points == none { 0 } else { points }
+  })
 
   context {
-      v(0.1em)
-      {
-        question-number.display(question-numbering)
-        if(points != none) {
-
-          [(#emph[#points points])]
-          h(0.2em)
-        }
+    v(0.1em)
+    {
+      question-number.display(question-numbering)
+      if (points != none) {
+        [(#emph[#points points])]
+        h(0.2em)
       }
-      // set text(..__g-question-text-parameters)
-      body
-      if solution != none {
-        linebreak()
-        text(fill:solution-color)[#solution]
-      }
+    }
+    // set text(..__g-question-text-parameters)
+    body
+    if solution != none {
+      linebreak()
+      text(fill: solution-color)[#solution]
+    }
   }
 }
 
 
 
 #let subquestion(
-    points: none,
-    solution: none,
-    solution-color: green.darken(20%),
-    body) = {
+  points: none,
+  solution: none,
+  solution-color: green.darken(20%),
+  body,
+) = {
   question-number.step(level: 2)
   let sub-question-points = 0
   if points != none { sub-question-points = points }
@@ -456,20 +483,19 @@
 
   context {
     set par(hanging-indent: 0.7em)
-      v(0.1em)
-      {
-        question-number.display(question-numbering)
-        if(points != none) {
-
-          [(#emph[#points points])]
-          h(0.2em)
-        }
+    v(0.1em)
+    {
+      question-number.display(question-numbering)
+      if (points != none) {
+        [(#emph[#points points])]
+        h(0.2em)
       }
-      // set text(..__g-question-text-parameters)
-      body
-      if solution != none {
-        linebreak()
-        text(fill:solution-color)[#solution]
-      }
+    }
+    // set text(..__g-question-text-parameters)
+    body
+    if solution != none {
+      linebreak()
+      text(fill: solution-color)[#solution]
+    }
   }
 }
