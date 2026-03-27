@@ -61,23 +61,25 @@ The rest of this document will be laid out much more similarly to how the rest o
 == Turing and the Birth of Computing
 - Godel Incompleteness
 - Computers as Thinking machines
-- Turing Test #sidenote()[Minds eye citation]
-- Cybernetics and Interdisciplinarity
+- Turing Test
+- Cybernetics, Systems Theory, Feedback, and Interdisciplinarity
 
 
 == Early Optimism
+=== Dartmouth AI Summer Project
 - McCarthy, Minsky, Rochester, Shannon, 1955#sidenote()[http://jmc.stanford.edu/articles/dartmouth/dartmouth.pdf]
-  - First use of term Artificial Intelligence:
-  - _"2 month, 10 man study ... significant advance in one or more of these problems ... over a summer"_
-  - McCarthy / Minsky divide: Logic vs Cybernetic Systems
+- First use of term Artificial Intelligence:
+- _"2 month, 10 man study ... significant advance in one or more of these problems ... over a summer"_
+- McCarthy / Minsky divide: Logical vs Connectionist Systems
 
-- Summer Vision Projecrt, Papert 1966, MIT#sidenote()[https://dspace.mit.edu/bitstream/handle/1721.1/6125/AIM-100.pdf] #sidenote()[https://philippschmitt.com/archive/computer-vision-history/]
+=== Summer Vision Project
+- Papert 1966, MIT#sidenote()[https://dspace.mit.edu/bitstream/handle/1721.1/6125/AIM-100.pdf] #sidenote()[https://philippschmitt.com/archive/computer-vision-history/]
   - _"The construction of a significant part of the visual system"_
 
 
 #colorbox()[
   #figure(
-    image("Figures/mccarthy_1955.png", width: 100%),
+    image("Figures/mccarthy_1955.png", width: 95%),
     caption: [First page from Proposal for Summer Research Project in Artificial Intelligence. AI involves the corse of every other part of computer science.#sidenote(dy: -20em)[_AI is just the parts of CS we have yet to fully understand_
         + Automatic Computers ⇒ Hardware / Computer Architecture
         + How Can a Computer be Programmed to Use a Language ⇒ PL (LISP : McCarthy 1958) / Formal Methods / NLP
@@ -96,6 +98,9 @@ The rest of this document will be laid out much more similarly to how the rest o
 - Boom/Bust cycle, the runaway effect of the popular imagination
 - Lack of formal treatment of the difficulty of the problems being attempted
 - Scale and hardware limitations
+- Perceptrons, Minsky, XOR, No Multilayer Backpropagation
+- 1974 Lighthill Report
+
 
 == Rise of Expert Systems
 - Attempts to solve more _well defined and limited_ problem with use of _expert background knowledge_
@@ -108,26 +113,33 @@ The rest of this document will be laid out much more similarly to how the rest o
       - At least one of $x_1$ and $x_2$ is high
       *_then_* there is a ketone subgroup.
     ]
-- Logic Programming, `Prolog`
-- Search
-- Deep Blue vs Gary Kasparov
+- LISP, Symbolic Logic
+- Prolog, Logic Programming,
 - Second AI Winter
 
-== Machine Learning and the Unreasonable Effectiveness of Data
+== Games
+- Chess, Deep Blue vs Gary Kasparov, 1996
+- Jeopardy, IBM Watson vs Ken Jennings, 2011
+- Go, Alphago vs Lee Sedol, 2016
 
-- Bitter Lesson
-- Reference the paper
-- Machine learning into Deep Learning
-- Go, Lee See Dol
-- Fuzzy world
+
+== Big Data and Machine Learning
+
+#colorbox()[
+  "Every time I fire a linguist, the performance of the speech recognizer goes up" - Frederick Jelinek
+]
+- Many hard real world problems are hard to explicitly model effectively
+- Richard Sutton, The Bitter Lesson #sidenote()[https://www.cs.utexas.edu/~eunsol/courses/data/bitter_lesson.pdf]
+- Unreasonable Effectiveness of Data #sidenote()[https://ieeexplore.ieee.org/document/4804817]
+- From Machine learning into Deep Learning
 
 == Large Language Models and the Current Frontier
 
-- Language as general purpose environment
+- Language as a general purpose environment
 - Essential properties of _scale_
 - Have we lost what we were trying to do?
 
-
+#pagebreak()
 = Intelligent Agents
 
 
