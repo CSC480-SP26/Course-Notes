@@ -143,7 +143,6 @@ The rest of this document will be laid out much more similarly to how the rest o
 = Intelligent Agents
 
 
-#import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 #figure(caption: [Basic Components of Agents], diagram(
   edge-stroke: 1pt,
   node-corner-radius: 5pt,
@@ -162,11 +161,11 @@ The rest of this document will be laid out much more similarly to how the rest o
     name: <agent>,
   ),
 
-  node((3.15, 0.1), [_Environment_]),
-  node((3.15, 1), [#text("?", size: 30pt)]),
+  node((3.5, 0.1), [_Environment_]),
+  node((3.5, 1), [#text("?", size: 30pt)]),
 
   node(
-    enclose: ((2.5, 0), (3.75, 2)),
+    enclose: ((3, 0), (4, 2)),
     stroke: black,
     fill: gray.lighten(95%),
     name: <env>,
@@ -175,9 +174,9 @@ The rest of this document will be laid out much more similarly to how the rest o
   edge(<agent>, <env>, "->", label: [Action], shift: -0.5),
 
   edge(<env>, <perf>, "=>", label: [Evaluation]),
-  edge(<perf>, "lll,u", "=>", label: [#h(12em)Learning]),
+  edge(<perf>, "lll,u", "=>", label: [Learning], label-pos: 0.3),
 
-  node((3.15, 3), [Performance], stroke: black, name: <perf>),
+  node((3.5, 3), [Performance], stroke: black, name: <perf>),
 ))
 
 #colorbox(title: [Definition: Rational Agent])[

@@ -1,4 +1,7 @@
 #import "@preview/drafting:0.2.2": *
+#import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
+#import "@preview/tdtr:0.5.4" as tdtr: tidy-tree-draws, tidy-tree-graph
+
 
 #let sans-fonts = (
   "Fira Sans",
