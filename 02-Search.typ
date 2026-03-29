@@ -153,7 +153,7 @@ $
 
 
 == Admissibility
-Heuristic is an underestimate of the true remaining cost.
+For a heuristic to be _admissible_, it must be is an _underestimate_ of the true remaining cost.
 $
   h(s) <= c^*(s mapsto g)
 $
