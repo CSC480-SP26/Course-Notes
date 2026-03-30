@@ -27,19 +27,18 @@
   *Professor*: _Dr. Austin P. Wright_\
   *Email*: `awrigh20@calpoly.edu`\
   *Office Hours*:
-  - In person at 14-222: Tuesdays 10am-11am, Thursdays 10am-12pm
+  - In person at 14-222: Monday 1pm-2pm, Tuesdays 10am-11am, Thursdays 10am-12pm
   - By appointment at #link("https://calendly.com/awrigh20-calpoly/30min")[https://calendly.com/awrigh20-calpoly/30min].
 ]
 #colorbox()[
   *Teaching Assistant*: _Samuel Fox Gar Kaplan_\
   *Email*: `sfkaplan@calpoly.edu`\
-  *Office Hours*: TBD.
 ]
 
 
 #colorbox()[
-  *Gradescope*: https://www.gradescope.com/courses/1266327  |  *Entry Code*: YBKXKB \
   *EdStem*: https://edstem.org/us/courses/96266/ \
+  *Gradescope*: https://www.gradescope.com/courses/1266327  |  *Entry Code*: YBKXKB \
   *Canvas*#sidenote()[As you will see in the grading section, you should use extreme caution when looking at the canvas gradebook, but since I know many of you like to use canvas to keep assignment due dates organized, I will maintain a minimal canvas site to reference.]: https://canvas.calpoly.edu/courses/181943\
   *Course Notes*: https://github.com/CSC480-SP26/Course-Notes
 ]
