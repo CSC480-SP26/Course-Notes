@@ -64,7 +64,10 @@ The rest of this document will be laid out much more similarly to how the rest o
 - Turing Test
 - Cybernetics, Systems Theory, Feedback, and Interdisciplinarity
 
-
+#colorbox(title: "Discuss: ", color: blue)[
+  Given the existing history of thought about the nature of consciousness and intelligence at the time of the birth of computing. How would you think about the most important and foundational problems to focus on towards building "Artificial Intelligence"?
+]
+#pagebreak()
 == Early Optimism
 === Dartmouth AI Summer Project
 - McCarthy, Minsky, Rochester, Shannon, 1955#sidenote()[http://jmc.stanford.edu/articles/dartmouth/dartmouth.pdf]
@@ -80,7 +83,7 @@ The rest of this document will be laid out much more similarly to how the rest o
 #colorbox()[
   #figure(
     image("Figures/mccarthy_1955.png", width: 95%),
-    caption: [First page from Proposal for Summer Research Project in Artificial Intelligence. AI involves the corse of every other part of computer science.#sidenote(dy: -20em)[_AI is just the parts of CS we have yet to fully understand_
+    caption: [First page from Proposal for Summer Research Project in Artificial Intelligence. AI involves the corse of every other part of computer science.#sidenote(dy: -30em)[_AI is just the parts of CS we have yet to fully understand_
         + Automatic Computers ⇒ Hardware / Computer Architecture
         + How Can a Computer be Programmed to Use a Language ⇒ PL (LISP : McCarthy 1958) / Formal Methods / NLP
         + Neuron Nets ⇒ Deep Learning
@@ -121,7 +124,9 @@ The rest of this document will be laid out much more similarly to how the rest o
 - Chess, Deep Blue vs Gary Kasparov, 1996
 - Jeopardy, IBM Watson vs Ken Jennings, 2011
 - Go, Alphago vs Lee Sedol, 2016
-
+#colorbox(title: "Discuss: ", color: blue)[
+  Think of some other games, be it video games, board games, sports, or something else. Is AI already better than humans? If so, when and using what methods? If not, why, and what are the things preventing it?
+]
 
 == Big Data and Machine Learning
 
@@ -137,7 +142,9 @@ The rest of this document will be laid out much more similarly to how the rest o
 
 - Language as a general purpose environment
 - Essential properties of _scale_
-- Have we lost what we were trying to do?
+- Return to the early optimism of general thinking things
+- Have we lost what we were trying to do? Or have we finally caught up?
+
 
 #pagebreak()
 = Intelligent Agents
@@ -199,6 +206,11 @@ The rest of this document will be laid out much more similarly to how the rest o
 - Goal Based Agent
 - Utility Based Agent
 - Learning Agent
+
+
+#colorbox(title: "Discuss: ", color: blue)[
+  Compare two different "AI" agents, ChatGPT#sidenote()[Get ready that this is basically the last of any LLM content in the course!] and Stockfish (current best chess bot). Using the agentic framework, how are these agents the same? different? In which ways do either exhibit essential characteristics of "intelligence"? What about "rationality"? Are there any other interesting examples you can think of?
+]
 
 #pagebreak()
 = Exercises
