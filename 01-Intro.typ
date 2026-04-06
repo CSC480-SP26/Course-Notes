@@ -61,24 +61,29 @@ The rest of this document will be laid out much more similarly to how the rest o
 == Turing and the Birth of Computing
 - Godel Incompleteness
 - Computers as Thinking machines
-- Turing Test #sidenote()[Minds eye citation]
-- Cybernetics and Interdisciplinarity
+- Turing Test
+- Cybernetics, Systems Theory, Feedback, and Interdisciplinarity
 
-
+#colorbox(title: "Discuss: ", color: blue)[
+  Given the existing history of thought about the nature of consciousness and intelligence at the time of the birth of computing. How would you think about the most important and foundational problems to focus on towards building "Artificial Intelligence"?
+]
+#pagebreak()
 == Early Optimism
+=== Dartmouth AI Summer Project
 - McCarthy, Minsky, Rochester, Shannon, 1955#sidenote()[http://jmc.stanford.edu/articles/dartmouth/dartmouth.pdf]
-  - First use of term Artificial Intelligence:
-  - _"2 month, 10 man study ... significant advance in one or more of these problems ... over a summer"_
-  - McCarthy / Minsky divide: Logic vs Cybernetic Systems
+- First use of term Artificial Intelligence:
+- _"2 month, 10 man study ... significant advance in one or more of these problems ... over a summer"_
+- McCarthy / Minsky divide: Logical vs Connectionist Systems
 
-- Summer Vision Projecrt, Papert 1966, MIT#sidenote()[https://dspace.mit.edu/bitstream/handle/1721.1/6125/AIM-100.pdf] #sidenote()[https://philippschmitt.com/archive/computer-vision-history/]
+=== Summer Vision Project
+- Papert 1966, MIT#sidenote()[https://dspace.mit.edu/bitstream/handle/1721.1/6125/AIM-100.pdf] #sidenote()[https://philippschmitt.com/archive/computer-vision-history/]
   - _"The construction of a significant part of the visual system"_
 
 
 #colorbox()[
   #figure(
-    image("Figures/mccarthy_1955.png", width: 100%),
-    caption: [First page from Proposal for Summer Research Project in Artificial Intelligence. AI involves the corse of every other part of computer science.#sidenote(dy: -20em)[_AI is just the parts of CS we have yet to fully understand_
+    image("Figures/mccarthy_1955.png", width: 95%),
+    caption: [First page from Proposal for Summer Research Project in Artificial Intelligence. AI involves the corse of every other part of computer science.#sidenote(dy: -30em)[_AI is just the parts of CS we have yet to fully understand_
         + Automatic Computers ⇒ Hardware / Computer Architecture
         + How Can a Computer be Programmed to Use a Language ⇒ PL (LISP : McCarthy 1958) / Formal Methods / NLP
         + Neuron Nets ⇒ Deep Learning
@@ -96,6 +101,9 @@ The rest of this document will be laid out much more similarly to how the rest o
 - Boom/Bust cycle, the runaway effect of the popular imagination
 - Lack of formal treatment of the difficulty of the problems being attempted
 - Scale and hardware limitations
+- Perceptrons, Minsky, XOR, No Multilayer Backpropagation
+- 1974 Lighthill Report
+
 
 == Rise of Expert Systems
 - Attempts to solve more _well defined and limited_ problem with use of _expert background knowledge_
@@ -108,30 +116,40 @@ The rest of this document will be laid out much more similarly to how the rest o
       - At least one of $x_1$ and $x_2$ is high
       *_then_* there is a ketone subgroup.
     ]
-- Logic Programming, `Prolog`
-- Search
-- Deep Blue vs Gary Kasparov
+- LISP, Symbolic Logic
+- Prolog, Logic Programming,
 - Second AI Winter
 
-== Machine Learning and the Unreasonable Effectiveness of Data
+== Games
+- Chess, Deep Blue vs Gary Kasparov, 1996
+- Jeopardy, IBM Watson vs Ken Jennings, 2011
+- Go, Alphago vs Lee Sedol, 2016
+#colorbox(title: "Discuss: ", color: blue)[
+  Think of some other games, be it video games, board games, sports, or something else. Is AI already better than humans? If so, when and using what methods? If not, why, and what are the things preventing it?
+]
 
-- Bitter Lesson
-- Reference the paper
-- Machine learning into Deep Learning
-- Go, Lee See Dol
-- Fuzzy world
+== Big Data and Machine Learning
+
+#colorbox()[
+  "Every time I fire a linguist, the performance of the speech recognizer goes up" - Frederick Jelinek
+]
+- Many hard real world problems are hard to explicitly model effectively
+- Richard Sutton, The Bitter Lesson #sidenote()[https://www.cs.utexas.edu/~eunsol/courses/data/bitter_lesson.pdf]
+- Unreasonable Effectiveness of Data #sidenote()[https://ieeexplore.ieee.org/document/4804817]
+- From Machine learning into Deep Learning
 
 == Large Language Models and the Current Frontier
 
-- Language as general purpose environment
+- Language as a general purpose environment
 - Essential properties of _scale_
-- Have we lost what we were trying to do?
+- Return to the early optimism of general thinking things
+- Have we lost what we were trying to do? Or have we finally caught up?
 
 
+#pagebreak()
 = Intelligent Agents
 
 
-#import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 #figure(caption: [Basic Components of Agents], diagram(
   edge-stroke: 1pt,
   node-corner-radius: 5pt,
@@ -150,11 +168,11 @@ The rest of this document will be laid out much more similarly to how the rest o
     name: <agent>,
   ),
 
-  node((3.15, 0.1), [_Environment_]),
-  node((3.15, 1), [#text("?", size: 30pt)]),
+  node((3.5, 0.1), [_Environment_]),
+  node((3.5, 1), [#text("?", size: 30pt)]),
 
   node(
-    enclose: ((2.5, 0), (3.75, 2)),
+    enclose: ((3, 0), (4, 2)),
     stroke: black,
     fill: gray.lighten(95%),
     name: <env>,
@@ -163,9 +181,9 @@ The rest of this document will be laid out much more similarly to how the rest o
   edge(<agent>, <env>, "->", label: [Action], shift: -0.5),
 
   edge(<env>, <perf>, "=>", label: [Evaluation]),
-  edge(<perf>, "lll,u", "=>", label: [#h(12em)Learning]),
+  edge(<perf>, "lll,u", "=>", label: [Learning], label-pos: 0.3),
 
-  node((3.15, 3), [Performance], stroke: black, name: <perf>),
+  node((3.5, 3), [Performance], stroke: black, name: <perf>),
 ))
 
 #colorbox(title: [Definition: Rational Agent])[
@@ -188,6 +206,11 @@ The rest of this document will be laid out much more similarly to how the rest o
 - Goal Based Agent
 - Utility Based Agent
 - Learning Agent
+
+
+#colorbox(title: "Discuss: ", color: blue)[
+  Compare two different "AI" agents, ChatGPT#sidenote()[Get ready that this is basically the last of any LLM content in the course!] and Stockfish (current best chess bot). Using the agentic framework, how are these agents the same? different? In which ways do either exhibit essential characteristics of "intelligence"? What about "rationality"? Are there any other interesting examples you can think of?
+]
 
 #pagebreak()
 = Exercises
