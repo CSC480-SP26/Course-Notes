@@ -1,4 +1,5 @@
-#import "wdf.typ": *
+#import "../wdf.typ": *
+
 
 #show: template.with(
   title: [
@@ -53,7 +54,7 @@ Q4: Explain the difference between tree search and graph search. Why might tree 
 Q5: Consider the following graph. All edges are undirected. The start state is S and the goal state is G.
 
 #figure(
-  image("Graph.png"),
+  image("images/Graph.png"),
   caption: [Search graph],
 )
 
@@ -125,3 +126,28 @@ Q11: Explain why Minimax is equivalent to choosing the optimal strategy in a two
 Q12: Compare and contrast Minimax and Expectimax. When would you choose Expectimax over Minimax, and what changes in the game tree structure? #sidenote[AIMA Chapter 6.5 Page 211]
 
 #v(4cm)
+
+
+#pagebreak()
+For Questions 13-15, use the following game tree. The root is the top node, and the leaf values from left to right are 3, 5, 2, 8, 1, 4. MAX moves first at the root.
+
+#figure(
+  image("images/minmax.png"),
+  caption: [Game tree for Q13-Q15],
+)
+
+Q13: Treating the second layer nodes as MIN nodes, compute the Minimax value of the root.
+#v(4cm)
+
+Q14: Using the same tree, apply Alpha Beta Pruning (with the second layer as MIN nodes). List which leaf nodes are pruned (not evaluated). Assume children are evaluated left to right.
+#v(4cm)
+
+#pagebreak()
+
+Q15: Now treat the second layer nodes as CHANCE nodes (with uniform probability over their children) instead of MIN nodes. Compute the Expectimax value of the root.
+#v(4cm)
+
+Q16: In Alpha Beta pruning, the order in which children are evaluated matters for efficiency but not for correctness. Explain why the final Minimax value is always the same regardless of evaluation order, and describe what child ordering maximizes the number of pruned nodes.
+#v(4cm)
+
+Q16: Musty the mustang is building a chess AI. They argue: "Since Expectimax accounts for the possibility that the opponent plays suboptimally, it is always better than Minimax." Is this claim always true, sometimes true, or always false? Provide a brief justification or counterexample.

@@ -1,5 +1,4 @@
-#import "wdf.typ": *
-
+#import "../../wdf.typ": *
 #show: template.with(
   title: [
     Search Algorithms
@@ -13,7 +12,7 @@
   full: false,
   header-content: none,
   abstract: [],
-  bib: bibliography("refs.bib"),
+  bib: none,
   serif: true,
   exam: false,
 )
