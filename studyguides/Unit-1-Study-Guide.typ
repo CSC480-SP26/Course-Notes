@@ -90,15 +90,18 @@ Q10: Consider the following graph. All edges are undirected. The start state is 
     node((1, 0), [*A*], name: <A>),
     node((2, 0), [*C*], name: <C>),
     node((1, 2), [*B*], name: <B>),
-    node((2, 2), [*G*], name: <G>),
+    node((2, 2), [*D*], name: <D>),
+    node((3, 1), [*G*], name: <G>),
 
     edge(<S>, <A>, "-", [1]),
     edge(<A>, <C>, "-", [3]),
     edge(<C>, <G>, "-", [2]),
     edge(<S>, <B>, "-", [4]),
-    edge(<B>, <G>, "-", [1]),
+    edge(<D>, <G>, "-", [1]),
+    edge(<D>, <B>, "-", [2]),
+    edge(<D>, <C>, "-", [1]),
   ),
-  caption: [Undirected weighted graph for Q5.],
+  caption: [Undirected weighted graph for Q10.],
 )
 (a) Give the order in which nodes are expanded using Breadth First Search. Break ties alphabetically.
 
