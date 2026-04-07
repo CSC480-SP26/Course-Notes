@@ -25,15 +25,23 @@
 #sidenote(dy: 1.15em, numbered: false)[#outline(depth: 2)]
 = Part 1: Intelligent Agents
 Q1: State the definition of a rational agent.
-#v(2cm)
+
+#answer["  A rational agent is an agent for which, for each possible percept sequence, it should select an action that is expected to maximize its performance measure, given the evidence provided by the percept sequence and whatever built-in knowledge the agent has."]
+#v(1cm)
 
 Q2: List the dimensions used to characterize environments, giving both sides of each dimension. #sidenote[AIMA Chapter 2.3 Page 61]
-#v(4cm)
+#answer[check the textbook :P]
+#v(2cm)
 
 Q3: Explain the difference between a reflex agent and a goal based agent. Why can't a reflex agent solve a maze?
-#v(3cm)
+
+#answer[A reflex agent selects actions based only on the current percept (or current percept + simple condition action rules). It has no internal model of the world and no concept of future consequences. A  goal based agent has explicit goals and uses search or planning to determine which sequence of actions will achieve them. 
+]
+#v(1cm)
 
 Q4: What is the difference between a model based agent and a utility based agent?  #sidenote[AIMA Chapter 3.4 Page 69]
+#answer[check the textbook]
+
 #v(3cm)
 
 #pagebreak()
@@ -41,11 +49,56 @@ Q4: What is the difference between a model based agent and a utility based agent
 Q5: Classify each of the following environments along dimensions used to characterize environments. 
 
 (a) A chess game against a human opponent
-#v(3cm)
+#answer[
+- Fully observable (you see the whole board)
+
+- Multi-agent (you and opponent)
+
+- Deterministic (moves have predictable outcomes)
+
+- Sequential (current moves affect future positions)
+
+- Static (board doesn't change while you think (assuming no clock pressure))
+
+- Discrete (finite number of squares, pieces, and moves)
+
+- Known (rules of chess are fully known)
+]
+#v(0.5cm)
 (b) A self driving car on a highway
-#v(3cm)
+#answer[
+  - Partially observable (sensors have blind spots, cant see intentions of other drivers)
+
+- Multi-agent (other drivers)
+
+- Stochastic (other drivers and conditions are unpredictable)
+
+- Sequential (decisions now affect future trajectory)
+
+- Dynamic (the world keeps moving while the car deliberates)
+
+- Continuous (positions, speeds, and steering angles are continuous)
+
+- Known, rules of the road are but with unknown agent behaviors]
+#v(0.5cm)
 
 (c) A thermostat in a room
+#answer[
+  - Partially observable (knows current temperature, not heat sources)
+
+- Single-agent
+
+- Mostly deterministic (or mildly stochastic depending on disturbances)
+
+- Sequential (though often modeled episodically)
+
+- Dynamic (temperature changes over time)
+
+- Continuous (temperature values)
+
+- Known (heat modeling is well understood (i think))
+]
+
 #v(3cm)
 
 
@@ -90,11 +143,14 @@ Q7: For each of the following search strategies, state whether it is complete an
 Q8: In your own words, explain why Breadth First Search is optimal only when all step costs are equal, whereas Uniform Cost Search is optimal for any non-negative step costs.
 
 #answer[
-BFS expands nodes fat increments of height/level, exploring the finds the shallowest areas first. If all step costs are equal, the shallowest path is also the cheapest. But if step costs vary, a deeper path might have lower total cost. UCS expands nodes in order of cumulative path cost, so it always expands the cheapest cost node next, guaranteeing it finds the lowest-cost path regardless of how costs are distributed.]
+BFS expands nodes in increments of height/level, exploring the finds the shallowest areas first. If all step costs are equal, the shallowest path is also the cheapest. But if step costs vary, a deeper path might have lower total cost. UCS expands nodes in order of cumulative path cost, so it always expands the cheapest cost node next, guaranteeing it finds the lowest cost path regardless of how costs are distributed.]
 
 #v(1cm)
 
 Q9: Explain the difference between tree search and graph search. Why might tree search expand the same state more than once, and what mechanism does graph search use to prevent this? #sidenote[AIMA Chapter 3.3 Page 92]
+
+#answer[Tree search does not track which states have been visited, so it may expand a state multiple times if it appears via different paths in the search tree. Graph search maintains a closed set (or explored set) of all previously expanded states and skips any state that has already been expanded. This prevents redundant exploration but requires additional memory proportional to the number of explored states.
+]
 
 #pagebreak()
 
@@ -122,60 +178,98 @@ Q10: Consider the following graph. All edges are undirected. The start state is 
 )
 (a) Give the order in which nodes are expanded using Breadth First Search. Break ties alphabetically.
 
-#v(2cm)
+#answer[*S, A, B, C, G*]
+#v(1cm)
 
 (b) Give the order in which nodes are expanded using Depth First Search. Break ties alphabetically.
 
-#v(2cm)
+#answer[*S, A, C, G*]
+#v(1cm)
 
 (C) Give the order in which nodes are expanded using Uniform Cost Search. Break ties alphabetically.
-#v(2cm)
+
+#answer[*S, A, B, C, G*]
+#v(1cm)
 
 Q11: For each search algorithm (DFS, BFS, UCS), state its time complexity and space complexity in terms of branching factor b, solution depth d, and maximum depth m. 
+
+#answer[
+#table(
+  columns: (auto, auto, auto),
+  table.header([*Algorithm*], [*Time*], [*Space*]),
+  [DFS], [$O(b^m)$], [$O(b m)$],
+  [BFS], [$O(b^d)$], [$O(b^d)$],
+  [UCS], [$O(b^(1 + ceil(C^* \/ epsilon))) approx O(b^d)$], [$O(b^(1 + ceil(C^* \/ epsilon))) approx O(b^d)$],
+)
+
+Where $b$ = branching factor, $d$ = depth of shallowest solution, $m$ = maximum depth, $C^*$ = cost of optimal solution, and $epsilon$ = minimum step cost.
+]
 #v(5cm)
 
 
 Q12: Which algorithm is most memory efficient, and why?
 
+#answer[DFS is the most memory efficient. It only needs to store the current path from root to the deepest expanded node, plus the unexpanded siblings along that path. Which results in O(bm) space complexity (linear in depth). BFS and UCS, however, must store the entire frontier, which grows exponentially with depth (O(b^d)). For deep search problems where memory is the bottleneck, DFS or its variants (like iterative deepening#sidenote[AIMA Chapter 3.4.4 Page 98]) are the only practical options.
+]
 
 #pagebreak()
 = Part 3: Search with Heuristics
 
 Q13: State the two properties a heuristic must satisfy to be consistent. How does consistency relate to admissibility? #sidenote[AIMA Chapter 3.5 Page 106]
 
-#v(2cm)
+#answer[check the textbook]
 
 Q14: A robot navigates a grid. Its state is represented as (row, col). The start is (0, 0) and the goal is (3, 4). The robot can move up, down, left, or right with cost 1 per step.
 
 (a) What is the value of the Manhattan distance heuristic from the goal to the start (ie: h(start))?
 
-#v(2cm)
+#answer[Manhattan distance = |3 − 0| + |4 − 0| = 3 + 4 = **7**.
+]
 
 (b) Suppose an obstacle blocks the direct path so the shortest actual path has cost 9. Does A-star with the Manhattan distance heuristic still find the optimal path? Why or why not?
 
-#v(2cm)
+#answer[The Manhattan distance is admissible. Astar with an admissible heuristic is guaranteed to find the optimal path, even though the optimal cost (9) exceeds the heuristic estimate (7).
+
+Astar will simply expand more nodes before finding the goal. The admissibility guarantee will hold regardless of how loose the estimate is, as long as it never overestimates.
+]
 
 Q15: Using the same robot and grid from Q14: A heuristic h1 returns 0 for every state. A heuristic h2 returns the Manhattan distance.
 
 (a) Are both admissible? Explain your answer. #sidenote[AIMA Chapter 3.5 Page 104]
 
-#v(2cm)
+#answer[h1 = 0 is trivially admissible#sidenote[0 <= hstar(n) for all n, since path costs are non-negative]. h2 = Manhattan distance is admissible for grid movement with cost 1 per step, since any path between two points must traverse at least the Manhattan distance in steps.
+]
 
 (b) Which one causes A-star to expand fewer nodes, and why?
 
-#v(2cm)
+#answer[h2 causes Astar to expand fewer nodes. A more informative#sidenote[higher valued, still admissible] heuristic focuses the search more tightly toward the goal by giving distant nodes higher f values, deprioritizing them. h1 = 0 makes Astar behave identically to UCS, expanding nodes uniformly outward in all directions with no goal directed steering.
+]
+
+#v(3cm)
 
 (c) If we define h3(n) = max(h1(n), h2(n)) (using h1 and h2 from Q15), is h3 admissible? Is it at least as informative as h1 and h2 individually?
 
-#v(4cm)
+#answer[h3 = max(h1, h2) = max(0, Manhattan) = Manhattan. 
+
+Since both are admissible, the max of two admissible heuristics is also admissible. h3 dominates both h1 and h2 because by definition h3(n) >= h1(n) and h3(n) >= h2(n) for all n.
+]
 
 Q16: Jeffrey Armstrong claims: "If a heuristic is inadmissible, A-star will never find the optimal solution." Is this claim always true, sometimes true, or always false? Provide a brief justification or counterexample.
 
-#v(4cm)
+#answer[*Sometimes true.* #sidenote[An inadmissible heuristic can still find the optimal solution, however it just isnt guaranteed to. ]
+
+
+Counterexample: Consider a graph where the heuristic overestimates only at states that arent on the optimal path. Astart may still expand the optimal path first and return it. The point of admissibility is to guarantee optimality. So losing admissibility means losing the guarantee, not necessarily losing optimality on every instance.
+]
 
 Q17: Explain why A-star with a consistent heuristic guarantees that when a node is first expanded in graph search, it has been reached by the optimal path. Why does admissibility alone not guarantee this for A-star graph search?
-#v(4cm)
 
+#answer[Consistency ensures that f values along any path are non-decreasing#sidenote[f(n') = g(n') + h(n') >= g(n) + h(n) = f(n)]. This means once a node is expanded, no later path to that same state can have a lower f value, so the first expansion is always optimal.
+
+With merely admissible (but inconsistent) heuristics, f values can decrease along a path. This means a node might be reached via a suboptimal path first (with lower f), get added to the closed set, and then later when a better path arrives, graph search refuses to reexpand it. 
+
+Soooo, Astar graph search with an admissible but inconsistent heuristic can return suboptimal solutions!#sidenote[To fix this, you can either use tree search, allow reexpansion when a better path is found, or insist on consistency.]
+]
 
 Q18: Jeffery has once again proposed a new heuristic for A-star search that is very accurate but takes O(n^2) time to compute, where n is the problem size. The current heuristic is less accurate but computes in O(1). Under what circumstances would you recommend switching to the more expensive heuristic?
 #v(4cm)
