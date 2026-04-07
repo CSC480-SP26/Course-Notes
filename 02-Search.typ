@@ -42,7 +42,7 @@ Most simple instance of Agentic Framework with:
     - Where state a state $s$ is mapped to the resultant state after the agent an performs action
     - $T(s,a in O(s)) mapsto s'$
   - Transition cost function $c : (S,A,S) -> RR$
-    - For transitions $c(s,a,s')$ where $s' = T(s,a)$, and $a in O(s)$
+    - For transitions $c(s,a,s')$ where $s' in T(s,a)$, and $a in O(s)$
   - Path: Sequence of actions to go from $s_a mapsto s_b$
   - Solution: Path from initial state to goal, $s_0 mapsto g in G$
 ]
@@ -53,15 +53,19 @@ Most simple instance of Agentic Framework with:
 - Sudoku
 - Programming
 
+#colorbox(color: blue, title: "Discussion: ")[
+  Come up with other examples of problems that can be viewed as search. What is the state space? What are the transitions? How does one determine a goal? What are the costs?
+]
+
 == Difficulty of Search Problems
 - Size of Search Space
 - Branching Factor
 - Solution Depth
 
 == Measures of Performance
-- Solution Correctness, Completeness, and Optimality
-- Space Complexity
-- Time Complexity
+- *Completeness*: Will find solution if exists, report failure otherwise
+- *Optimality*: Find solution with lowest path cost
+- *Performance*: Space and Time Complexity
 
 == Representing Search Problems
 
@@ -129,14 +133,25 @@ Most simple instance of Agentic Framework with:
 - Keep track of unexplored states
 - Choose which unexplored state to expand
 
-
 = Uninformed Search
 
 == Depth First Search
 
+- unexplored stack
+- example
+- *incomplete* in infinite state space
+- risk of cycles
+
 == Breadth First Search
 
+- unexplored queue
+- example
+
+
 == Uniform Cost Search (Dijkstra's Algorithm)
+
+- unexplored pq
+- example
 
 
 = Informed Search
@@ -159,13 +174,30 @@ $
 $
 
 $"Admissible"(h) => "A* is solution is optimal"$
+Let admissible $h$, assume returns path with $C>C^*$. Then there is node $n$ unexpanded on optimal path.
+$
+  & f(n) > C^* \
+  & f(n) = g(n) + h(n) \
+  & f(n) = g^*(n) + h(n) \
+  & f(n) <= g^* + h^*(n) \
+  & f(n) <= C^* \
+  & text("Contradiction"), qed
+$
 
 == Consistency
+$
+  forall n in S, n' in T(n,a)\
+  h(n) <= c(n,a,n') + h(n')
+$
 - Triangle Inequality
-- Expand fewest nodes
+- $"Consistent"(h) => "Admissible"(h)$
+
+- The first time we reach a state it will be on an optimal path, so we never have to re-add a state to the frontier.
 
 
 == Suboptimal Search
+- Wiggle room:
+  - optimal path if $h(n)$ is admissible on all states on path, then optimal will be found regardless of other states
+  - optimal path if optimal cost $C^*$, second best $C^2$,$h(n) - h^*(n) < C^2 - C^*$
 - Benefits of inadmissible heuristic
-- Constraint of how far off of optimal
-- Semi-greedy
+- Semi-greedy,  $"Priority" = c(S) + W*h(s)$
