@@ -70,6 +70,7 @@ The six components are:
 
   (6) Cost function which assigns a numeric cost to each action or path, used to evaluate the expense of reaching the goal.
 ]
+#v(1cm)
 Q7: For each of the following search strategies, state whether it is complete and whether it is optimal. (Assume a finite branching factor and non-negative edge costs.)
 #table(
   columns: 3,
@@ -84,12 +85,14 @@ Q7: For each of the following search strategies, state whether it is complete an
   [Astar Tree Search (admissible h)], answer[Yes], answer[Yes],
   [Astar Graph Search (consistent h)], answer[Yes], answer[Yes],
 )
+
+#pagebreak()
 Q8: In your own words, explain why Breadth First Search is optimal only when all step costs are equal, whereas Uniform Cost Search is optimal for any non-negative step costs.
 
 #answer[
 BFS expands nodes fat increments of height/level, exploring the finds the shallowest areas first. If all step costs are equal, the shallowest path is also the cheapest. But if step costs vary, a deeper path might have lower total cost. UCS expands nodes in order of cumulative path cost, so it always expands the cheapest cost node next, guaranteeing it finds the lowest-cost path regardless of how costs are distributed.]
 
-#v(3cm)
+#v(1cm)
 
 Q9: Explain the difference between tree search and graph search. Why might tree search expand the same state more than once, and what mechanism does graph search use to prevent this? #sidenote[AIMA Chapter 3.3 Page 92]
 
@@ -254,32 +257,29 @@ Q23: Compare and contrast Minimax and Expectimax. When would you choose Expectim
 
 
 #pagebreak()
-For Questions 24-26, use the following game tree. The root is the top node, and the leaf values from left to right are 3, 5, 2, 8, 1, 4. MAX moves first at the root.
 
+#pagebreak()
+For Questions 24-25, use the following game tree. 
 #figure(
   diagram(
-    node-stroke: 0.5pt,
-    node-shape: circle,
-    node-inset: 4pt,
-    spacing: (1.2cm, 1cm),
+    spacing: (1cm, 1.2cm),
 
-    node((3, 0), box(width: 7pt, height: 7pt), name: <root>),
+    node((3, 0), text(18pt, sym.triangle.t), name: <root>, stroke: none),
 
-    node((1, 1), box(width: 7pt, height: 7pt), name: <L>),
-    node((3, 1), box(width: 7pt, height: 7pt), name: <M>),
-    node((5, 1), box(width: 7pt, height: 7pt), name: <R>),
+    node((1, 1), text(18pt, sym.triangle.b), name: <L>, stroke: none),
+    node((3, 1), text(18pt, sym.triangle.b), name: <M>, stroke: none),
+    node((5, 1), text(18pt, sym.triangle.b), name: <R>, stroke: none),
 
-    node((0, 2),   [3], name: <l1>),
-    node((1.6, 2),   [5], name: <l2>),
-    node((2.2, 2), [2], name: <l3>),
-    node((3.8, 2), [8], name: <l4>),
-    node((4.4, 2),   [1], name: <l5>),
-    node((6, 2),   [4], name: <l6>),
+    node((0,   2), text(18pt)[#sym.triangle.t #h(0.2em) 3], name: <l1>, stroke: none),
+    node((1.4, 2), text(18pt)[#sym.triangle.t #h(0.2em) 5], name: <l2>, stroke: none),
+    node((2.2, 2), text(18pt)[#sym.triangle.t #h(0.2em) 2], name: <l3>, stroke: none),
+    node((3.8, 2), text(18pt)[#sym.triangle.t #h(0.2em) 8], name: <l4>, stroke: none),
+    node((4.6, 2), text(18pt)[#sym.triangle.t #h(0.2em) 1], name: <l5>, stroke: none),
+    node((6,   2), text(18pt)[#sym.triangle.t #h(0.2em) 4], name: <l6>, stroke: none),
 
     edge(<root>, <L>, "-"),
     edge(<root>, <M>, "-"),
     edge(<root>, <R>, "-"),
-
     edge(<L>, <l1>, "-"),
     edge(<L>, <l2>, "-"),
     edge(<M>, <l3>, "-"),
@@ -287,18 +287,47 @@ For Questions 24-26, use the following game tree. The root is the top node, and 
     edge(<R>, <l5>, "-"),
     edge(<R>, <l6>, "-"),
   ),
-  caption: [Game tree for Q13–Q15],
+  caption: [Game tree for Q24-25. MAX nodes (#sym.triangle.t), MIN nodes (#sym.triangle.b).],
 )
 
-Q24: Treating the second layer nodes as MIN nodes, compute the Minimax value of the root.
+Q24:Compute the Minimax value of the root.
 #v(4cm)
 
-Q25: Using the same tree, apply Alpha Beta Pruning (with the second layer as MIN nodes). List which leaf nodes are pruned (not evaluated). Assume children are evaluated left to right.
+Q25: Using the same tree, apply Alpha Beta Pruning. List which leaf nodes are pruned (not evaluated). Assume children are evaluated left to right.
 #v(4cm)
 
 #pagebreak()
+For Questions 26, use the following game tree. 
+#figure(
+  diagram(
+    spacing: (1cm, 1.2cm),
 
-Q26: Now treat the second layer nodes as CHANCE nodes (with uniform probability over their children) instead of MIN nodes. Compute the Expectimax value of the root.
+    node((3, 0), text(18pt, sym.triangle.t), name: <root>, stroke: none),
+
+    node((1, 1), text(18pt, sym.circle.stroked), name: <L>, stroke: none),
+    node((3, 1), text(18pt, sym.circle.stroked), name: <M>, stroke: none),
+    node((5, 1), text(18pt, sym.circle.stroked), name: <R>, stroke: none),
+
+    node((0,   2), text(18pt)[#sym.triangle.t #h(0.2em) 3], name: <l1>, stroke: none),
+    node((1.4, 2), text(18pt)[#sym.triangle.t #h(0.2em) 5], name: <l2>, stroke: none),
+    node((2.2, 2), text(18pt)[#sym.triangle.t #h(0.2em) 2], name: <l3>, stroke: none),
+    node((3.8, 2), text(18pt)[#sym.triangle.t #h(0.2em) 8], name: <l4>, stroke: none),
+    node((4.6, 2), text(18pt)[#sym.triangle.t #h(0.2em) 1], name: <l5>, stroke: none),
+    node((6,   2), text(18pt)[#sym.triangle.t #h(0.2em) 4], name: <l6>, stroke: none),
+
+    edge(<root>, <L>, "-"),
+    edge(<root>, <M>, "-"),
+    edge(<root>, <R>, "-"),
+    edge(<L>, <l1>, "-"),
+    edge(<L>, <l2>, "-"),
+    edge(<M>, <l3>, "-"),
+    edge(<M>, <l4>, "-"),
+    edge(<R>, <l5>, "-"),
+    edge(<R>, <l6>, "-"),
+  ),
+  caption: [Game tree for Q26. MAX nodes (#sym.triangle.t), CHANCE nodes (#sym.circle.stroked).],
+)
+Q26: Now the second layer nodes are CHANCE nodes (with uniform probability over their children) instead of MIN nodes. Compute the Expectimax value of the root.
 #v(4cm)
 
 Q27: In Alpha Beta pruning, the order in which children are evaluated matters for efficiency but not for correctness. Explain why the final Minimax value is always the same regardless of evaluation order, and describe what child ordering maximizes the number of pruned nodes.
