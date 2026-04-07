@@ -1,4 +1,6 @@
 #import "../../wdf.typ": *
+
+
 #show: template.with(
   title: [
     Search Algorithms
@@ -17,21 +19,58 @@
   exam: false,
 )
 
+#let answer(body) = text(fill: red, body)
+
 
 #sidenote(dy: 1.15em, numbered: false)[#outline(depth: 2)]
+= Part 1: Intelligent Agents
+Q1: State the definition of a rational agent.
+#v(2cm)
 
-= Part 1: Search Fundamentals
+Q2: List the dimensions used to characterize environments, giving both sides of each dimension. #sidenote[AIMA Chapter 2.3 Page 61]
+#v(4cm)
 
-Q1: List and explain the components that formally define a search problem.
+Q3: Explain the difference between a reflex agent and a goal based agent. Why can't a reflex agent solve a maze?
+#v(3cm)
+
+Q4: What is the difference between a model based agent and a utility based agent?  #sidenote[AIMA Chapter 3.4 Page 69]
+#v(3cm)
+
+#pagebreak()
+
+Q5: Classify each of the following environments along dimensions used to characterize environments. 
+
+(a) A chess game against a human opponent
+#v(3cm)
+(b) A self driving car on a highway
+#v(3cm)
+
+(c) A thermostat in a room
+#v(3cm)
+
+
+#pagebreak()
+
+= Part 2: Search Fundamentals
+
+Q6: List and explain the components that formally define a search problem. #sidenote[AIMA Chapter 3.1 Page 83]
+
+#answer[
 The six components are: 
-  (1) States which are the set of all possible configurations the problem can be in (the state space). 
-  (2) Initial state which is the starting configuration the agent begins in. 
-  (3) Goal state or the the target configuration (or a goal test that determines whether a given state satisfies the goal). 
-  (4) Actions. The set of possible moves available to the agent in each state.
-  (5) Transition model which defines the result of applying an action in a state, mapping (state, action) ==> successor state. 
-  (6) Cost function which assigns a numeric cost to each action or path, used to evaluate the expense of reaching the goal.
 
-Q2: For each of the following search strategies, state whether it is complete and whether it is optimal. (Assume a finite branching factor and non-negative edge costs.)
+  (1) States which are the set of all possible configurations the problem can be in (the state space). 
+
+  (2) Initial state which is the starting configuration the agent begins in. 
+
+  (3) Goal state or the the target configuration (or a goal test that determines whether a given state satisfies the goal). 
+
+  (4) Actions. The set of possible moves available to the agent in each state.
+
+  (5) Transition model which defines the result of applying an action in a state, mapping (state, action) ==> successor state. 
+
+  (6) Cost function which assigns a numeric cost to each action or path, used to evaluate the expense of reaching the goal.
+]
+Q7: For each of the following search strategies, state whether it is complete and whether it is optimal. (Assume a finite branching factor and non-negative edge costs.)
 #table(
   columns: 3,
   align: (left, center, center),
@@ -39,11 +78,233 @@ Q2: For each of the following search strategies, state whether it is complete an
 
   [*Strategy*], [*Complete?*], [*Optimal?*],
 
-  [Depth-First Search (Graph)], [Yes (finite state space)], [no],
-  [Breadth-First Search (Graph)], [Yes (finite branching)], [Only if step costs are equal],
-  [Uniform Cost Search (Graph)], [Yes (if step costs > 0)], [Yes],
-  [Astar Tree Search (admissible h)], [Yes], [Yes],
-  [Astar Graph Search (consistent h)], [Yes], [Yes],
+  [Depth-First Search (Graph)], answer[Yes (finite state space)], answer[no],
+  [Breadth-First Search (Graph)], answer[Yes (finite branching)], answer[Only if step costs are equal],
+  [Uniform Cost Search (Graph)], answer[Yes (if step costs > 0)], answer[Yes],
+  [Astar Tree Search (admissible h)], answer[Yes], answer[Yes],
+  [Astar Graph Search (consistent h)], answer[Yes], answer[Yes],
 )
-Q3: In your own words, explain why Breadth First Search is optimal only when all step costs are equal, whereas Uniform Cost Search is optimal for any non-negative step costs.
-BFS expands nodes fat increments of height/level, exploring the finds the shallowest areas first. If all step costs are equal, the shallowest path is also the cheapest. But if step costs vary, a deeper path might have lower total cost. UCS expands nodes in order of cumulative path cost, so it always expands the cheapest cost node next, guaranteeing it finds the lowest-cost path regardless of how costs are distributed.
+Q8: In your own words, explain why Breadth First Search is optimal only when all step costs are equal, whereas Uniform Cost Search is optimal for any non-negative step costs.
+
+#answer[
+BFS expands nodes fat increments of height/level, exploring the finds the shallowest areas first. If all step costs are equal, the shallowest path is also the cheapest. But if step costs vary, a deeper path might have lower total cost. UCS expands nodes in order of cumulative path cost, so it always expands the cheapest cost node next, guaranteeing it finds the lowest-cost path regardless of how costs are distributed.]
+
+#v(3cm)
+
+Q9: Explain the difference between tree search and graph search. Why might tree search expand the same state more than once, and what mechanism does graph search use to prevent this? #sidenote[AIMA Chapter 3.3 Page 92]
+
+#pagebreak()
+
+Q10: Consider the following graph. All edges are undirected. The start state is S and the goal state is G.
+
+#figure(
+  diagram(
+    node-stroke: 0.5pt,
+    node-shape: circle,
+    node-inset: 6pt,
+
+    node((0, 1), [*S*], name: <S>),
+    node((1, 0), [*A*], name: <A>),
+    node((2, 0), [*C*], name: <C>),
+    node((1, 2), [*B*], name: <B>),
+    node((2, 2), [*G*], name: <G>),
+
+    edge(<S>, <A>, "-", [1]),
+    edge(<A>, <C>, "-", [3]),
+    edge(<C>, <G>, "-", [2]),
+    edge(<S>, <B>, "-", [4]),
+    edge(<B>, <G>, "-", [1]),
+  ),
+  caption: [Undirected weighted graph for Q5.],
+)
+(a) Give the order in which nodes are expanded using Breadth First Search. Break ties alphabetically.
+
+#v(2cm)
+
+(b) Give the order in which nodes are expanded using Depth First Search. Break ties alphabetically.
+
+#v(2cm)
+
+(C) Give the order in which nodes are expanded using Uniform Cost Search. Break ties alphabetically.
+#v(2cm)
+
+Q11: For each search algorithm (DFS, BFS, UCS), state its time complexity and space complexity in terms of branching factor b, solution depth d, and maximum depth m. 
+#v(5cm)
+
+
+Q12: Which algorithm is most memory efficient, and why?
+
+
+#pagebreak()
+= Part 3: Search with Heuristics
+
+Q13: State the two properties a heuristic must satisfy to be consistent. How does consistency relate to admissibility? #sidenote[AIMA Chapter 3.5 Page 106]
+
+#v(2cm)
+
+Q14: A robot navigates a grid. Its state is represented as (row, col). The start is (0, 0) and the goal is (3, 4). The robot can move up, down, left, or right with cost 1 per step.
+
+(a) What is the value of the Manhattan distance heuristic from the goal to the start (ie: h(start))?
+
+#v(2cm)
+
+(b) Suppose an obstacle blocks the direct path so the shortest actual path has cost 9. Does A-star with the Manhattan distance heuristic still find the optimal path? Why or why not?
+
+#v(2cm)
+
+Q15: Using the same robot and grid from Q14: A heuristic h1 returns 0 for every state. A heuristic h2 returns the Manhattan distance.
+
+(a) Are both admissible? Explain your answer. #sidenote[AIMA Chapter 3.5 Page 104]
+
+#v(2cm)
+
+(b) Which one causes A-star to expand fewer nodes, and why?
+
+#v(2cm)
+
+(c) If we define h3(n) = max(h1(n), h2(n)) (using h1 and h2 from Q15), is h3 admissible? Is it at least as informative as h1 and h2 individually?
+
+#v(4cm)
+
+Q16: Jeffrey Armstrong claims: "If a heuristic is inadmissible, A-star will never find the optimal solution." Is this claim always true, sometimes true, or always false? Provide a brief justification or counterexample.
+
+#v(4cm)
+
+Q17: Explain why A-star with a consistent heuristic guarantees that when a node is first expanded in graph search, it has been reached by the optimal path. Why does admissibility alone not guarantee this for A-star graph search?
+#v(4cm)
+
+
+Q18: Jeffery has once again proposed a new heuristic for A-star search that is very accurate but takes O(n^2) time to compute, where n is the problem size. The current heuristic is less accurate but computes in O(1). Under what circumstances would you recommend switching to the more expensive heuristic?
+#v(4cm)
+#pagebreak()
+
+Q19: The 15-puzzle is a sliding tile game in which one tries to arrange all the tiles in ascending order(See figure 2 below). Two heuristics are proposed for the 15-puzzle :
+#figure(
+  image("../images/15puz.jpg"),
+  caption: [An Example of the 15 puzzle],
+)
+
+h1 = number of misplaced tiles
+
+h2 = sum of Manhattan distances of each tile from its goal position
+
+(a) Prove both are admissible.
+#v(3cm)
+
+(b) Prove that h2 dominates h1 (h2(n) >= h1(n) for all n). What does dominance guarantee about the number of nodes expanded?
+#v(3cm)
+
+(c) If both are admissible and h2 dominates, why would you ever use h1?
+#v(3cm)
+
+(d) A third heuristic h3 is proposed: h3 = Manhattan distance + 2 × (number of tiles that must pass through the center square). Evaluate whether h3 is admissible and whether it dominates h2.
+#v(3cm)
+
+
+Q20: Musty the mustang is designing an A-star heuristic for the pancake sorting problem: given a stack of N pancakes of distinct sizes, you can insert a spatula at any position and flip all pancakes above it(See figure 3 below). The goal is to sort the stack largest on bottom to smallest on top.
+
+
+#figure(
+  image("../images/pancakes.png"),
+  caption: [An example of a flip],
+)
+
+Musty proposes: h = number of pancakes not in their final position ÷ 2, arguing "each flip can move the spatula through at least 2 pancakes, so we fix at least 2 pancakes per flip."
+
+(a) Identify the flaw in Musty's admissibility argument.
+#v(3cm)
+
+(b) Construct a concrete counterexample with 4 pancakes showing the heuristic either overestimates or that their reasoning breaks down.
+#v(3cm)
+
+#pagebreak()
+
+(c) Propose a correct admissible heuristic and prove it is admissible.
+#v(3cm)
+
+(d) Is your heuristic in (c) more or less informed than the Musty's? Does a more informed heuristic always mean better performance in practice? Explain.
+#v(3cm)
+
+
+#pagebreak()
+
+= Part 4: Adversarial Search
+
+Q21: Define the following terms in the context of adversarial search: #sidenote[AIMA Chapter 6.1 Page 193]
+
+(a) Zero sum game
+
+#v(1cm)
+
+(b) Terminal state
+
+#v(1cm)
+
+(c) Utility function
+
+#v(1cm)
+
+Q22: Explain why Minimax is equivalent to choosing the optimal strategy in a two player zero sum game where both players play perfectly. What assumption about the opponent makes Minimax appropriate? #sidenote[AIMA Chapter 6.2 Page 194]
+
+#v(4cm)
+
+Q23: Compare and contrast Minimax and Expectimax. When would you choose Expectimax over Minimax, and what changes in the game tree structure? #sidenote[AIMA Chapter 6.5 Page 211]
+
+#v(4cm)
+
+
+#pagebreak()
+For Questions 24-26, use the following game tree. The root is the top node, and the leaf values from left to right are 3, 5, 2, 8, 1, 4. MAX moves first at the root.
+
+#figure(
+  diagram(
+    node-stroke: 0.5pt,
+    node-shape: circle,
+    node-inset: 4pt,
+    spacing: (1.2cm, 1cm),
+
+    node((3, 0), box(width: 7pt, height: 7pt), name: <root>),
+
+    node((1, 1), box(width: 7pt, height: 7pt), name: <L>),
+    node((3, 1), box(width: 7pt, height: 7pt), name: <M>),
+    node((5, 1), box(width: 7pt, height: 7pt), name: <R>),
+
+    node((0, 2),   [3], name: <l1>),
+    node((1.6, 2),   [5], name: <l2>),
+    node((2.2, 2), [2], name: <l3>),
+    node((3.8, 2), [8], name: <l4>),
+    node((4.4, 2),   [1], name: <l5>),
+    node((6, 2),   [4], name: <l6>),
+
+    edge(<root>, <L>, "-"),
+    edge(<root>, <M>, "-"),
+    edge(<root>, <R>, "-"),
+
+    edge(<L>, <l1>, "-"),
+    edge(<L>, <l2>, "-"),
+    edge(<M>, <l3>, "-"),
+    edge(<M>, <l4>, "-"),
+    edge(<R>, <l5>, "-"),
+    edge(<R>, <l6>, "-"),
+  ),
+  caption: [Game tree for Q13–Q15],
+)
+
+Q24: Treating the second layer nodes as MIN nodes, compute the Minimax value of the root.
+#v(4cm)
+
+Q25: Using the same tree, apply Alpha Beta Pruning (with the second layer as MIN nodes). List which leaf nodes are pruned (not evaluated). Assume children are evaluated left to right.
+#v(4cm)
+
+#pagebreak()
+
+Q26: Now treat the second layer nodes as CHANCE nodes (with uniform probability over their children) instead of MIN nodes. Compute the Expectimax value of the root.
+#v(4cm)
+
+Q27: In Alpha Beta pruning, the order in which children are evaluated matters for efficiency but not for correctness. Explain why the final Minimax value is always the same regardless of evaluation order, and describe what child ordering maximizes the number of pruned nodes.
+#v(4cm)
+
+Q28: Musty is building a chess AI. They argue: "Since Expectimax accounts for the possibility that the opponent plays suboptimally, it is better than Minimax." Is this claim always true, sometimes true, or always false? Provide a brief justification or counterexample.
+
+
+
