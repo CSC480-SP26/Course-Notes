@@ -81,10 +81,25 @@ Q9: Explain the difference between tree search and graph search. Why might tree 
 Q10: Consider the following graph. All edges are undirected. The start state is S and the goal state is G.
 
 #figure(
-  image("images/Graph.png"),
-  caption: [Search graph],
-)
+  diagram(
+    node-stroke: 0.5pt,
+    node-shape: circle,
+    node-inset: 6pt,
 
+    node((0, 1), [*S*], name: <S>),
+    node((1, 0), [*A*], name: <A>),
+    node((2, 0), [*C*], name: <C>),
+    node((1, 2), [*B*], name: <B>),
+    node((2, 2), [*G*], name: <G>),
+
+    edge(<S>, <A>, "-", [1]),
+    edge(<A>, <C>, "-", [3]),
+    edge(<C>, <G>, "-", [2]),
+    edge(<S>, <B>, "-", [4]),
+    edge(<B>, <G>, "-", [1]),
+  ),
+  caption: [Undirected weighted graph for Q5.],
+)
 (a) Give the order in which nodes are expanded using Breadth First Search. Break ties alphabetically.
 
 #v(2cm)
@@ -94,7 +109,7 @@ Q10: Consider the following graph. All edges are undirected. The start state is 
 #v(2cm)
 
 (C) Give the order in which nodes are expanded using Uniform Cost Search. Break ties alphabetically.
-#v(7cm)
+#v(2cm)
 
 Q11: For each search algorithm (DFS, BFS, UCS), state its time complexity and space complexity in terms of branching factor b, solution depth d, and maximum depth m. 
 #v(5cm)
@@ -120,7 +135,7 @@ Q14: A robot navigates a grid. Its state is represented as (row, col). The start
 
 #v(2cm)
 
-Q15: A heuristic h1 returns 0 for every state. A heuristic h2 returns the Manhattan distance.
+Q15: Using the same robot and grid from Q14: A heuristic h1 returns 0 for every state. A heuristic h2 returns the Manhattan distance.
 
 (a) Are both admissible? Explain your answer. #sidenote[AIMA Chapter 3.5 Page 104]
 
@@ -130,7 +145,7 @@ Q15: A heuristic h1 returns 0 for every state. A heuristic h2 returns the Manhat
 
 #v(2cm)
 
-(c) If we define h3(n) = max(h1(n), h2(n)), is h3 admissible? Is it at least as informative as h1 and h2 individually?
+(c) If we define h3(n) = max(h1(n), h2(n)) (using h1 and h2 from Q15), is h3 admissible? Is it at least as informative as h1 and h2 individually?
 
 #v(4cm)
 
@@ -146,7 +161,7 @@ Q18: Jeffery has once again proposed a new heuristic for A-star search that is v
 #v(4cm)
 #pagebreak()
 
-Q19: Two heuristics are proposed for the 15-puzzle (See figure below):
+Q19: The 15-puzzle is a sliding tile game in which one tries to arrange all the tiles in ascending order(See figure 2 below). Two heuristics are proposed for the 15-puzzle :
 #figure(
   image("images/15puz.jpg"),
   caption: [An Example of the 15 puzzle],
@@ -169,7 +184,7 @@ h2 = sum of Manhattan distances of each tile from its goal position
 #v(3cm)
 
 
-Q20: Musty the mustang is designing an A-star heuristic for the pancake sorting problem: given a stack of N pancakes of distinct sizes, you can insert a spatula at any position and flip all pancakes above it(See figure below). The goal is to sort the stack largest on bottom to smallest on top.
+Q20: Musty the mustang is designing an A-star heuristic for the pancake sorting problem: given a stack of N pancakes of distinct sizes, you can insert a spatula at any position and flip all pancakes above it(See figure 3 below). The goal is to sort the stack largest on bottom to smallest on top.
 
 
 #figure(
@@ -225,8 +240,37 @@ Q23: Compare and contrast Minimax and Expectimax. When would you choose Expectim
 For Questions 24-26, use the following game tree. The root is the top node, and the leaf values from left to right are 3, 5, 2, 8, 1, 4. MAX moves first at the root.
 
 #figure(
-  image("images/minmax.png"),
-  caption: [Game tree for Q24-Q26],
+  diagram(
+    node-stroke: 0.5pt,
+    node-shape: circle,
+    node-inset: 4pt,
+    spacing: (1.2cm, 1cm),
+
+    node((3, 0), box(width: 7pt, height: 7pt), name: <root>),
+
+    node((1, 1), box(width: 7pt, height: 7pt), name: <L>),
+    node((3, 1), box(width: 7pt, height: 7pt), name: <M>),
+    node((5, 1), box(width: 7pt, height: 7pt), name: <R>),
+
+    node((0, 2),   [3], name: <l1>),
+    node((1.6, 2),   [5], name: <l2>),
+    node((2.2, 2), [2], name: <l3>),
+    node((3.8, 2), [8], name: <l4>),
+    node((4.4, 2),   [1], name: <l5>),
+    node((6, 2),   [4], name: <l6>),
+
+    edge(<root>, <L>, "-"),
+    edge(<root>, <M>, "-"),
+    edge(<root>, <R>, "-"),
+
+    edge(<L>, <l1>, "-"),
+    edge(<L>, <l2>, "-"),
+    edge(<M>, <l3>, "-"),
+    edge(<M>, <l4>, "-"),
+    edge(<R>, <l5>, "-"),
+    edge(<R>, <l6>, "-"),
+  ),
+  caption: [Game tree for Q13–Q15],
 )
 
 Q24: Treating the second layer nodes as MIN nodes, compute the Minimax value of the root.
