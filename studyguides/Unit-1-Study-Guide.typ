@@ -150,4 +150,5 @@ Q15: Now treat the second layer nodes as CHANCE nodes (with uniform probability 
 Q16: In Alpha Beta pruning, the order in which children are evaluated matters for efficiency but not for correctness. Explain why the final Minimax value is always the same regardless of evaluation order, and describe what child ordering maximizes the number of pruned nodes.
 #v(4cm)
 
-Q16: Musty the mustang is building a chess AI. They argue: "Since Expectimax accounts for the possibility that the opponent plays suboptimally, it is always better than Minimax." Is this claim always true, sometimes true, or always false? Provide a brief justification or counterexample.
+Q16: Musty the mustang is building a chess AI. They argue: "Since Expectimax accounts for the possibility that the opponent plays suboptimally, it is better than Minimax." Is this claim always true, sometimes true, or always false? Provide a brief justification or counterexample.
+#v(4cm)
