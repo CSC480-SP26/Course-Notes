@@ -35,11 +35,11 @@ Q2: List the dimensions used to characterize environments, giving both sides of 
 
 Q3: Explain the difference between a reflex agent and a goal based agent. Why can't a reflex agent solve a maze?
 
-#answer[A reflex agent selects actions based only on the current percept (or current percept + simple condition action rules). It has no internal model of the world and no concept of future consequences. A  goal based agent has explicit goals and uses search or planning to determine which sequence of actions will achieve them. 
+#answer[A reflex agent selects actions based only on the current percept (or current percept + simple condition action rules). It has no internal model of the world and no concept of future consequences. A  goal based agent has explicit goals and uses search or planning to determine which sequence of actions will achieve them. So a reflex agent will loop infinitely since it has no memory of visited states 
 ]
 #v(1cm)
 
-Q4: What is the difference between a model based agent and a utility based agent?  #sidenote[AIMA Chapter 3.4 Page 69]
+Q4: What is the difference between a model based agent and a utility based agent?  #sidenote[AIMA Chapter 2.4 Page 69]
 #answer[check the textbook]
 
 #v(3cm)
@@ -79,7 +79,7 @@ Q5: Classify each of the following environments along dimensions used to charact
 
 - Continuous (positions, speeds, and steering angles are continuous)
 
-- Known, rules of the road are but with unknown agent behaviors]
+- Known(rules of the road are but with unknown agent behaviors)]
 #v(0.5cm)
 
 (c) A thermostat in a room
@@ -115,7 +115,7 @@ The six components are:
 
   (2) Initial state which is the starting configuration the agent begins in. 
 
-  (3) Goal state or the the target configuration (or a goal test that determines whether a given state satisfies the goal). 
+  (3) Goal state or the target configuration (or a goal test that determines whether a given state satisfies the goal). 
 
   (4) Actions. The set of possible moves available to the agent in each state.
 
@@ -143,7 +143,7 @@ Q7: For each of the following search strategies, state whether it is complete an
 Q8: In your own words, explain why Breadth First Search is optimal only when all step costs are equal, whereas Uniform Cost Search is optimal for any non-negative step costs.
 
 #answer[
-BFS expands nodes in increments of height/level, exploring the finds the shallowest areas first. If all step costs are equal, the shallowest path is also the cheapest. But if step costs vary, a deeper path might have lower total cost. UCS expands nodes in order of cumulative path cost, so it always expands the cheapest cost node next, guaranteeing it finds the lowest cost path regardless of how costs are distributed.]
+BFS expands nodes in increments of height/level. It explores the shallowest areas first. If all step costs are equal, the shallowest path is also the cheapest. But if step costs vary, a deeper path might have lower total cost. UCS expands nodes in order of cumulative path cost, so it always expands the cheapest cost node next, guaranteeing it finds the lowest cost path regardless of how costs are distributed.]
 
 #v(1cm)
 
@@ -163,9 +163,9 @@ Q10: Consider the following graph. All edges are undirected. The start state is 
     node-inset: 6pt,
 
     node((0, 1), [*S*], name: <S>),
-    node((1, 0), [*A*], name: <A>),
+    node((1, 0), [*B*], name: <A>),
     node((2, 0), [*C*], name: <C>),
-    node((1, 2), [*B*], name: <B>),
+    node((1, 2), [*A*], name: <B>),
     node((1.5, 1), [*D*], name: <D>),
     node((3, 1), [*G*], name: <G>),
 
@@ -183,17 +183,17 @@ Q10: Consider the following graph. All edges are undirected. The start state is 
 
 (a) Give the order in which nodes are expanded using Breadth First Search. Break ties alphabetically.
 
-#answer[*S, A, B, C, D, G*]
+#answer[*S, A, B, D, G*]
 #v(1cm)
 
 (b) Give the order in which nodes are expanded using Depth First Search. Break ties alphabetically.
 
-#answer[*S, A, C, D, G*]
+#answer[*S, A, D, C, B, G*]
 #v(1cm)
 
 (C) Give the order in which nodes are expanded using Uniform Cost Search. Break ties alphabetically.
 
-#answer[*S, A, B, C, D, G*]
+#answer[*S, B, A, C, D, G*]
 #v(1cm)
 
 Q11: For each search algorithm (DFS, BFS, UCS), state its time complexity and space complexity in terms of branching factor b, solution depth d, and maximum depth m. 

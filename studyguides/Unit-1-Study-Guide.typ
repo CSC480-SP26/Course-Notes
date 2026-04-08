@@ -31,7 +31,7 @@ Q2: List the dimensions used to characterize environments, giving both sides of 
 Q3: Explain the difference between a reflex agent and a goal based agent. Why can't a reflex agent solve a maze?
 #v(3cm)
 
-Q4: What is the difference between a model based agent and a utility based agent?  #sidenote[AIMA Chapter 3.4 Page 69]
+Q4: What is the difference between a model based agent and a utility based agent?  #sidenote[AIMA Chapter 2.4 Page 69]
 #v(3cm)
 
 #pagebreak()
@@ -87,9 +87,9 @@ Q10: Consider the following graph. All edges are undirected. The start state is 
     node-inset: 6pt,
 
     node((0, 1), [*S*], name: <S>),
-    node((1, 0), [*A*], name: <A>),
+    node((1, 0), [*B*], name: <A>),
     node((2, 0), [*C*], name: <C>),
-    node((1, 2), [*B*], name: <B>),
+    node((1, 2), [*A*], name: <B>),
     node((1.5, 1), [*D*], name: <D>),
     node((3, 1), [*G*], name: <G>),
 
