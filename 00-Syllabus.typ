@@ -151,18 +151,19 @@ Where $P in [0,4]$ is your final project grade, which is used relative to the st
         [*Week*], [*Date*], [*Unit*], [*Lecture Topics*], [*Lab Session*]
       ),
       [0], [4/2], [], [Course Introduction and AI History], [Course Onboarding],
-      [1], [4/7], [1], [Search], [AI Debate Activity],
+      [1], [4/7], [1], [Agents and Search], [AI Debate Activity],
       [1],
       [4/9],
       [1],
-      [Game Theory and Adversarial Search ],
+      [Informed Search and Heuristics],
       [Final Project Speed Dating],
 
-      [2], [4/14], [1], [Search Optimizations ], [Lab 1 Check-in],
+      [2], [4/14], [1], [Game Theory and Adversarial Search], [Lab 1 Check-in],
+
       [2],
       [4/16],
       [1],
-      [Uncertain Search ],
+      [Adversarial Search Continued ],
       [Exam 1 Prep / Final Project Team Selection],
 
       [3], [4/21], [2], [Propositional Logic], [*_Exam 1_*],

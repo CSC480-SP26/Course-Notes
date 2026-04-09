@@ -36,7 +36,7 @@ Q4: What is the difference between a model based agent and a utility based agent
 
 #pagebreak()
 
-Q5: Classify each of the following environments along dimensions used to characterize environments. 
+Q5: Classify each of the following environments along dimensions used to characterize environments.
 
 (a) A chess game against a human opponent
 #v(3cm)
@@ -115,7 +115,7 @@ Q10: Consider the following graph. All edges are undirected. The start state is 
 (C) Give the order in which nodes are expanded using Uniform Cost Search. Break ties alphabetically.
 #v(2cm)
 
-Q11: For each search algorithm (DFS, BFS, UCS), state its time complexity and space complexity in terms of branching factor b, solution depth d, and maximum depth m. 
+Q11: For each search algorithm (DFS, BFS, UCS), state its time complexity and space complexity in terms of branching factor b, solution depth d, and maximum depth m.
 #v(5cm)
 
 
@@ -241,81 +241,88 @@ Q23: Compare and contrast Minimax and Expectimax. When would you choose Expectim
 
 
 #pagebreak()
-For Questions 24-25, use the following game tree. 
-#figure(
-  diagram(
-    spacing: (1cm, 1.2cm),
+For Questions 24-25, use the following game tree.
 
-    //MAX 
-    node((3, 0), text(18pt, sym.triangle.t), name: <root>, stroke: none),
+#let min-node = metadata("min-node")
+#let max-node = metadata("max-node")
+#let leaf-node = metadata("leaf-node")
+#let average-node = metadata("average-node")
 
-    //MIN 
-    node((1, 1), text(18pt, sym.triangle.b), name: <L>, stroke: none),
-    node((3, 1), text(18pt, sym.triangle.b), name: <M>, stroke: none),
-    node((5, 1), text(18pt, sym.triangle.b), name: <R>, stroke: none),
-
-    //leaves
-    node((0,   2), text(18pt)[#sym.triangle.t #h(0.2em) 3], name: <l1>, stroke: none),
-    node((1.4, 2), text(18pt)[#sym.triangle.t #h(0.2em) 5], name: <l2>, stroke: none),
-    node((2.2, 2), text(18pt)[#sym.triangle.t #h(0.2em) 2], name: <l3>, stroke: none),
-    node((3.8, 2), text(18pt)[#sym.triangle.t #h(0.2em) 8], name: <l4>, stroke: none),
-    node((4.6, 2), text(18pt)[#sym.triangle.t #h(0.2em) 1], name: <l5>, stroke: none),
-    node((6,   2), text(18pt)[#sym.triangle.t #h(0.2em) 4], name: <l6>, stroke: none),
-
-    edge(<root>, <L>, "-"),
-    edge(<root>, <M>, "-"),
-    edge(<root>, <R>, "-"),
-    edge(<L>, <l1>, "-"),
-    edge(<L>, <l2>, "-"),
-    edge(<M>, <l3>, "-"),
-    edge(<M>, <l4>, "-"),
-    edge(<R>, <l5>, "-"),
-    edge(<R>, <l6>, "-"),
+#let minimax-tree = tidy-tree-graph.with(
+  draw-node: (
+    (extrude: -5pt),
+    (inset: 1em),
+    (stroke: 0.75pt),
+    tidy-tree-draws.metadata-match-draw-node.with(
+      matches: (
+        min-node: (
+          (width: 20pt, height: 20pt, shape: shapes.triangle.with(dir: bottom))
+        ),
+        max-node: (
+          (width: 20pt, height: 20pt, shape: shapes.triangle.with(dir: top))
+        ),
+        leaf-node: (
+          (width: 30pt, height: 30pt, shape: rect)
+        ),
+        average-node: (
+          (width: 20pt, height: 20pt, shape: circle)
+        ),
+      ),
+    ),
   ),
-  caption: [Game tree for Q24-25. MAX nodes (#sym.triangle.t), MIN nodes (#sym.triangle.b).],
+  draw-edge: (
+    (marks: "->", stroke: 0.5pt),
+  ),
+  spacing: (45pt, 25pt),
+)
+
+
+
+#figure(
+  caption: [Game Tree for Q24-25],
+  minimax-tree()[
+    - #max-node
+      - #min-node
+        - 3 #leaf-node
+        - 5 #leaf-node
+      - #min-node
+        - 2 #leaf-node
+        - 8 #leaf-node
+      - #min-node
+        - 1 #leaf-node
+        - 4 #leaf-node
+  ],
 )
 
 Q24:Compute the Minimax value of the root.
 #v(4cm)
 
-Q25: Using the same tree, apply Alpha Beta Pruning. List which leaf nodes are pruned (not evaluated). Assume children are evaluated left to right.
+Q25: Using the same tree, apply Alpha-Beta Pruning. List which leaf nodes are pruned (not evaluated). Assume children are evaluated left to right.
 #v(4cm)
 
 #pagebreak()
-For Questions 26, use the following game tree. 
+For Questions 26, use the following game tree.
+
 #figure(
-  diagram(
-    spacing: (1cm, 1.2cm),
-    
-    node((3, 0), text(18pt, sym.triangle.t), name: <root>, stroke: none),
-
-    node((1, 1), text(18pt, sym.circle.stroked), name: <L>, stroke: none),
-    node((3, 1), text(18pt, sym.circle.stroked), name: <M>, stroke: none),
-    node((5, 1), text(18pt, sym.circle.stroked), name: <R>, stroke: none),
-
-    node((0,   2), text(18pt)[#sym.triangle.t #h(0.2em) 3], name: <l1>, stroke: none),
-    node((1.4, 2), text(18pt)[#sym.triangle.t #h(0.2em) 5], name: <l2>, stroke: none),
-    node((2.2, 2), text(18pt)[#sym.triangle.t #h(0.2em) 2], name: <l3>, stroke: none),
-    node((3.8, 2), text(18pt)[#sym.triangle.t #h(0.2em) 8], name: <l4>, stroke: none),
-    node((4.6, 2), text(18pt)[#sym.triangle.t #h(0.2em) 1], name: <l5>, stroke: none),
-    node((6,   2), text(18pt)[#sym.triangle.t #h(0.2em) 4], name: <l6>, stroke: none),
-
-    edge(<root>, <L>, "-"),
-    edge(<root>, <M>, "-"),
-    edge(<root>, <R>, "-"),
-    edge(<L>, <l1>, "-"),
-    edge(<L>, <l2>, "-"),
-    edge(<M>, <l3>, "-"),
-    edge(<M>, <l4>, "-"),
-    edge(<R>, <l5>, "-"),
-    edge(<R>, <l6>, "-"),
-  ),
-  caption: [Game tree for Q26. MAX nodes (#sym.triangle.t), CHANCE nodes (#sym.circle.stroked).],
+  caption: [Game Tree for Q26],
+  minimax-tree()[
+    - #max-node
+      - #average-node
+        - 3 #leaf-node
+        - 5 #leaf-node
+      - #average-node
+        - 2 #leaf-node
+        - 8 #leaf-node
+      - #average-node
+        - 1 #leaf-node
+        - 4 #leaf-node
+  ],
 )
+
 Q26: Now the second layer nodes are CHANCE nodes (with uniform probability over their children) instead of MIN nodes. Compute the Expectimax value of the root.
 #v(4cm)
 
-Q27: In Alpha Beta pruning, the order in which children are evaluated matters for efficiency but not for correctness. Explain why the final Minimax value is always the same regardless of evaluation order, and describe what child ordering maximizes the number of pruned nodes.
+Q27: In Alpha-Beta pruning, the order in which children are evaluated matters for efficiency but not for correctness. Explain why the final Minimax value is always the same regardless of evaluation order, and describe what child ordering maximizes the number of pruned nodes.
 #v(4cm)
 
-Q28: Musty is building a chess AI. They argue: "Since Expectimax accounts for the possibility that the opponent plays suboptimally, it is better than Minimax." Is this claim always true, sometimes true, or always false? Provide a brief justification or counterexample.
+Q28: Musty is building a chess AI. They argue: "In my experience, opponents frequently play suboptimally and I can rarely predict very well what their next move is likely to be. Since Expectimax accounts for this uncertainty and possiblilty of suboptimal play, it is likely to perform better than Minimax on average." Is this claim always true, sometimes true (if so under what conditions?), or always false? Provide a brief justification or counterexample.
