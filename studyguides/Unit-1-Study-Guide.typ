@@ -277,22 +277,24 @@ For Questions 24-25, use the following game tree.
 )
 
 
+#wideblock()[
+  #figure(
+    caption: [Game Tree for Q24-25],
+    minimax-tree()[
+      - #max-node
+        - #min-node
+          - 3 #leaf-node
+          - 5 #leaf-node
+        - #min-node
+          - 2 #leaf-node
+          - 8 #leaf-node
+        - #min-node
+          - 1 #leaf-node
+          - 4 #leaf-node
+    ],
+  )
+]
 
-#figure(
-  caption: [Game Tree for Q24-25],
-  minimax-tree()[
-    - #max-node
-      - #min-node
-        - 3 #leaf-node
-        - 5 #leaf-node
-      - #min-node
-        - 2 #leaf-node
-        - 8 #leaf-node
-      - #min-node
-        - 1 #leaf-node
-        - 4 #leaf-node
-  ],
-)
 
 Q24:Compute the Minimax value of the root.
 #v(4cm)
@@ -302,22 +304,24 @@ Q25: Using the same tree, apply Alpha-Beta Pruning. List which leaf nodes are pr
 
 #pagebreak()
 For Questions 26, use the following game tree.
+#wideblock()[
+  #figure(
+    caption: [Game Tree for Q26],
+    minimax-tree()[
+      - #max-node
+        - #average-node
+          - 3 #leaf-node
+          - 5 #leaf-node
+        - #average-node
+          - 2 #leaf-node
+          - 8 #leaf-node
+        - #average-node
+          - 1 #leaf-node
+          - 4 #leaf-node
+    ],
+  )
+]
 
-#figure(
-  caption: [Game Tree for Q26],
-  minimax-tree()[
-    - #max-node
-      - #average-node
-        - 3 #leaf-node
-        - 5 #leaf-node
-      - #average-node
-        - 2 #leaf-node
-        - 8 #leaf-node
-      - #average-node
-        - 1 #leaf-node
-        - 4 #leaf-node
-  ],
-)
 
 Q26: Now the second layer nodes are CHANCE nodes (with uniform probability over their children) instead of MIN nodes. Compute the Expectimax value of the root.
 #v(4cm)
