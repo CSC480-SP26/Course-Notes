@@ -158,12 +158,12 @@ Where $P in [0,4]$ is your final project grade, which is used relative to the st
       [Informed Search and Heuristics],
       [Final Project Speed Dating],
 
-      [2], [4/14], [1], [Game Theory and Adversarial Search], [Lab 1 Check-in],
+      [2], [4/14], [1], [Game Search], [Lab 1 Check-in],
 
       [2],
       [4/16],
       [1],
-      [Adversarial Search Continued ],
+      [Game Search Continued ],
       [Exam 1 Prep / Final Project Team Selection],
 
       [3], [4/21], [2], [Propositional Logic], [*_Exam 1_*],

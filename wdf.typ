@@ -421,6 +421,21 @@
   )
 }
 
+#let discussion(body, vspace: 10em) = {
+  colorbox(
+    [#linebreak()] + body + [#v(vspace)],
+    title: "Discussion",
+    color: green.darken(20%),
+  )
+}
+
+#let def(body, term: "") = {
+  colorbox(
+    [#linebreak()] + body,
+    title: "Definition: " + term,
+    color: yellow.darken(20%),
+  )
+}
 
 
 // Exam stuff
