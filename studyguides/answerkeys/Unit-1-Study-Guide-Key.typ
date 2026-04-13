@@ -291,17 +291,46 @@ h1 = number of misplaced tiles
 h2 = sum of Manhattan distances of each tile from its goal position
 
 (a) Prove both are admissible.
-#v(3cm)
+
+#answer[
+h1: Each misplaced tile must be moved at least once to reach its goal position and 1 move only changes the position of 1 tile. So the number of moves required is at least the number of misplaced tiles. h1(n) <= hstar(n).
+
+h2: Each tile must travel at least its manhattan distance to its goal position. Each move shifts a single tile by exactly 1 in manhattan distance. So the total number of moves is at least the sum of Manhattan distances. h2(n) <= hstar(n).
+]
 
 (b) Prove that h2 dominates h1 (h2(n) >= h1(n) for all n). What does dominance guarantee about the number of nodes expanded?
-#v(3cm)
+
+#answer[
+ for each of the misplaced tile the manhattan distance is at least 1 (since its not in its goal/finish square). So each tile contributes at least 1 to h2 and exactly 1 to h1. For any tile thats farther than 1 square from its goal it contributes more to h2 than to h1. Therefore h2(n) .= h1(n) for all n.
+
+Dominance guarantees that: 
+- if h2 dominates h1 
+- and both are admissible 
+then Astar using h2 will expand no more nodes than Astar using h1. Every node Astar with h2 expands is also expanded by Astar with h1 but not necessarily vice versa.
+
+]
 
 (c) If both are admissible and h2 dominates, why would you ever use h1?
-#v(3cm)
 
-(d) A third heuristic h3 is proposed: h3 = Manhattan distance + 2 × (number of tiles that must pass through the center square). Evaluate whether h3 is admissible and whether it dominates h2.
-#v(3cm)
+#answer[Computational cost is a pretty good reason. h1 is faster to compute (youre just counting tiles not on goal positions) while h2 requires computing position/difference from goal for every tile. In a time constrained setting or in problems where heuristic computation is a majority of total runtime the simpler heuristic might give better wall clock performance even though it expands more nodes. Also h1 is simpler to explain verify and debug(important if industry your project manager never took an algorithms class).
+]
 
+(d) A third heuristic h3 is proposed: h3 = Manhattan distance + 2 x (number of tiles that must pass through a given centeral square). Evaluate whether h3 is admissible and whether it dominates h2.
+
+#answer[
+  
+Admissibility depends on the puzzle and goal layout. The added penalty 2 x (tiles passing through center) is meant to reflect the constraint that the center area is like a "bottleneck" for certain tiles. Moving tiles across the puzzle is complex and very move intensive. However this is an additional cost added on top of manhattan distance. 
+  
+So the question is whether the true minimum cost actually accounts for at least 2 extra moves per tile passing through the center.
+
+In many cases h3 is inadmissible. manhattan distance already counts the moves needed for each tiles traversal including moves through the center if thats its shortest route. Adding 2 x (tiles passing through center) on top of manhattan double counts it basically overestimating the cost. 
+
+let me propose a specific counterexample to illustrate what I mean by overestimating. If only 1 tile needs to pass through the central square and its manhattan distance is exactly 3, h3 would estimate 3 + 2 = 5, but the actual move count for that tile is 3.
+
+On the topic of dominace, since h3 = h2 + (some non-negative term) h3(n) >= h2(n). So h3 numerically dominates h2. That being said, only h2 is guaranteed admissible. An inadmissible heuristic that "dominates" doesnt help because it can cause Astar to return suboptimal paths. So... h3 is generally inadmissible and shouldnt be used with Astar if optimality matters.
+]
+
+#pagebreak()
 
 Q20: Musty the mustang is designing an A-star heuristic for the pancake sorting problem: given a stack of N pancakes of distinct sizes, you can insert a spatula at any position and flip all pancakes above it(See figure 3 below). The goal is to sort the stack largest on bottom to smallest on top.
 
