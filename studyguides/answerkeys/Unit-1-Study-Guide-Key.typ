@@ -228,7 +228,7 @@ Q14: A robot navigates a grid. Its state is represented as (row, col). The start
 
 (a) What is the value of the Manhattan distance heuristic from the goal to the start (ie: h(start))?
 
-#answer[Manhattan distance = |3 − 0| + |4 − 0| = 3 + 4 = **7**.
+#answer[Manhattan distance = |3 − 0| + |4 − 0| = 3 + 4 = *7*.
 ]
 
 (b) Suppose an obstacle blocks the direct path so the shortest actual path has cost 9. Does A-star with the Manhattan distance heuristic still find the optimal path? Why or why not?
