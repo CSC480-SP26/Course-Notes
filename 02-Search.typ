@@ -129,33 +129,36 @@ Most simple instance of Agentic Framework with:
 )
 
 == Tasks for Search Solver
-- Keep track of explored states
-- Keep track of unexplored states
+- Keep track of already explored states (only for graph search)
+- Keep track of unexplored states (successors of expanded nodes)
 - Choose which unexplored state to expand
 
 = Uninformed Search
+Where we can only use the direct information in the search problem to solve it in the most general way possible.
 
 == Depth First Search
 
 - unexplored stack
-- example
 - *incomplete* in infinite state space
 - risk of cycles
+- tree to graph search
 
 == Breadth First Search
 
 - unexplored queue
-- example
+- fewest action optimal
 
 
 == Uniform Cost Search (Dijkstra's Algorithm)
 
-- unexplored pq
-- example
-
+- unexplored priority queue based on path cost
+- lowest cost optimal
+$
+  p(n') = p(n) + c(n,a,n')
+$
 
 = Informed Search
-
+Where we use some additional information to make better choices about which search nodes to explore next
 == Heuristics
 
 Help decide which nodes to explore by prioritizing more promising branches.
@@ -163,7 +166,7 @@ Help decide which nodes to explore by prioritizing more promising branches.
 == A\*
 
 $
-  "Priority" = c(S) + h(s)
+  "Priority" = p(n) + h(n)
 $
 
 
@@ -174,6 +177,7 @@ $
 $
 
 $"Admissible"(h) => "A* is solution is optimal"$
+
 Let admissible $h$, assume returns path with $C>C^*$. Then there is node $n$ unexpanded on optimal path.
 $
   & f(n) > C^* \
@@ -184,6 +188,36 @@ $
   & text("Contradiction"), qed
 $
 
+If heuristic is inadmissible, i.e. too high  or _pessimistic_, it may _deprioritize_ actually optimal paths sufficiently to result in a non-optimal path.
+
+=== Semi-Lattice of Heuristics
+- Zero heuristic is admissible, equivalent to UCS
+- True cost is optimal, but does it help?
+#figure(
+  caption: [Hierarchy of Admissible Heuristics from zero to the true cost],
+  diagram(
+    edge-stroke: 1pt,
+    node-corner-radius: 5pt,
+    edge-corner-radius: 8pt,
+    mark-scale: 80%,
+
+    node((0, 0), [_True Cost_], name: <true>),
+    node((0, 0.5), [$max(h_a, h_b)$], name: <max>),
+    node((1, 1), [$h_b$], name: <b>),
+    node((-1, 1), [$h_a$], name: <a>),
+    node((0.5, 1.5), [$h_c$], name: <c>),
+    node((0, 2), [_Zero_], name: <zero>),
+
+    edge(<true>, <max>, "->"),
+    edge(<max>, (-1, 0.5), <a>, "->"),
+    edge(<max>, (1, 0.5), <b>, "->"),
+    edge(<b>, <c>, "->"),
+    edge(<a>, <zero>, "->"),
+    edge(<c>, <zero>, "->"),
+  ),
+)
+
+
 == Consistency
 $
   forall n in S, n' in T(n,a)\
@@ -193,11 +227,52 @@ $
 - $"Consistent"(h) => "Admissible"(h)$
 
 - The first time we reach a state it will be on an optimal path, so we never have to re-add a state to the frontier.
+- Graph search needs consistent, Tree search needs admissible
+
+#let badge(pos, body, ..args) = {
+  body = text(size: 10pt, fill: gray.darken(50%), body)
+  node(
+    (rel: (0, 0.1), to: pos),
+    stroke: none,
+    fill: none,
+    inset: 2pt,
+    shape: rect,
+    ..args,
+    body,
+  )
+}
+#figure(
+  caption: [Example of inconsistent heuristic gone wrong in graph search. Go through A\* graph search with the provided inconsistent heuristic. What went wrong?],
+
+  diagram(
+    node-stroke: black,
+    node((0, 0.5), name: <s>, fill: blue.lighten(80%))[_S_],
+    node((1.5, 0), name: <a>)[_A_],
+    node((1.5, 1), name: <b>)[_B_],
+    node((4, 0), name: <c>)[_C_],
+    node((4, 1), name: <g>, fill: green.lighten(80%))[_G_],
+    badge(<s.south>)[$h=2$],
+    badge(<a.south>)[$h=4$],
+    badge(<b.south>)[$h=1$],
+    badge((rel: (0.5, -0.1), to: <c.east>))[$h=1$],
+    badge(<g.south>)[$h=0$],
+
+    edge(<s>, <a>, "<|-|>", label: [1]),
+    edge(<a>, <c>, "<|-|>", label: [1]),
+    edge(<s>, <b>, "<|-|>", label: [1]),
+    edge(<b>, <c>, "<|-|>", label: [2]),
+    edge(<c>, <g>, "<|-|>", label: [3]),
+  ),
+)
+
+== Designing Heuristics
+- Consider relaxed version of problem
+- Additional possible actions
+- Tends to be consistent
 
 
 == Suboptimal Search
-- Wiggle room:
-  - optimal path if $h(n)$ is admissible on all states on path, then optimal will be found regardless of other states
-  - optimal path if optimal cost $C^*$, second best $C^2$,$h(n) - h^*(n) < C^2 - C^*$
-- Benefits of inadmissible heuristic
-- Semi-greedy,  $"Priority" = c(S) + W*h(s)$
+- Wiggle room, will still find optimal path if either:
+  - $h(n)$ is admissible on all states on optimal path, then optimal will be found regardless of value at other states
+  - For optimal cost $C^*$, and second best $C^(**)$ with $ h(n) - h^*(n) < C^(**) - C^* $
+- Semi-greedy,  $"Priority" = c(n) + W*h(n)$
