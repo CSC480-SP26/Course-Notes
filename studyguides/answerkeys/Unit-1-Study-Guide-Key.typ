@@ -301,7 +301,7 @@ h2: Each tile must travel at least its manhattan distance to its goal position. 
 (b) Prove that h2 dominates h1 (h2(n) >= h1(n) for all n). What does dominance guarantee about the number of nodes expanded?
 
 #answer[
- for each of the misplaced tile the manhattan distance is at least 1 (since its not in its goal/finish square). So each tile contributes at least 1 to h2 and exactly 1 to h1. For any tile thats farther than 1 square from its goal it contributes more to h2 than to h1. Therefore h2(n) .= h1(n) for all n.
+ for each of the misplaced tile the manhattan distance is at least 1 (since its not in its goal/finish square). So each tile contributes at least 1 to h2 and exactly 1 to h1. For any tile thats farther than 1 square from its goal it contributes more to h2 than to h1. Therefore h2(n) >= h1(n) for all n.
 
 Dominance guarantees that: 
 - if h2 dominates h1 
@@ -343,19 +343,65 @@ Q20: Musty the mustang is designing an A-star heuristic for the pancake sorting 
 Musty proposes: h = number of pancakes not in their final position ÷ 2, arguing "each flip can move the spatula through at least 2 pancakes, so we fix at least 2 pancakes per flip."
 
 (a) Identify the flaw in Musty's admissibility argument.
-#v(3cm)
+
+#answer[Musty claims that "each flip can move the spatula through at least 2 pancakes, so we fix at least 2 pancakes per flip." This conflates moving pancakes with fixing them.
+
+Importantly, a flip moves multiple pancakes at once however most of those pancakes dont end up in their correct final position. In fact many end up in worse positions. A single flip is more likley to fix a small number of pancakes and may even fix no pancakes(Consider, in some cases you may make a move where non are fixed inorder to set up a better position for future flips). Dividing the count of misplaced pancakes by 2 assumes a fixed rate of progress that the operation simply can not guarantee.
+]
 
 (b) Construct a concrete counterexample with 4 pancakes showing the heuristic either overestimates or that their reasoning breaks down.
-#v(3cm)
 
-#pagebreak()
+#answer[
+Consider the stack [2, 4, 1, 3] (top to bottom), where the goal is [1, 2, 3, 4] (smallest on top, largest on bottom).
+
+All 4 pancakes are out of place so Musty's heuristic gives h = 4 / 2 = 2.
+
+But the optimal solution requires more than 2 flips. Feel free to try it. No matter which flip you make first very few if any pancakes end up in their final positions and you need additional flips to fix the rest. The optimal solution for this stack is 4 flips so the true cost is 4, but h estimates 2, which is fine for admissibility (h <= hstar). The issue is Mustys reasoning is flawed even though the resulting number happens to be admissible.
+
+Heres another counterexample showing overestimation. Consider [1, 3, 2, 4] where pancakes 3 and 2 are out of position. h = 2/2 = 1. But fixing this requires at least 2 flips (you cant swap two adjacent pancakes in one flip). So the heuristic underestimates here, which is still admissible but not for the reason Musty claims.
+
+So basically Musty's justification is wrong even when the number happens to come out admissible. To prove admissibility, you need a real argument tying h to a lower bound on the optimal cost.
+]
 
 (c) Propose a correct admissible heuristic and prove it is admissible.
-#v(3cm)
+
+#answer[
+Heres one but there are certainly more: 
+
+h(n) = number of adjacent pairs in the stack that are not consecutive in the goal ordering(ie: count pairs (i, i+1) in the current stack where the two pancakes at positions i and i+1 are not consecutive in size either ascending or decending).
+ 
+Each flip can break or fix at most 1 such adjacent gap (specifically, the gap at the position where the spatula was inserted). Other adjacencies in the flipped portion are preserved (just reversed). So each flip reduces the gap count by at most 1, meaning the number of remaining gaps is a lower bound on the number of flips needed. h(n) <= hstar(n).
+
+Consider:
+h([1,3,2,4]) = 2
+
+[1,3,2,4] insert between 2 and 4  
+
+[2,3,1,4] insert between 3 and 1
+
+[3,2,1,4] insert between 1 and 4
+
+[1,2,3,4] Done!
+
+true flips = 3 , hursitic = 2
+
+2<=3 huzzah!
+
+]
+
 
 (d) Is your heuristic in (c) more or less informed than the Musty's? Does a more informed heuristic always mean better performance in practice? Explain.
-#v(3cm)
 
+#answer[
+The gap heuristic is more informed than Musty's heuristic as it captures the structural limitations by which pancakes are adjacent and need to be separated as opposed to just counting misplaced pancakes. Moreover, since Musty's heuristic is actually inadmissible (see the example [4,3,2,1] requires 1 flip but h=2), the gap heuristic is strictly preferable for use with Astar when optimality matters.
+
+That being said, more informed does not always mean better in practice. More informed heuristics typically expand fewer nodes, but:
+- They may take longer per node to compute.
+- Their advantage shrinks on small problems.
+- A heuristic thats marginally more informed but much more expensive can be a net loss.
+
+In the pancake problem the gap heuristic is cheap (O(n) per evaluation) and much more informed than misplaced/2, so its clearly a win. In general informedness reduces nodes expanded, but total runtime depends on both nodes expanded and per node cost.
+]
 
 #pagebreak()
 
