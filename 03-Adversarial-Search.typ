@@ -19,38 +19,6 @@
   exam: false,
 )
 
-#let min-node = metadata("min-node")
-#let max-node = metadata("max-node")
-#let leaf-node = metadata("leaf-node")
-#let average-node = metadata("average-node")
-
-#let minimax-tree = tidy-tree-graph.with(
-  draw-node: (
-    (extrude: -5pt),
-    (inset: 1em),
-    (stroke: 0.75pt),
-    tidy-tree-draws.metadata-match-draw-node.with(
-      matches: (
-        min-node: (
-          (width: 20pt, height: 20pt, shape: shapes.triangle.with(dir: bottom))
-        ),
-        max-node: (
-          (width: 20pt, height: 20pt, shape: shapes.triangle.with(dir: top))
-        ),
-        leaf-node: (
-          (width: 30pt, height: 30pt, shape: rect)
-        ),
-        average-node: (
-          (width: 20pt, height: 20pt, shape: circle)
-        ),
-      ),
-    ),
-  ),
-  draw-edge: (
-    (marks: "->", stroke: 0.5pt),
-  ),
-  spacing: (15pt, 25pt),
-)
 
 
 
@@ -61,6 +29,7 @@
 
 
 = Games
+
 == Deterministic Games
 Search problems where multiple agents have different actions available at different states with different goals. Game is played until it is over where each agent has some valuation of the end state.
 === Zero-Sum
