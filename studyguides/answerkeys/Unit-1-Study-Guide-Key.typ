@@ -411,103 +411,202 @@ Q21: Define the following terms in the context of adversarial search: #sidenote[
 
 (a) Zero sum game
 
-#v(1cm)
+#answer[A game where the total utility across all players adds to a constant (usually zero) for every outcome
+
+ie: one players gain is exactly another players loss
+
+Examples: chess (win/loss/draw) or poker (money won = money lost)
+]
 
 (b) Terminal state
 
-#v(1cm)
+#answer[
+A state where the game is over and no further moves are possible. Terminal states have a defined utility value assigned by the games rules.
+]
 
 (c) Utility function
 
-#v(1cm)
+#answer[
+A function that assigns a numerical value to terminal states representing the how good that outcome is from a players perspective. MAX tries to reach high utility and MIN tries to force low utility.
+]
 
 Q22: Explain why Minimax is equivalent to choosing the optimal strategy in a two player zero sum game where both players play perfectly. What assumption about the opponent makes Minimax appropriate? #sidenote[AIMA Chapter 6.2 Page 194]
 
-#v(4cm)
+#answer[
+Minimax assumes the opponent plays optimally in that at every MIN node the opponent will select the move that minimizes MAXs utility. So in a zero sum game  the opponents optimal play directly minimizes your utility (since their gain is your loss). If both players play perfectly the Minimax value of the root represents the best outcome MAX can guarantee against any opponent strategy.
+
+The key assumption is that the opponent is rational and adversarial. So they know the game tree and they play perfectly and their goal is directly opposed to yours. If this assumption holds then Minimax produces the optimal strategy. If the opponent is suboptimal or stochastic Minimax is overly pessimistic and may miss exploitable opportunities.
+]
+
+#pagebreak()
 
 Q23: Compare and contrast Minimax and Expectimax. When would you choose Expectimax over Minimax, and what changes in the game tree structure? #sidenote[AIMA Chapter 6.5 Page 211]
 
-#v(4cm)
+#answer[
+Minimax assumes the opponent plays optimally (so they chose the worse options for you), so MIN nodes take the minimum of children. Expectimax replaces MIN nodes with CHANCE nodes that compute the weighted average (expected value) of children according to some probability distribution.
+
+So you Choose Expectimax when:
+- The opponent is stochastic or imperfect (ie: a random move generator or a beginner player)
+- The environment has randomness (ie: dice rolls or card draws)
+- You have a probabilistic model of how an outcome will unfold rather than an adversarial one
+
+In the tree MIN nodes become CHANCE nodes. Instead of selecting the worst child you compute an expectation over the children weighted by their probabilities. The values that propagate up are no longer guaranteed minimums or maximums instead theyre expected values. Importantly, this means a single high utility branch can dominate even if it has a risky low utility branch beside it.
+]
 
 
-#pagebreak()
 
 #pagebreak()
 For Questions 24-25, use the following game tree. 
-#figure(
-  diagram(
-    spacing: (1cm, 1.2cm),
 
-    node((3, 0), text(18pt, sym.triangle.t), name: <root>, stroke: none),
 
-    node((1, 1), text(18pt, sym.triangle.b), name: <L>, stroke: none),
-    node((3, 1), text(18pt, sym.triangle.b), name: <M>, stroke: none),
-    node((5, 1), text(18pt, sym.triangle.b), name: <R>, stroke: none),
+#let min-node = metadata("min-node")
+#let max-node = metadata("max-node")
+#let leaf-node = metadata("leaf-node")
+#let average-node = metadata("average-node")
 
-    node((0,   2), text(18pt)[#sym.triangle.t #h(0.2em) 3], name: <l1>, stroke: none),
-    node((1.4, 2), text(18pt)[#sym.triangle.t #h(0.2em) 5], name: <l2>, stroke: none),
-    node((2.2, 2), text(18pt)[#sym.triangle.t #h(0.2em) 2], name: <l3>, stroke: none),
-    node((3.8, 2), text(18pt)[#sym.triangle.t #h(0.2em) 8], name: <l4>, stroke: none),
-    node((4.6, 2), text(18pt)[#sym.triangle.t #h(0.2em) 1], name: <l5>, stroke: none),
-    node((6,   2), text(18pt)[#sym.triangle.t #h(0.2em) 4], name: <l6>, stroke: none),
-
-    edge(<root>, <L>, "-"),
-    edge(<root>, <M>, "-"),
-    edge(<root>, <R>, "-"),
-    edge(<L>, <l1>, "-"),
-    edge(<L>, <l2>, "-"),
-    edge(<M>, <l3>, "-"),
-    edge(<M>, <l4>, "-"),
-    edge(<R>, <l5>, "-"),
-    edge(<R>, <l6>, "-"),
+#let minimax-tree = tidy-tree-graph.with(
+  draw-node: (
+    (extrude: -5pt),
+    (inset: 1em),
+    (stroke: 0.75pt),
+    tidy-tree-draws.metadata-match-draw-node.with(
+      matches: (
+        min-node: (
+          (width: 20pt, height: 20pt, shape: shapes.triangle.with(dir: bottom))
+        ),
+        max-node: (
+          (width: 20pt, height: 20pt, shape: shapes.triangle.with(dir: top))
+        ),
+        leaf-node: (
+          (width: 30pt, height: 30pt, shape: rect)
+        ),
+        average-node: (
+          (width: 20pt, height: 20pt, shape: circle)
+        ),
+      ),
+    ),
   ),
-  caption: [Game tree for Q24-25. MAX nodes (#sym.triangle.t), MIN nodes (#sym.triangle.b).],
+  draw-edge: (
+    (marks: "->", stroke: 0.5pt),
+  ),
+  spacing: (45pt, 25pt),
 )
 
+#wideblock()[
+  #figure(
+    caption: [Game Tree for Q24-25],
+    minimax-tree()[
+      - #max-node
+        - #min-node
+          - 3 #leaf-node
+          - 5 #leaf-node
+        - #min-node
+          - 2 #leaf-node
+          - 8 #leaf-node
+        - #min-node
+          - 1 #leaf-node
+          - 4 #leaf-node
+    ],
+  )
+]
 Q24:Compute the Minimax value of the root.
-#v(4cm)
+
+#answer[
+  Left MIN: min(3, 5) = 3. 
+  
+  Middle MIN: min(2, 8) = 2. 
+  
+  Right MIN: min(1, 4) = 1. 
+  
+  MAX root: max(3, 2, 1) = 3.
+  
+   MAX picks the left most branch.
+]
 
 Q25: Using the same tree, apply Alpha Beta Pruning. List which leaf nodes are pruned (not evaluated). Assume children are evaluated left to right.
-#v(4cm)
+
+#answer[
+Start at MAX root: $alpha$ = $-oo$, $beta$ = $+oo$.
+
+- Left MIN subtree($alpha$ = $-oo$, $beta$ = $+oo$ passed down):
+  - Evaluate leaf 3. MIN updates its $beta$ = min($+oo$, 3) = 3.
+  - Evaluate leaf 5. MIN updates its $beta$ = min(3, 5) = 3.
+  - MIN returns 3. Back at MAX root: $alpha$ = max($-oo$, 3) = 3.
+
+- Middle MIN subtree ($alpha$ = 3, $beta$ = $+oo$ passed down):
+  - Evaluate leaf 2. MIN updates its $beta$ = min($+oo$, 2) = 2.
+  - Now $beta$ (2) $<=$ $alpha$ (3): prune. Leaf 8 is never evaluated.
+  - MIN returns $<=$ 2. Root $alpha$ stays 3 (2 is not better for MAX).
+
+- Right MIN subtree ($alpha$ = 3, $beta$ = $+oo$ passed down):
+  - Evaluate leaf 1. MIN updates its $beta$ = min($+oo$, 1) = 1.
+  - Now $beta$ (1) $<=$ $alpha$ (3): prune. Leaf 4 is never evaluated.
+  - MIN returns $<=$ 1. Root $alpha$ stays 3.
+
+Pruned leaves: 8 and 4. Final Minimax value = 3 (unchanged from full Minimax as pruning never affects correctness).
+]
 
 #pagebreak()
-For Questions 26, use the following game tree. 
-#figure(
-  diagram(
-    spacing: (1cm, 1.2cm),
-
-    node((3, 0), text(18pt, sym.triangle.t), name: <root>, stroke: none),
-
-    node((1, 1), text(18pt, sym.circle.stroked), name: <L>, stroke: none),
-    node((3, 1), text(18pt, sym.circle.stroked), name: <M>, stroke: none),
-    node((5, 1), text(18pt, sym.circle.stroked), name: <R>, stroke: none),
-
-    node((0,   2), text(18pt)[#sym.triangle.t #h(0.2em) 3], name: <l1>, stroke: none),
-    node((1.4, 2), text(18pt)[#sym.triangle.t #h(0.2em) 5], name: <l2>, stroke: none),
-    node((2.2, 2), text(18pt)[#sym.triangle.t #h(0.2em) 2], name: <l3>, stroke: none),
-    node((3.8, 2), text(18pt)[#sym.triangle.t #h(0.2em) 8], name: <l4>, stroke: none),
-    node((4.6, 2), text(18pt)[#sym.triangle.t #h(0.2em) 1], name: <l5>, stroke: none),
-    node((6,   2), text(18pt)[#sym.triangle.t #h(0.2em) 4], name: <l6>, stroke: none),
-
-    edge(<root>, <L>, "-"),
-    edge(<root>, <M>, "-"),
-    edge(<root>, <R>, "-"),
-    edge(<L>, <l1>, "-"),
-    edge(<L>, <l2>, "-"),
-    edge(<M>, <l3>, "-"),
-    edge(<M>, <l4>, "-"),
-    edge(<R>, <l5>, "-"),
-    edge(<R>, <l6>, "-"),
-  ),
-  caption: [Game tree for Q26. MAX nodes (#sym.triangle.t), CHANCE nodes (#sym.circle.stroked).],
-)
+For Question 26, use the following game tree. 
+#wideblock()[
+  #figure(
+    caption: [Game Tree for Q26],
+    minimax-tree()[
+      - #max-node
+        - #average-node
+          - 3 #leaf-node
+          - 5 #leaf-node
+        - #average-node
+          - 2 #leaf-node
+          - 8 #leaf-node
+        - #average-node
+          - 1 #leaf-node
+          - 4 #leaf-node
+    ],
+  )
+]
 Q26: Now the second layer nodes are CHANCE nodes (with uniform probability over their children) instead of MIN nodes. Compute the Expectimax value of the root.
-#v(4cm)
+
+#answer[
+Treating second layer nodes as CHANCE nodes with uniform probability (each child weighted 0.5):
+
+- Left CHANCE: (3 + 5) / 2 = 4.0
+- Middle CHANCE: (2 + 8) / 2 = 5.0
+- Right CHANCE: (1 + 4) / 2 = 2.5
+
+MAX root: max(4.0, 5.0, 2.5) = 5.0. MAX picks the middle branch.
+
+Importantly Expectimax picks the middle branch while Minimax and Alpha-Beta pick the left branch on the same tree. Under Minimax, the middle branch looked terrible because the opponent would force you to the 2. Under Expectimax, the middle branch has the highest expected value because the 8 balances out the 2.
+
+This shows the big difference between these algorithms as Minimax assumes the worst case, Expectimax assumes outcomes average out. Notably how they average out can differ based on weightings. Lets propose an alternate tree were the 2 is weighted 0.8 and the 8 is weighted 0.2:
+
+- Middle CHANCE: 0.8 x 2 + 0.2 x 8 = 1.6 + 1.6 = 3.2
+
+MAX root: max(4.0, 3.2, 2.5) = 4.0. Now Expectimax also picks the left branch, agreeing with Minimax.
+
+When the high value outcome (8) is sufficiently unlikely, the expected value of the middle branch drops below the average 4.0 from the left branch, and both algorithms converge on the same choice for different reasons. Minimax avoids the worst case (2), Expectimax sees that the average outcome is worse when the 2 is highly probable.
+]
+
+#pagebreak()
 
 Q27: In Alpha Beta pruning, the order in which children are evaluated matters for efficiency but not for correctness. Explain why the final Minimax value is always the same regardless of evaluation order, and describe what child ordering maximizes the number of pruned nodes.
-#v(4cm)
+
+#answer[
+  
+Alpha-Beta pruning only eliminates subtrees that provably can not affect the final Minimax value. The $alpha$ and $beta$ bounds guarantee that any pruned subtree would return a value that is irrelevant to the parent's decision, so the parent has already found a child that's at least as good (or as bad). So no matter what evaluation order is used, the pruned subtrees couldn't have changed the answer, and the result is always identical to full Minimax.
+
+So the order that maxinimzes the number of pruned nodes places the best move first at each node. So the highest valued children first at MAX nodes, and lowest valued children first at MIN nodes. This establishes tight $alpha$/$beta$ bounds as early as possible, allowing maximum pruning of remaining children. With perfect ordering, the time complexity drops from O(b^d) to O(b^(d/2)), effectively letting you search twice as deep for the same computational budget. 
+
+In practice, move ordering heuristics (like trying captures first in chess) approximate this ideal(this could be important for your lab :P )
+]
 
 Q28: Musty is building a chess AI. They argue: "Since Expectimax accounts for the possibility that the opponent plays suboptimally, it is better than Minimax." Is this claim always true, sometimes true, or always false? Provide a brief justification or counterexample.
 
+#answer[
+It is sometimes true becasue Expectimax is better when the opponent really is suboptimal or stochastic. This is because it accurately models a random or imperfect opponent and exploits their mistakes. But it's worse when facing a strong adversary, because Expectimax may choose risky moves that an optimal opponent would punish.
 
+Take chess specifically, the claim is just wrong. Serious chess opponents play near optimally#sidenote[https://www.vice.com/en/article/did-hans-neimann-cheat-at-chess-with-a-sex-toy-this-coder-is-attempting-to-find-out/] so modeling them as random or stochastic would lead to overconfident, exploitable strategies. The standard approach in chess AI is Minimax with alpha-beta pruning, exactly because the worst case (adversarial) assumption is appropriate against strong opponents. Expectimax would actually be worse for chess in most realistic settings.
+
+The right choice depends on your opponent model. Use Minimax when the opponent is adversarial and use Expectimax when the opponent is random, stochastic, or suboptimal in known ways. "Always better" is too strong a claim for either.
+]
 
