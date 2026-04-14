@@ -264,7 +264,7 @@ Q16: Jeffrey Armstrong claims: "If a heuristic is inadmissible, A-star will neve
 #answer[*Sometimes true.* #sidenote[An inadmissible heuristic can still find the optimal solution, however it just isnt guaranteed to. ]
 
 
-Counterexample: Consider a graph where the heuristic overestimates only at states that arent on the optimal path. Astart may still expand the optimal path first and return it. The point of admissibility is to guarantee optimality. So losing admissibility means losing the guarantee, not necessarily losing optimality on every instance.
+Counterexample: Consider a graph where the heuristic overestimates only at states that arent on the optimal path. Astar may still expand the optimal path first and return it. The point of admissibility is to guarantee optimality. So losing admissibility means losing the guarantee, not necessarily losing optimality on every instance.
 ]
 
 Q17: Explain why A-star with a consistent heuristic guarantees that when a node is first expanded in graph search, it has been reached by the optimal path. Why does admissibility alone not guarantee this for A-star graph search?
@@ -277,7 +277,20 @@ Soooo, Astar graph search with an admissible but inconsistent heuristic can retu
 ]
 
 Q18: Jeffery has once again proposed a new heuristic for A-star search that is very accurate but takes O(n^2) time to compute, where n is the problem size. The current heuristic is less accurate but computes in O(1). Under what circumstances would you recommend switching to the more expensive heuristic?
-#v(4cm)
+
+#answer[
+Total runtime for A-star is roughly: (nodes expanded) x (cost per node). The cost per node includes heuristic evaluation, so switching makes sense only when the reduction in nodes expanded outweighs the higher per node cost.
+
+One would switch to the O(n^2) heuristic when:
+- The branching factor is large. A more informed heuristic prunes far more of the search tree when b is high, since the frontier grows exponentially. The node savings can exceed the constant overhead of a worse heuristic.
+- The solution depth is large. The deeper the goal, the more nodes the inaccurate heuristic explores, so the accurate one pays off more over time.
+- n is small. If the problem size n is small, O(n^2) vs O(1) per node is a minor difference in absolute time.
+
+But you would stay with the O(1) heuristic when:
+- n is large. If n is large, the O(n^2) evaluation becomes expensive per node and the heuristic cost starts to dominate total runtime.
+- The state space is small or shallow. If both heuristics lead to similar node counts, paying O(n^2) per node gains nothing.
+]
+
 #pagebreak()
 
 Q19: The 15-puzzle is a sliding tile game in which one tries to arrange all the tiles in ascending order(See figure 2 below). Two heuristics are proposed for the 15-puzzle :
@@ -358,9 +371,7 @@ All 4 pancakes are out of place so Musty's heuristic gives h = 4 / 2 = 2.
 
 But the optimal solution requires more than 2 flips. Feel free to try it. No matter which flip you make first very few if any pancakes end up in their final positions and you need additional flips to fix the rest. The optimal solution for this stack is 4 flips so the true cost is 4, but h estimates 2, which is fine for admissibility (h <= hstar). The issue is Mustys reasoning is flawed even though the resulting number happens to be admissible.
 
-Heres another counterexample showing overestimation. Consider [1, 3, 2, 4] where pancakes 3 and 2 are out of position. h = 2/2 = 1. But fixing this requires at least 2 flips (you cant swap two adjacent pancakes in one flip). So the heuristic underestimates here, which is still admissible but not for the reason Musty claims.
-
-So basically Musty's justification is wrong even when the number happens to come out admissible. To prove admissibility, you need a real argument tying h to a lower bound on the optimal cost.
+To prove admissibility, you need a real argument tying h to a lower bound on the optimal cost.
 ]
 
 (c) Propose a correct admissible heuristic and prove it is admissible.
@@ -368,7 +379,7 @@ So basically Musty's justification is wrong even when the number happens to come
 #answer[
 Heres one but there are certainly more: 
 
-h(n) = number of adjacent pairs in the stack that are not consecutive in the goal ordering(ie: count pairs (i, i+1) in the current stack where the two pancakes at positions i and i+1 are not consecutive in size either ascending or decending).
+h(n) = number of adjacent pairs in the stack that are not consecutive in the goal ordering(ie: count pairs (i, i+1) in the current stack where the two pancakes at positions i and i+1 are not consecutive in size either ascending or descending).
  
 Each flip can break or fix at most 1 such adjacent gap (specifically, the gap at the position where the spatula was inserted). Other adjacencies in the flipped portion are preserved (just reversed). So each flip reduces the gap count by at most 1, meaning the number of remaining gaps is a lower bound on the number of flips needed. h(n) <= hstar(n).
 
@@ -383,7 +394,7 @@ h([1,3,2,4]) = 2
 
 [1,2,3,4] Done!
 
-true flips = 3 , hursitic = 2
+true flips = 3 , heuristic = 2
 
 2<=3 huzzah!
 
