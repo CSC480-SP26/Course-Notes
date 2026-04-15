@@ -621,3 +621,106 @@ Take chess specifically, the claim is just wrong. Serious chess opponents play n
 The right choice depends on your opponent model. Use Minimax when the opponent is adversarial and use Expectimax when the opponent is random, stochastic, or suboptimal in known ways. "Always better" is too strong a claim for either.
 ]
 
+
+For Question 29, use the following game tree. 
+
+
+#let minimax-tree = tidy-tree-graph.with(
+  draw-node: (
+    (extrude: -5pt),
+    (inset: 1em),
+    (stroke: 0.75pt),
+    tidy-tree-draws.metadata-match-draw-node.with(
+      matches: (
+        min-node: (
+          (width: 20pt, height: 20pt, shape: shapes.triangle.with(dir: bottom))
+        ),
+        max-node: (
+          (width: 20pt, height: 20pt, shape: shapes.triangle.with(dir: top))
+        ),
+        leaf-node: (
+          (width: 30pt, height: 30pt, shape: rect)
+        ),
+        average-node: (
+          (width: 20pt, height: 20pt, shape: circle)
+        ),
+      ),
+    ),
+  ),
+  draw-edge: (
+    (marks: "->", stroke: 0.5pt),
+  ),
+  spacing: (15pt, 25pt),
+)
+
+#wideblock()[
+  #figure(
+    caption: [Game Tree for Q29],
+    minimax-tree()[
+      - #max-node
+        - #min-node
+          - #max-node
+            - 6 #leaf-node
+            - 8 #leaf-node
+          - #max-node
+            - 4 #leaf-node
+            - 7 #leaf-node 
+        - #min-node
+          - #max-node
+            - 2 #leaf-node
+            - 5 #leaf-node
+          - #max-node
+            - 9 #leaf-node
+            - 1 #leaf-node 
+        - #min-node
+          - #max-node
+            - 12 #leaf-node
+            - 3 #leaf-node
+          - #max-node
+            - 15 #leaf-node
+            - 9 #leaf-node 
+    ],
+  )
+]
+
+Q29: Using the above tree, apply Alpha Beta Pruning. List which leaf nodes are pruned (not evaluated). Assume children are evaluated left to right.
+
+#answer[
+Start at MAX root: $alpha$ = $-oo$, $beta$ = $+oo$.
+
+- Left MIN subtree ($alpha$ = $-oo$, $beta$ = $+oo$ passed down):
+  - Left MAX child ($alpha$ = $-oo$, $beta$ = $+oo$):
+    - Evaluate leaf 6. $alpha$ = max($-oo$, 6) = 6.
+    - Evaluate leaf 8. $alpha$ = max(6, 8) = 8.
+    - Returns 8.
+  - Left MIN updates $beta$ = min($+oo$, 8) = 8.
+  - Right MAX child ($alpha$ = $-oo$, $beta$ = 8):
+    - Evaluate leaf 4. $alpha$ = max($-oo$, 4) = 4. No pruning.
+    - Evaluate leaf 7. $alpha$ = max(4, 7) = 7. No pruning (7 < 8).
+    - Returns 7.
+  - Left MIN updates $beta$ = min(8, 7) = 7.
+  - Left MIN returns 7. Back at MAX root: $alpha$ = max($-oo$, 7) = 7.
+
+- Middle MIN subtree ($alpha$ = 7, $beta$ = $+oo$ passed down):
+  - Left MAX child ($alpha$ = 7, $beta$ = $+oo$):
+    - Evaluate leaf 2. $alpha$ = max(7, 2) = 7. No pruning.
+    - Evaluate leaf 5. $alpha$ = max(7, 5) = 7. No pruning.
+    - Returns 5.
+  - Middle MIN updates $beta$ = min($+oo$, 5) = 5.
+  - Now $beta$ (5) $<=$ $alpha$ (7): prune. The entire right MAX child (leaves 9 and 1) is never evaluated.
+  - Middle MIN returns $<=$ 5. Root $alpha$ stays 7.
+
+- Right MIN subtree ($alpha$ = 7, $beta$ = $+oo$ passed down):
+  - Left MAX child ($alpha$ = 7, $beta$ = $+oo$):
+    - Evaluate leaf 12. $alpha$ = max(7, 12) = 12. No pruning.
+    - Evaluate leaf 3. $alpha$ = max(12, 3) = 12. No pruning.
+    - Returns 12.
+  - Right MIN updates $beta$ = min($+oo$, 12) = 12.
+  - Right MAX child ($alpha$ = 7, $beta$ = 12):
+    - Evaluate leaf 15. $alpha$ = max(7, 15) = 15.
+    - Now $alpha$ (15) $>=$ $beta$ (12): prune. Leaf 9 is never evaluated.
+    - Returns $>=$ 15.
+  - Right MIN returns min(12, $>=$ 15) = 12. Root $alpha$ = max(7, 12) = 12.
+
+Pruned leaves: 9 and 1 (right MAX subtree of Middle MIN), and 9 (second child of Right MAX of Right MIN). Final Minimax value = 12 (unchanged from full Minimax).
+]
