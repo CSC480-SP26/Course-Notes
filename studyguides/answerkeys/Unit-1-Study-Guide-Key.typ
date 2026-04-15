@@ -622,6 +622,8 @@ The right choice depends on your opponent model. Use Minimax when the opponent i
 ]
 
 
+#pagebreak()
+
 For Question 29, use the following game tree. 
 
 
