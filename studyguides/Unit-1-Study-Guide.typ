@@ -227,7 +227,7 @@ Q21: Define the following terms in the context of adversarial search: #sidenote[
 
 #v(1cm)
 
-(c) Utility function
+(c) Evaluation(Utility) function
 
 #v(1cm)
 

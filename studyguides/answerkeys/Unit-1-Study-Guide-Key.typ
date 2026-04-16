@@ -435,7 +435,7 @@ Examples: chess (win/loss/draw) or poker (money won = money lost)
 A state where the game is over and no further moves are possible. Terminal states have a defined utility value assigned by the games rules.
 ]
 
-(c) Utility function
+(c) Evaluation(Utility) function
 
 #answer[
 A function that assigns a numerical value to terminal states representing the how good that outcome is from a players perspective. MAX tries to reach high utility and MIN tries to force low utility.
