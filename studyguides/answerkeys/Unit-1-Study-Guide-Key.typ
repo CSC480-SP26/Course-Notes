@@ -822,3 +822,81 @@ Start at MAX root: $alpha$ = $-oo$, $beta$ = $+oo$.
 
 Pruned leaves: 3 (child of D), 11 (child of G), 1 (child of I), and 4 (child of L). Final value = 6.
 ]
+
+
+#pagebreak()
+#let minimax-tree = tidy-tree-graph.with(
+  draw-node: (
+    (extrude: -5pt),
+    (inset: 1em),
+    (stroke: 0.75pt),
+    tidy-tree-draws.metadata-match-draw-node.with(
+      matches: (
+        min-node: (
+          (width: 20pt, height: 20pt, shape: shapes.triangle.with(dir: bottom))
+        ),
+        max-node: (
+          (width: 20pt, height: 20pt, shape: shapes.triangle.with(dir: top))
+        ),
+        leaf-node: (
+          (width: 30pt, height: 30pt, shape: rect)
+        ),
+        average-node: (
+          (width: 40pt, height: 20pt, shape: circle)
+        ),
+      ),
+    ),
+  ),
+  draw-edge: (
+    (marks: "->", stroke: 0.5pt),
+  ),
+  spacing: (15pt, 25pt),
+)
+
+
+#wideblock()[
+  #figure(
+    caption: [Game Tree for Q31],
+    minimax-tree()[
+      - #max-node
+        - A #min-node
+          - B #max-node
+            - C (.6|.4) #average-node
+              - 5 #leaf-node
+              - D #max-node
+                - 7 #leaf-node
+                - 3 #leaf-node
+            - 8 #leaf-node
+          - E #max-node
+            - F (.3|.2|.5) #average-node
+                - 9 #leaf-node
+                - 4 #leaf-node
+                - 11 #leaf-node
+            - G #min-node
+              - H (.3|.7) #average-node
+                - 13 #leaf-node
+                - 1 #leaf-node
+              - I #max-node
+                - 2 #leaf-node
+                - 5 #leaf-node
+        - J (.9|.1) #average-node
+          - 2 #leaf-node
+          - 5 #leaf-node
+    ],
+  )
+]
+
+Q31: Using the above tree, apply the Expectimax Algorithm. Provide the final outpoot of the root.
+
+#answer[
+- *D* (max): max(7, 3) = 7
+- *C* (avg, 0.6|0.4): 0.6x5 + 0.4x7 = 5.8
+- *B* (max): max(5.8, 8) = 8
+- *F* (avg, 0.3|0.2|0.5): 0.3x9 + 0.2x4 + 0.5x11 = 9.0
+- *I* (max): max(2, 5) = 5
+- *H* (avg, 0.3|0.7): 0.3x13 + 0.7x1 = 4.6
+- *G* (min): min(4.6, 5) = 4.6
+- *E* (max): max(9.0, 4.6) = 9.0
+- *A* (min): min(8, 9.0) = 8
+- *J* (avg, 0.9|0.1): 0.9x2 + 0.1x5 = 2.3
+- *Root* (max): max(8, 2.3) = *8*]
