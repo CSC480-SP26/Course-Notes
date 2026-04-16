@@ -324,9 +324,122 @@ For Questions 26, use the following game tree.
 
 
 Q26: Now the second layer nodes are CHANCE nodes (with uniform probability over their children) instead of MIN nodes. Compute the Expectimax value of the root.
-#v(4cm)
+#v(3cm)
 
 Q27: In Alpha-Beta pruning, the order in which children are evaluated matters for efficiency but not for correctness. Explain why the final Minimax value is always the same regardless of evaluation order, and describe what child ordering maximizes the number of pruned nodes.
-#v(4cm)
+#v(3.5cm)
 
 Q28: Musty is building a chess AI. They argue: "In my experience, opponents frequently play suboptimally and I can rarely predict very well what their next move is likely to be. Since Expectimax accounts for this uncertainty and possiblilty of suboptimal play, it is likely to perform better than Minimax on average." Is this claim always true, sometimes true (if so under what conditions?), or always false? Provide a brief justification or counterexample.
+
+
+
+#pagebreak()
+
+
+For Question 29, use the following game tree. 
+
+
+#let minimax-tree = tidy-tree-graph.with(
+  draw-node: (
+    (extrude: -5pt),
+    (inset: 1em),
+    (stroke: 0.75pt),
+    tidy-tree-draws.metadata-match-draw-node.with(
+      matches: (
+        min-node: (
+          (width: 20pt, height: 20pt, shape: shapes.triangle.with(dir: bottom))
+        ),
+        max-node: (
+          (width: 20pt, height: 20pt, shape: shapes.triangle.with(dir: top))
+        ),
+        leaf-node: (
+          (width: 30pt, height: 30pt, shape: rect)
+        ),
+        average-node: (
+          (width: 20pt, height: 20pt, shape: circle)
+        ),
+      ),
+    ),
+  ),
+  draw-edge: (
+    (marks: "->", stroke: 0.5pt),
+  ),
+  spacing: (15pt, 25pt),
+)
+
+#wideblock()[
+  #figure(
+    caption: [Game Tree for Q29],
+    minimax-tree()[
+      - #max-node
+        - #min-node
+          - #max-node
+            - 6 #leaf-node
+            - 8 #leaf-node
+          - #max-node
+            - 4 #leaf-node
+            - 7 #leaf-node 
+        - #min-node
+          - #max-node
+            - 2 #leaf-node
+            - 5 #leaf-node
+          - #max-node
+            - 9 #leaf-node
+            - 1 #leaf-node 
+        - #min-node
+          - #max-node
+            - 12 #leaf-node
+            - 3 #leaf-node
+          - #max-node
+            - 15 #leaf-node
+            - 9 #leaf-node 
+    ],
+  )
+]
+
+Q29: Using the above tree, apply Alpha Beta Pruning. List which leaf nodes are pruned (not evaluated). Assume children are evaluated left to right.
+
+
+#pagebreak()
+
+#wideblock()[
+  #figure(
+    caption: [Game Tree for Q30],
+    minimax-tree()[
+      - #max-node
+        - A #min-node
+          - B #max-node
+            - C #min-node
+              - 5 #leaf-node
+              - D #max-node
+                - 7 #leaf-node
+                - 3 #leaf-node
+            - 8 #leaf-node
+          - E #max-node
+            - F #min-node
+                - 9 #leaf-node
+                - 4 #leaf-node
+            - G #min-node
+                - 6 #leaf-node
+                - 2 #leaf-node
+              - 11 #leaf-node
+            - H #min-node
+              - I #max-node
+                - 13 #leaf-node
+                - 1 #leaf-node
+              - J #max-node
+                - 2 #leaf-node
+                - 5 #leaf-node
+        - K #min-node
+              - 6 #leaf-node
+              - 9 #leaf-node
+              - L #max-node
+                - 7 #leaf-node
+                - 4 #leaf-node
+    ],
+  )
+]
+
+Note: in the tree above, some nodes have both a MIN/MAX child _and_ a leaf as siblings. This represents situations where a player can either continue the game (allowing the opponent to respond) or take an action that immediately terminates that branch, such as folding in a card game, accepting an offer in a negotiation, or delivering checkmate in chess. The opponent never gets to act on a terminal branch. Importantly, early termination is not always the better choice: the fixed payoff of a terminal state may be worse than what the player could have achieved by continuing play.
+
+Q30: Using the above tree, apply Alpha Beta Pruning. List which leaf nodes are pruned (not evaluated). Assume children are evaluated left to right.
