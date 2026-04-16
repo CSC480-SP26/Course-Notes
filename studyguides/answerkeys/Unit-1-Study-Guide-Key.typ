@@ -724,5 +724,101 @@ Start at MAX root: $alpha$ = $-oo$, $beta$ = $+oo$.
     - Returns $>=$ 15.
   - Right MIN returns min(12, $>=$ 15) = 12. Root $alpha$ = max(7, 12) = 12.
 
-Pruned leaves: 9 and 1 (right MAX subtree of Middle MIN), and 9 (second child of Right MAX of Right MIN). Final Minimax value = 12 (unchanged from full Minimax).
+Pruned leaves: 9 and 1 (right MAX subtree of Middle MIN), and 9 (second child of Right MAX of Right MIN). Final value = 12 .
+]
+
+#pagebreak()
+
+#wideblock()[
+  #figure(
+    caption: [Game Tree for Q30],
+    minimax-tree()[
+      - #max-node
+        - A #min-node
+          - B #max-node
+            - C #min-node
+              - 5 #leaf-node
+              - D #max-node
+                - 7 #leaf-node
+                - 3 #leaf-node
+            - 8 #leaf-node
+          - E #max-node
+            - F #min-node
+                - 9 #leaf-node
+                - 4 #leaf-node
+            - G #min-node
+                - 6 #leaf-node
+                - 2 #leaf-node
+              - 11 #leaf-node
+            - H #min-node
+              - I #max-node
+                - 13 #leaf-node
+                - 1 #leaf-node
+              - J #max-node
+                - 2 #leaf-node
+                - 5 #leaf-node
+        - K #min-node
+              - 6 #leaf-node
+              - 9 #leaf-node
+              - L #max-node
+                - 7 #leaf-node
+                - 4 #leaf-node
+    ],
+  )
+]
+
+Note: in the tree above, some nodes have both a MIN/MAX child _and_ a leaf as siblings. This represents situations where a player can either continue the game (allowing the opponent to respond) or take an action that immediately terminates that branch, such as folding in a card game, accepting an offer in a negotiation, or delivering checkmate in chess. The opponent never gets to act on a terminal branch. Importantly, early termination is not always the better choice: the fixed payoff of a terminal state may be worse than what the player could have achieved by continuing play. #sidenote[https://en.wikipedia.org/wiki/Horizon_effect]#sidenote[https://en.wikipedia.org/wiki/Secretary_problem]
+
+Q30: Using the above tree, apply Alpha Beta Pruning. List which leaf nodes are pruned (not evaluated). Assume children are evaluated left to right.
+
+#answer[
+Start at MAX root: $alpha$ = $-oo$, $beta$ = $+oo$.
+
+- MIN node A ($alpha$ = $-oo$, $beta$ = $+oo$ passed down):
+  - MAX node B ($alpha$ = $-oo$, $beta$ = $+oo$):
+    - MIN node C ($alpha$ = $-oo$, $beta$ = $+oo$):
+      - Evaluate leaf 5. $beta$ = min($+oo$, 5) = 5.
+      - MAX node D ($alpha$ = $-oo$, $beta$ = 5):
+        - Evaluate leaf 7. $alpha$ = max($-oo$, 7) = 7.
+        - Now $alpha$ (7) $>=$ $beta$ (5): prune. Leaf 3 is never evaluated.
+        - D returns $>=$ 7.
+      - C returns min(5, $>=$ 7) = 5. B updates $alpha$ = max($-oo$, 5) = 5.
+    - Evaluate leaf 8. $alpha$ = max(5, 8) = 8. No pruning (8 $<$ $beta$ = $+oo$).
+    - B returns 8.
+  - A updates $beta$ = min($+oo$, 8) = 8.
+  - MAX node E ($alpha$ = $-oo$, $beta$ = 8):
+    - MIN node F ($alpha$ = $-oo$, $beta$ = 8):
+      - Evaluate leaf 9. No pruning ($beta$ = min(8, 9) = 8).
+      - Evaluate leaf 4. No pruning ($beta$ = min(8, 4) = 4).
+      - F returns 4.
+    - E updates $alpha$ = max($-oo$, 4) = 4.
+    - MIN node G ($alpha$ = 4, $beta$ = 8):
+      - Evaluate leaf 6. $beta$ = min(8, 6) = 6. No pruning (6 $>$ $alpha$ = 4).
+      - Evaluate leaf 2. $beta$ = min(6, 2) = 2.
+      - Now $beta$ (2) $<=$ $alpha$ (4): prune. Leaf 11 is never evaluated.
+      - G returns $<=$ 2. E's $alpha$ stays 4.
+    - MIN node H ($alpha$ = 4, $beta$ = 8):
+      - MAX node I ($alpha$ = 4, $beta$ = 8):
+        - Evaluate leaf 13. $alpha$ = max(4, 13) = 13.
+        - Now $alpha$ (13) $>=$ $beta$ (8): prune. Leaf 1 is never evaluated. Even if leaf 1 were larger than 13, I would still return $>=$ 13. For A (MIN) to consider E at all, E must return something less than B's value of 8. For E to beat F's current value of 4, H must return something in the range (4, 8). Since I $>=$ 13 $>$ 8, H can only return a useful value through J — I's exact value beyond 13 is irrelevant to any decision higher up the tree.
+        - I returns $>=$ 13.
+      - H updates $beta$ = min(8, 13) = 8 (unchanged). No pruning yet.
+      - MAX node J ($alpha$ = 4, $beta$ = 8):
+        - Evaluate leaf 2. $alpha$ = max(4, 2) = 4. No pruning.
+        - Evaluate leaf 5. $alpha$ = max(4, 5) = 5. No pruning (5 $<$ $beta$ = 8).
+        - J returns 5.
+      - H returns min(13, 5) = 5. E updates $alpha$ = max(4, 5) = 5.
+    - E returns 5.
+  - A returns min(8, 5) = 5. Root updates $alpha$ = max($-oo$, 5) = 5.
+
+- MIN node K ($alpha$ = 5, $beta$ = $+oo$ passed down):
+  - Evaluate leaf 6. $beta$ = min($+oo$, 6) = 6. No pruning (6 $>$ $alpha$ = 5).
+  - Evaluate leaf 9. $beta$ = min(6, 9) = 6. No pruning.
+  - MAX node L ($alpha$ = 5, $beta$ = 6):
+    - Evaluate leaf 7. $alpha$ = max(5, 7) = 7.
+    - Now $alpha$ (7) $>=$ $beta$ (6): prune. Leaf 4 is never evaluated. This is becasue L will maximize its score meaning that L will return 7 or more, however K (MIN) already has 6 from its leaf children and will never choose a child returning more. So L's other leaf is pruned as the other leaf (which is 4 but we can pretend we don't know what it is, it could be $+oo$), can only raise L's value further. K will always discard L in favour of 6, so leaf 4 cannot affect any decision in the tree.
+    - L returns $>=$ 7.
+  - K returns min(6, $>=$ 7) = 6. Root $alpha$ = max(5, 6) = 6.
+
+Pruned leaves: 3 (child of D), 11 (child of G), 1 (child of I), and 4 (child of L). Final value = 6.
 ]
