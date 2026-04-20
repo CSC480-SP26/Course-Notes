@@ -227,7 +227,7 @@ Q21: Define the following terms in the context of adversarial search: #sidenote[
 
 #v(1cm)
 
-(c) Utility function
+(c) Evaluation(Utility) function
 
 #v(1cm)
 
@@ -443,3 +443,69 @@ Q29: Using the above tree, apply Alpha Beta Pruning. List which leaf nodes are p
 Note: in the tree above, some nodes have both a MIN/MAX child _and_ a leaf as siblings. This represents situations where a player can either continue the game (allowing the opponent to respond) or take an action that immediately terminates that branch, such as folding in a card game, accepting an offer in a negotiation, or delivering checkmate in chess. The opponent never gets to act on a terminal branch. Importantly, early termination is not always the better choice: the fixed payoff of a terminal state may be worse than what the player could have achieved by continuing play.
 
 Q30: Using the above tree, apply Alpha Beta Pruning. List which leaf nodes are pruned (not evaluated). Assume children are evaluated left to right.
+
+
+
+#pagebreak()
+#let minimax-tree = tidy-tree-graph.with(
+  draw-node: (
+    (extrude: -5pt),
+    (inset: 1em),
+    (stroke: 0.75pt),
+    tidy-tree-draws.metadata-match-draw-node.with(
+      matches: (
+        min-node: (
+          (width: 20pt, height: 20pt, shape: shapes.triangle.with(dir: bottom))
+        ),
+        max-node: (
+          (width: 20pt, height: 20pt, shape: shapes.triangle.with(dir: top))
+        ),
+        leaf-node: (
+          (width: 30pt, height: 30pt, shape: rect)
+        ),
+        average-node: (
+          (width: 40pt, height: 20pt, shape: circle)
+        ),
+      ),
+    ),
+  ),
+  draw-edge: (
+    (marks: "->", stroke: 0.5pt),
+  ),
+  spacing: (15pt, 25pt),
+)
+
+
+#wideblock()[
+  #figure(
+    caption: [Game Tree for Q31],
+    minimax-tree()[
+      - #max-node
+        - A #min-node
+          - B #max-node
+            - C (.6|.4) #average-node
+              - 5 #leaf-node
+              - D #max-node
+                - 7 #leaf-node
+                - 3 #leaf-node
+            - 8 #leaf-node
+          - E #max-node
+            - F (.3|.2|.5) #average-node
+                - 9 #leaf-node
+                - 4 #leaf-node
+                - 11 #leaf-node
+            - G #min-node
+              - H (.3|.7) #average-node
+                - 13 #leaf-node
+                - 1 #leaf-node
+              - I #max-node
+                - 2 #leaf-node
+                - 5 #leaf-node
+        - J (.9|.1) #average-node
+          - 2 #leaf-node
+          - 5 #leaf-node
+    ],
+  )
+]
+
+Q31: Using the above tree, apply the Expectimax Algorithm. Provide the final outpoot of the root.
