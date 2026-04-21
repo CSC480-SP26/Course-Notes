@@ -1,4 +1,4 @@
-#import "../wdf.typ": *
+#import "../../wdf.typ": *
 
 
 #show: template.with(
@@ -18,6 +18,7 @@
   serif: true,
   exam: false,
 )
+#let answer(body) = text(fill: red, body)
 
 
 #sidenote(dy: 1.15em, numbered: false)[#outline(depth: 2)]
@@ -62,16 +63,15 @@ Q: Fill out this truth table:
 
   [*P*], [*Q*], [*R*], [*$not$ P*], [*P $or$ Q*], [*Q $and$ R*], [*$not$(P $and$ R)*], [*(P $or$ Q) $and$ $not$ R*],
 
-  [True],  [False], [True],      [],      [],      [],      [],      [],
-  [False], [],      [True],  [],      [False], [],      [],      [],
-  [],      [True],  [False], [],      [],      [False], [],      [True],
-  [],      [],      [True],  [True],  [],      [True],  [],      [],
-  [True],  [],      [],      [],      [True],  [],      [False], [],
-  [],      [False], [False], [],      [],      [False], [True],  [],
-  [False], [True],  [],      [],      [],      [],      [],      [True],
-  [],      [],      [True],  [],      [True],  [],      [True],  [False],
+  [True],  [False], [True],  [#answer("False")], [#answer("True")],  [#answer("False")], [#answer("False")], [#answer("False")],
+  [False], [#answer("False")], [True], [#answer("True")], [False], [#answer("False")], [#answer("True")], [#answer("False")],
+  [#answer("False")], [True], [False], [#answer("True")], [#answer("True")], [False], [#answer("True")], [True],
+  [#answer("False")], [#answer("True")], [True], [True], [#answer("True")], [True], [#answer("True")], [#answer("False")],
+  [True], [#answer("True")], [#answer("False")], [#answer("False")], [True], [#answer("False")], [False], [#answer("True")],
+  [#answer("True")], [False], [False], [#answer("False")], [#answer("True")], [False], [True], [#answer("True")],
+  [False], [True], [#answer("False")], [#answer("True")], [#answer("True")], [#answer("False")], [#answer("True")], [True],
+  [#answer("False")], [#answer("False")], [True], [#answer("True")], [True], [#answer("False")], [True], [False],
 )
-
 
 Q: Why is the statement “P $=>$ Q” true when P is false? Then give an example in your own words. #sidenote("Think of the example we talked through during lecture...")
 
@@ -112,3 +112,5 @@ Q: What is And-Elimination?
 
 $models$
 $tack$
+
+
