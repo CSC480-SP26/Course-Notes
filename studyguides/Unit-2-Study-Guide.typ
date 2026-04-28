@@ -39,7 +39,7 @@ Q: Using the PEAS model, describe the environment of a student in CSC480.
 #v(4cm)
 
 
-Q: Classify the student’s environment in CSC480 using standard environment properties (ie: deterministic vs stochastic, fully vs partially observable, episodic vs sequential... etc).
+Q: Classify the student's environment in CSC480 using standard environment properties (ie: deterministic vs stochastic, fully vs partially observable, episodic vs sequential... etc).
 #v(2cm)
 
 
@@ -47,6 +47,11 @@ Q: Classify the student’s environment in CSC480 using standard environment pro
 = Part : Propositional Logic
 Q: Define Propositional Logic in your own words. #sidenote[AIMA Chapter 7.4 Page 235]
 #v(2cm)
+
+
+Q:  Explain Syntax Semantics and Models:
+#v(3cm)
+
 
 Q: What are the five common logical connectives uses in complex sentences and what do they mean?
 
