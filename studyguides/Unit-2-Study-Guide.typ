@@ -135,7 +135,7 @@ Q: $not X or (Y and Z)  models (X => Y)$
 #pagebreak()
 = Part : First-Order Logic
 
-Q: What is an interpretation (model) in First-Order Logic?
+Q: What is an interpretation (model) in First-Order Logic? #sidenote[AIMA Chapter 8.2 Page 274]
 #v(2.5cm)
 
 Q: What does it mean for a FOL formula to be valid? Satisfiable? Unsatisfiabl? How do these concepts compare to the propositional logic versions?
