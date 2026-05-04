@@ -34,8 +34,8 @@ Q: What is the difference between knowledge level and implementation level? Why 
 Q: Explain the difference between the declarative approach vs the procedural approach to building agents:
 #v(2cm)
 
-Q: Using the PEAS model, describe the environment of a student in CSC480.
-(Performance measure, Environment, Actuators, Sensors)
+Q: Using the PEAP/PEAS model, describe the environment of a student in CSC480. #sidenote[AIMA Chapter 7.4 Page 228]
+(Performance measure, Environment, Actions/Actuators, Preception/Sensors)
 #v(4cm)
 
 
@@ -82,38 +82,55 @@ Q: Why is the statement “P $=>$ Q” true when P is false? Then give an exampl
 
 #v(4cm)
 
+
+// Q Explain the difference between model checking and theorem proving. When might one be more efficient than the other?
+// #v(3cm) 
+
+
+Q: What is _Modus Ponens_? Give an example.
+#v(3cm)
+
 #pagebreak()
 
-= Part : Logic
+= Part : Conjunctive Normal Form
+For the Folllowing questions (XX-XX) convert them into CNF.
+
+Q: $(A or not B) <=> C$
+#v(3cm)
+
+Q: $not (A and B) => (not B or C)$
+
+#v(3cm)
+
+Q: $((A and B ) or C) => (not B and not (C or A))$
+#v(3cm)
+
+= Part : Logical Justification
 For the Folllowing questions (XX-XX) provide justification for whether each of the following are correct or incorrect.
 
 Q: $(X and Y)  models Y$
+#v(3cm)
 
 Q: $(not X and Y) or X  models X or Y$
+#v(3cm)
 
 
 Q: $not (X and Y) or (Z and not Y) models not X or Y$
+#v(3cm)
 
 
 Q: $not X or (Y and Z)  models (X => Y)$
 
 
 
-= Part : Inference
+// = Part : Inference
 
-Q: Define soundness and completeness. Why are both important?
-#v(3cm)
-
-Q Explain the difference between model checking and theorem proving. When might one be more efficient than the other?
-#v(3cm) 
+// Q: Define soundness and completeness. Why are both important?
+// #v(3cm)
 
 
-Q: What is _Modus Ponens_? Give an example.
-#v(3cm)
-
-
-Q: What is And-Elimination?
-#v(2cm)
-
+// Q: What is And-Elimination?
+// #v(2cm)
+#pagebreak()
 $models$
 $tack$
