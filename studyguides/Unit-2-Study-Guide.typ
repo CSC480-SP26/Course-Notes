@@ -71,7 +71,7 @@ Q: Fill out this truth table:
   [False], [],      [True],  [],      [False], [],      [],      [],
   [],      [True],  [False], [],      [],      [False], [],      [True],
   [],      [],      [True],  [True],  [],      [True],  [],      [],
-  [True],  [],      [],      [],      [True],  [],      [False], [],
+  [True],  [],      [],      [],      [True],  [True],      [False], [],
   [],      [False], [False], [],      [],      [False], [True],  [],
   [False], [True],  [],      [],      [],      [],      [],      [True],
   [],      [],      [True],  [],      [True],  [],      [True],  [False],
@@ -131,6 +131,75 @@ Q: $not X or (Y and Z)  models (X => Y)$
 
 // Q: What is And-Elimination?
 // #v(2cm)
+
+#pagebreak()
+= Part : First-Order Logic
+
+Q: What is an interpretation (model) in First-Order Logic?
+#v(2.5cm)
+
+Q: What does it mean for a FOL formula to be valid? Satisfiable? Unsatisfiabl? How do these concepts compare to the propositional logic versions?
+#v(2.5cm)
+
+Q: Consider the domain $D = {1, 2, 3}$ with interpretation $I$ where:
+- $"Even" = {2}$, $"Prime" = {2, 3}$
+- $"Less"(x, y)$ is true iff $x < y$ 
+
+Evaluate each sentence as true or false under $I$, and briefly justify:
+
+(a) $forall x ("Even"(x) => "Prime"(x))$
+#v(1.2cm)
+(b) $forall x ("Prime"(x) => "Even"(x))$
+#v(1.2cm)
+(c) $exists x ("Even"(x) and "Prime"(x))$
+#v(1.2cm)
+(d) $forall x exists y "Less"(x, y)$
+#v(1.2cm)
+(e) $exists x forall y (x eq.not y => "Less"(x, y))$
+#v(1.2cm)
+
+#pagebreak()
+
+Q: For each sentence below, decide if it is valid, satisfiable (but not valid), or unsatisfiable. Justify each answer, for satisfiable but not valid sentences, give both a model where it is true and one where it is false.
+
+(a) $forall x P(x) => exists x P(x)$
+#v(2cm)
+(b) $exists x P(x) => forall x P(x)$
+#v(2cm)
+(c) $(forall x P(x)) => (forall x (P(x) or Q(x)))$
+#v(2cm)
+(d) $forall x exists y F(x, y) => exists y forall x F(x, y)$
+#v(2cm)
+
+Q: For each pair of sentences, determine whether they are logically equivalent. If not, clearly describe the difference in meaning and give a concrete counterexample interpretation.
+
+(a) $forall x exists y F(x, y)$ #h(1em) vs. #h(1em) $exists y forall x F(x, y)$
+#v(2.5cm)
+(b) $not forall x P(x)$ #h(1em) vs. #h(1em) $forall x not P(x)$
+#v(2.5cm)
+(c) $forall x (P(x) => Q(x))$ #h(1em) vs. #h(1em) $(forall x P(x)) => (forall x Q(x))$
+#v(2.5cm)
+
+Q: Consider the following knowledge base:
++ $forall x ("CS_Student"(x) => "TakesExams"(x))$
++ $forall x ("TakesExams"(x) and "StudiesHard"(x) => "Passes"(x))$
++ $forall x ("Passes"(x) => "Happy"(x))$
++ $"CS_Student"("John")$
++ $not "Happy"("John")$
+
+For each of the following, determine whether it is entailed by the KB. Show your chain of reasoning.
+
+(a) $"TakesExams"("John")$
+#v(1.5cm)
+(b) $not "StudiesHard"("John")$
+#v(1.5cm)
+(c) $exists x not "Happy"(x)$
+#v(1.5cm)
+(d) $forall x "CS_Student"(x)$
+#v(1.5cm)
+(e) $exists x ("CS_Student"(x) and not "StudiesHard"(x))$
+#v(1.5cm)
+
 #pagebreak()
 $models$
 $tack$

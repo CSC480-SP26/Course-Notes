@@ -67,7 +67,9 @@ Q: Fill out this truth table:
   [False], [#answer("False")], [True], [#answer("True")], [False], [#answer("False")], [#answer("True")], [#answer("False")],
   [#answer("False")], [True], [False], [#answer("True")], [#answer("True")], [False], [#answer("True")], [True],
   [#answer("False")], [#answer("True")], [True], [True], [#answer("True")], [True], [#answer("True")], [#answer("False")],
-  [True], [#answer("True")], [#answer("False")], [#answer("False")], [True], [#answer("False")], [False], [#answer("True")],
+
+  [True], [#answer("True")], [#answer("True")], [#answer("False")], [True], [True], [False], [#answer("False")],
+
   [#answer("True")], [False], [False], [#answer("False")], [#answer("True")], [False], [True], [#answer("True")],
   [False], [True], [#answer("False")], [#answer("True")], [#answer("True")], [#answer("False")], [#answer("True")], [True],
   [#answer("False")], [#answer("False")], [True], [#answer("True")], [True], [#answer("False")], [True], [False],
