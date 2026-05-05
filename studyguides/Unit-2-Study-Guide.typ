@@ -26,14 +26,14 @@
 = Part : Knowledge Based Agents 
 
 
-Q1: What is a knowledge base? What is a “sentence” in this context?
+Q1: What is a knowledge base? What is a “sentence” in this context?  #sidenote[AIMA Chapter 7.1 Page 227]
 #v(1.5cm)
 
 
-Q2: What is the difference between knowledge level and implementation level? Why is this distinction important?
+Q2: What is the difference between knowledge level and implementation level? Why is this distinction important?#sidenote[AIMA Chapter 7.1 Page 228]
 #v(1.5cm)
 
-Q3: Explain the difference between the declarative approach vs the procedural approach to building agents:
+Q3: Explain the difference between the declarative approach vs the procedural approach to building agents:#sidenote[AIMA Chapter 7.1 Page 228]
 #v(2cm)
 
 Q4: Using the PEAP/PEAS model, describe the environment of a student in CSC480. #sidenote[AIMA Chapter 7.4 Page 228]
@@ -47,20 +47,20 @@ Q5: Classify the student's environment in CSC480 using standard environment prop
 
 #sidenote("Questions 4 & 5 are mostly review from the last unit and wont be on this exam")
 = Part : Propositional Logic
-Q: Define Propositional Logic in your own words. #sidenote[AIMA Chapter 7.4 Page 235]
+Q6: Define Propositional Logic in your own words. #sidenote[AIMA Chapter 7.4 Page 235]
 #v(2cm)
 
 
-Q:  Explain Syntax Semantics and Models:
+Q7:  Explain Syntax Semantics and Models:
 #v(3cm)
 
 
-Q: What are the five common logical connectives uses in complex sentences and what do they mean?
+Q8: What are the five common logical connectives uses in complex sentences and what do they mean?#sidenote[AIMA Chapter 7.4.1 Page 235]
 
 #v(3cm)
 
 
-Q: Fill out this truth table:
+Q9: Fill out this truth table:
 
 #table(
   columns: 8,
@@ -80,7 +80,7 @@ Q: Fill out this truth table:
 )
 
 
-Q: Why is the statement “P $=>$ Q” true when P is false? Then give an example in your own words. #sidenote("Think of the example we talked through during lecture...")
+Q10: Why is the statement “P $=>$ Q” true when P is false? Then give an example in your own words. #sidenote("Think of the example we talked through during lecture...")
 
 #v(4cm)
 
@@ -89,7 +89,7 @@ Q: Why is the statement “P $=>$ Q” true when P is false? Then give an exampl
 // #v(3cm) 
 
 
-Q: What is _Modus Ponens_? Give an example.
+Q11: What is _Modus Ponens_? Give an example.
 #v(3cm)
 
 #pagebreak()
@@ -97,31 +97,31 @@ Q: What is _Modus Ponens_? Give an example.
 = Part : Conjunctive Normal Form
 For the Folllowing questions (XX-XX) convert them into CNF.
 
-Q: $(A or not B) <=> C$
+Q12: $(A or not B) <=> C$
 #v(3cm)
 
-Q: $not (A and B) => (not B or C)$
+Q13: $not (A and B) => (not B or C)$
 
 #v(3cm)
 
-Q: $((A and B ) or C) => (not B and not (C or A))$
+Q14: $((A and B ) or C) => (not B and not (C or A))$
 #v(3cm)
 
 = Part : Logical Justification
 For the Folllowing questions (XX-XX) provide justification for whether each of the following are correct or incorrect.
 
-Q: $(X and Y)  models Y$
+Q15: $(X and Y)  models Y$
 #v(3cm)
 
-Q: $(not X and Y) or X  models X or Y$
-#v(3cm)
-
-
-Q: $not (X and Y) or (Z and not Y) models not X or Y$
+Q16: $(not X and Y) or X  models X or Y$
 #v(3cm)
 
 
-Q: $not X or (Y and Z)  models (X => Y)$
+Q17: $not (X and Y) or (Z and not Y) models not X or Y$
+#v(3cm)
+
+
+Q18: $not X or (Y and Z)  models (X => Y)$
 
 
 
@@ -137,13 +137,13 @@ Q: $not X or (Y and Z)  models (X => Y)$
 #pagebreak()
 = Part : First-Order Logic
 
-Q: What is an interpretation (model) in First-Order Logic? #sidenote[AIMA Chapter 8.2 Page 274]
+Q19: What is an interpretation (model) in First-Order Logic? #sidenote[AIMA Chapter 8.2 Page 274]
 #v(2.5cm)
 
-Q: What does it mean for a FOL formula to be valid? Satisfiable? Unsatisfiabl? How do these concepts compare to the propositional logic versions?
+Q20: What does it mean for a FOL formula to be valid? Satisfiable? Unsatisfiabl? How do these concepts compare to the propositional logic versions?
 #v(2.5cm)
 
-Q: Consider the domain $D = {1, 2, 3}$ with interpretation $I$ where:
+Q21: Consider the domain $D = {1, 2, 3}$ with interpretation $I$ where:
 - $"Even" = {2}$, $"Prime" = {2, 3}$
 - $"Less"(x, y)$ is true iff $x < y$ 
 
@@ -162,7 +162,7 @@ Evaluate each sentence as true or false under $I$, and briefly justify:
 
 #pagebreak()
 
-Q: For each sentence below, decide if it is valid, satisfiable (but not valid), or unsatisfiable. Justify each answer, for satisfiable but not valid sentences, give both a model where it is true and one where it is false.
+Q22: For each sentence below, decide if it is valid, satisfiable (but not valid), or unsatisfiable. Justify each answer, for satisfiable but not valid sentences, give both a model where it is true and one where it is false.
 
 (a) $forall x P(x) => exists x P(x)$
 #v(2cm)
@@ -173,7 +173,7 @@ Q: For each sentence below, decide if it is valid, satisfiable (but not valid), 
 (d) $forall x exists y F(x, y) => exists y forall x F(x, y)$
 #v(2cm)
 
-Q: For each pair of sentences, determine whether they are logically equivalent. If not, clearly describe the difference in meaning and give a concrete counterexample interpretation.
+Q23: For each pair of sentences, determine whether they are logically equivalent. If not, clearly describe the difference in meaning and give a concrete counterexample interpretation.
 
 (a) $forall x exists y F(x, y)$ #h(1em) vs. #h(1em) $exists y forall x F(x, y)$
 #v(2.5cm)
@@ -182,7 +182,7 @@ Q: For each pair of sentences, determine whether they are logically equivalent. 
 (c) $forall x (P(x) => Q(x))$ #h(1em) vs. #h(1em) $(forall x P(x)) => (forall x Q(x))$
 #v(2.5cm)
 
-Q: Consider the following knowledge base:
+Q24: Consider the following knowledge base:
 + $forall x ("CS_Student"(x) => "TakesExams"(x))$
 + $forall x ("TakesExams"(x) and "StudiesHard"(x) => "Passes"(x))$
 + $forall x ("Passes"(x) => "Happy"(x))$
@@ -202,6 +202,3 @@ For each of the following, determine whether it is entailed by the KB. Show your
 (e) $exists x ("CS_Student"(x) and not "StudiesHard"(x))$
 #v(1.5cm)
 
-#pagebreak()
-$models$
-$tack$

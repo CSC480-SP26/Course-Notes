@@ -25,36 +25,51 @@
 
 
 = Part : Knowledge Based Agents
-Q: What is a knowledge base? What is a “sentence” in this context?
-#v(1.5cm)
+Q1: What is a knowledge base? What is a “sentence” in this context?  #sidenote[AIMA Chapter 7.1 Page 227]
 
+#answer[See the textbook]
 
-Q: What is the difference between knowledge level and implementation level? Why is this distinction important?
-#v(1.5cm)
+Q2: What is the difference between knowledge level and implementation level? Why is this distinction important?#sidenote[AIMA Chapter 7.1 Page 228]
 
-Q: Explain the difference between the declarative approach vs the procedural approach to building agents:
-#v(2cm)
+#answer[See the textbook]
 
-Q: Using the PEAS model, describe the environment of a student in CSC480.
+Q3: Explain the difference between the declarative approach vs the procedural approach to building agents:#sidenote[AIMA Chapter 7.1 Page 228]
+
+#answer[See the textbook]
+
+Q4: Using the PEAS model, describe the environment of a student in CSC480.
 (Performance measure, Environment, Actuators, Sensors)
-#v(4cm)
+
+#answer[This is review...]
 
 
-Q: Classify the student’s environment in CSC480 using standard environment properties (ie: deterministic vs stochastic, fully vs partially observable, episodic vs sequential... etc).
-#v(2cm)
+Q5: Classify the student’s environment in CSC480 using standard environment properties (ie: deterministic vs stochastic, fully vs partially observable, episodic vs sequential... etc).
+
+#answer[This is review...]
 
 
 #sidenote("Questions 4 & 5 are mostly review from the last unit and wont be on this exam")
 = Part : Propositional Logic
-Q: Define Propositional Logic in your own words. #sidenote[AIMA Chapter 7.4 Page 235]
-#v(2cm)
+Q6: Define Propositional Logic in your own words. #sidenote[AIMA Chapter 7.4 Page 235]
 
-Q: What are the five common logical connectives uses in complex sentences and what do they mean?
+#answer[See the textbook]
 
-#v(3cm)
+Q7:  Explain Syntax Semantics and Models:
+
+#answer[
+  Syntax: The set of sentences allowed within the formal system
+
+  Semantics: The definition of truth in a logical system, generally as _correspondence_ of logical syntax sentences with _possible worlds_ and their properties.
+
+  Model: An instance of a world
+]
+
+Q8: What are the five common logical connectives uses in complex sentences and what do they mean? #sidenote[AIMA Chapter 7.4.1 Page 235]
+
+#answer[See the textbook]
 
 
-Q: Fill out this truth table:
+Q9: Fill out this truth table:
 
 #table(
   columns: 8,
@@ -74,71 +89,63 @@ Q: Fill out this truth table:
   [False], [True], [#answer("False")], [#answer("True")], [#answer("True")], [#answer("False")], [#answer("True")], [True],
   [#answer("False")], [#answer("False")], [True], [#answer("True")], [True], [#answer("False")], [True], [False],
 )
+#answer[In some sections of this true table any value could be permitted.]
 
-Q: Why is the statement “P $=>$ Q” true when P is false? Then give an example in your own words. #sidenote("Think of the example we talked through during lecture...")
+Q10: Why is the statement “P $=>$ Q” true when P is false? Then give an example in your own words. #sidenote("Think of the example we talked through during lecture...")
 
-#v(4cm)
+#answer[Smoke $=>$ Fire...]
 
-#pagebreak()
+Q11: What is _Modus Ponens_? Give an example.
 
-= Part : Logic
-For the Folllowing questions (XX-XX) provide justification for whether each of the following are correct or incorrect.
-
-Q: $(X and Y)  models Y$
-
-Q: $(not X and Y) or X  models X or Y$
-
-
-Q: $not (X and Y) or (Z and not Y) models not X or Y$
-
-
-Q: $not X or (Y and Z)  models (X => Y)$
-
-
-
-= Part : Inference
-
-Q: Define soundness and completeness. Why are both important?
-#v(3cm)
-
-Q Explain the difference between model checking and theorem proving. When might one be more efficient than the other?
-#v(3cm) 
-
-
-Q: What is _Modus Ponens_? Give an example.
-#v(3cm)
-
-#pagebreak()
+#answer[]
 
 = Part : Conjunctive Normal Form
 For the Folllowing questions (XX-XX) convert them into CNF.
 
-Q: $(A or not B) <=> C$
+Q12: $(A or not B) <=> C$
 #v(3cm)
 
-Q: $not (A and B) => (not B or C)$
+Q13: $not (A and B) => (not B or C)$
 
 #v(3cm)
 
-Q: $((A and B ) or C) => (not B and not (C or A))$
+Q14: $((A and B ) or C) => (not B and not (C or A))$
 #v(3cm)
+
+
+#pagebreak()
+
 
 = Part : Logical Justification
 For the Folllowing questions (XX-XX) provide justification for whether each of the following are correct or incorrect.
 
-Q: $(X and Y)  models Y$
+Q15: $(X and Y)  models Y$
 #v(3cm)
 
-Q: $(not X and Y) or X  models X or Y$
-#v(3cm)
-
-
-Q: $not (X and Y) or (Z and not Y) models not X or Y$
+Q16: $(not X and Y) or X  models X or Y$
 #v(3cm)
 
 
-Q: $not X or (Y and Z)  models (X => Y)$
+Q17: $not (X and Y) or (Z and not Y) models not X or Y$
+#v(3cm)
 
+
+Q18: $not X or (Y and Z)  models (X => Y)$
+
+
+#v(3cm)
+
+// = Part : Inference
+
+// Q14: Define soundness and completeness. Why are both important?
+// #v(3cm)
+
+// Q15: Explain the difference between model checking and theorem proving. When might one be more efficient than the other?
+// #v(3cm) 
+
+
+// Q16: What is _Modus Ponens_? Give an example.
+// #v(3cm)
 
 
 // = Part : Inference
@@ -153,16 +160,16 @@ Q: $not X or (Y and Z)  models (X => Y)$
 #pagebreak()
 = Part : First-Order Logic
 
-Q: What is an interpretation (model) in First-Order Logic? #sidenote[AIMA Chapter 8.2 Page 274]
+Q19: What is an interpretation (model) in First-Order Logic? #sidenote[AIMA Chapter 8.2 Page 274]
 
 #answer[See the textbook]
 
-Q: What does it mean for a FOL formula to be valid? Satisfiable? Unsatisfiabl? How do these concepts compare to the propositional logic versions?
+Q19: What does it mean for a FOL formula to be valid? Satisfiable? Unsatisfiabl? How do these concepts compare to the propositional logic versions?
 
 #answer[A First Order Logic formula is valid (a tautology) if it is true under every possible interpretation. It is satisfiable if there exists at least one interpretation that makes it true. It is unsatisfiable (a contradiction) if no interpretation makes it true. These are the same as the propositional definitions. The difference is that propositional models just assign T/F to symbols, while FOL interpretations additionally fix a domain and predicate extensions (so the the space of models is much larger).
 ]
 
-Q: Consider the domain $D = {1, 2, 3}$ with interpretation $I$ where:
+Q21: Consider the domain $D = {1, 2, 3}$ with interpretation $I$ where:
 - $"Even" = {2}$, $"Prime" = {2, 3}$
 - $"Less"(x, y)$ is true iff $x < y$ 
 
@@ -191,7 +198,7 @@ TRUE. Consider: $x = 1$. For $y = 2$: $1 eq.not 2$ and $"Less"(1, 2) = T$. For $
 
 #pagebreak()
 
-Q: For each sentence below, decide if it is valid, satisfiable (but not valid), or unsatisfiable. Justify each answer, for satisfiable but not valid sentences, give both a model where it is true and one where it is false.
+Q22: For each sentence below, decide if it is valid, satisfiable (but not valid), or unsatisfiable. Justify each answer, for satisfiable but not valid sentences, give both a model where it is true and one where it is false.
 
 (a) $forall x P(x) => exists x P(x)$
 
@@ -222,7 +229,7 @@ False: $D = {a, b}$, $F = {chevron.l a,a chevron.r, chevron.l b,b chevron.r}$, e
 In this example _friend_ is just a stand in for some nebulous predicate/relation that could mean anything, the important bit here is the mapping.
 ]
 
-Q: For each pair of sentences, determine whether they are logically equivalent. If not, clearly describe the difference in meaning and give a concrete counterexample interpretation.
+Q23: For each pair of sentences, determine whether they are logically equivalent. If not, clearly describe the difference in meaning and give a concrete counterexample interpretation.
 
 (a) $forall x exists y F(x, y)$ #h(1em) vs. #h(1em) $exists y forall x F(x, y)$
 
@@ -249,7 +256,7 @@ Counterexample where the second holds but the first fails: $D = {a, b}$, $P = {a
 $forall x P(x) = F$ (since $b$ is not in $P$), so the implication is vacuously true
 ]
 
-Q: Consider the following knowledge base:
+Q24: Consider the following knowledge base:
 + $forall x ("CS_Student"(x) => "TakesExams"(x))$
 + $forall x ("TakesExams"(x) and "StudiesHard"(x) => "Passes"(x))$
 + $forall x ("Passes"(x) => "Happy"(x))$
@@ -288,6 +295,4 @@ From part (a) we have $"TakesExams"("John")$ thus $not "StudiesHard"("John") $
 
 #answer[Entailed. From (4) and (b) $"CS_Student"("John") and not "StudiesHard"("John")$.]
 
-#pagebreak()
-$models$
-$tack$
+
