@@ -23,23 +23,23 @@
 #sidenote(dy: 1.15em, numbered: false)[#outline(depth: 2)]
 
 
-= Part : Knowledge Based Agents
-Q: What is a knowledge base? What is a “sentence” in this context?
+= Part : Knowledge Based Agents #sidenote("Questions 4&% are mostly review from the last unit and wont be on this exam")
+Q1: What is a knowledge base? What is a “sentence” in this context?
 #v(1.5cm)
 
 
-Q: What is the difference between knowledge level and implementation level? Why is this distinction important?
+Q2: What is the difference between knowledge level and implementation level? Why is this distinction important?
 #v(1.5cm)
 
-Q: Explain the difference between the declarative approach vs the procedural approach to building agents:
+Q3: Explain the difference between the declarative approach vs the procedural approach to building agents:
 #v(2cm)
 
-Q: Using the PEAP/PEAS model, describe the environment of a student in CSC480. #sidenote[AIMA Chapter 7.4 Page 228]
+Q4: Using the PEAP/PEAS model, describe the environment of a student in CSC480. #sidenote[AIMA Chapter 7.4 Page 228]
 (Performance measure, Environment, Actions/Actuators, Preception/Sensors)
 #v(4cm)
 
 
-Q: Classify the student's environment in CSC480 using standard environment properties (ie: deterministic vs stochastic, fully vs partially observable, episodic vs sequential... etc).
+Q5: Classify the student's environment in CSC480 using standard environment properties (ie: deterministic vs stochastic, fully vs partially observable, episodic vs sequential... etc).
 #v(2cm)
 
 
