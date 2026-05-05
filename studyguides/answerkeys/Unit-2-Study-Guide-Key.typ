@@ -44,7 +44,7 @@ Q: Classify the student’s environment in CSC480 using standard environment pro
 #v(2cm)
 
 
-
+#sidenote("Questions 4 & 5 are mostly review from the last unit and wont be on this exam")
 = Part : Propositional Logic
 Q: Define Propositional Logic in your own words. #sidenote[AIMA Chapter 7.4 Page 235]
 #v(2cm)
