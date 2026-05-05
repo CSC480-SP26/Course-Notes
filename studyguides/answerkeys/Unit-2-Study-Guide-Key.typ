@@ -259,15 +259,34 @@ Q: Consider the following knowledge base:
 For each of the following, determine whether it is entailed by the KB. Show your chain of reasoning.
 
 (a) $"TakesExams"("John")$
-#v(1.5cm)
+
+#answer[Entailed. From (4) and (1) by Modus Ponens.]
+
 (b) $not "StudiesHard"("John")$
-#v(1.5cm)
+
+#answer[Entailed.
+
+(3) for John. $"Passes"("John") => "Happy"("John")$. We know from (5) that $not "Happy"("John")$. By contrapositive $not "Passes"("John")$
+
+(2) for John. $"TakesExams"("John") and "StudiesHard"("John") => "Pases"("John")$. We know $not "Passes"("John")$ from Step 1. By contrapositive$not ("TakesExams"("John") and "StudiesHard"("John")) $
+
+by de morgans law this is $not "TakesExams"("John") or not "StudiesHard"("John")$.
+
+From part (a) we have $"TakesExams"("John")$ thus $not "StudiesHard"("John") $
+]
+
 (c) $exists x not "Happy"(x)$
-#v(1.5cm)
+
+#answer[Entailed. From (5)]
+
 (d) $forall x "CS_Student"(x)$
-#v(1.5cm)
+
+#answer[Not entailed. The KB only asserts John is a CS student; nothing forces all objects to be CS students.
+]
+
 (e) $exists x ("CS_Student"(x) and not "StudiesHard"(x))$
-#v(1.5cm)
+
+#answer[Entailed. From (4) and (b) $"CS_Student"("John") and not "StudiesHard"("John")$.]
 
 #pagebreak()
 $models$
