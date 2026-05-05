@@ -46,6 +46,9 @@ Q5: Classify the student's environment in CSC480 using standard environment prop
 
 
 #sidenote("Questions 4 & 5 are mostly review from the last unit and wont be on this exam")
+
+#pagebreak()
+
 = Part : Propositional Logic
 Q6: Define Propositional Logic in your own words. #sidenote[AIMA Chapter 7.4 Page 235]
 #v(2cm)
@@ -95,7 +98,7 @@ Q11: What is _Modus Ponens_? Give an example.
 #pagebreak()
 
 = Part : Conjunctive Normal Form
-For the Folllowing questions (XX-XX) convert them into CNF.
+For the Folllowing questions (12-14) convert them into CNF.
 
 Q12: $(A or not B) <=> C$
 #v(3cm)
@@ -107,8 +110,10 @@ Q13: $not (A and B) => (not B or C)$
 Q14: $((A and B ) or C) => (not B and not (C or A))$
 #v(3cm)
 
+#pagebreak()
+
 = Part : Logical Justification
-For the Folllowing questions (XX-XX) provide justification for whether each of the following are correct or incorrect.
+For the Folllowing questions (15-18) provide justification for whether each of the following are correct or incorrect.
 
 Q15: $(X and Y)  models Y$
 #v(3cm)
@@ -192,13 +197,17 @@ Q24: Consider the following knowledge base:
 For each of the following, determine whether it is entailed by the KB. Show your chain of reasoning.
 
 (a) $"TakesExams"("John")$
-#v(1.5cm)
+#v(2.5cm)
+
 (b) $not "StudiesHard"("John")$
-#v(1.5cm)
+#v(2.5cm)
+
 (c) $exists x not "Happy"(x)$
-#v(1.5cm)
+#v(2.5cm)
+
 (d) $forall x "CS_Student"(x)$
-#v(1.5cm)
+#v(2.5cm)
+
 (e) $exists x ("CS_Student"(x) and not "StudiesHard"(x))$
-#v(1.5cm)
+#v(2.5cm)
 

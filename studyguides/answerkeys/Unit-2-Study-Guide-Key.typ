@@ -49,6 +49,9 @@ Q5: Classify the student’s environment in CSC480 using standard environment pr
 
 
 #sidenote("Questions 4 & 5 are mostly review from the last unit and wont be on this exam")
+
+#pagebreak()
+
 = Part : Propositional Logic
 Q6: Define Propositional Logic in your own words. #sidenote[AIMA Chapter 7.4 Page 235]
 
@@ -99,6 +102,8 @@ Q10: Why is the statement “P $=>$ Q” true when P is false? Then give an exam
   Consider: "If it is smoking, then there is fire" ($"Smoke" => "Fire"$). Think of this claim like a promise. If there is _no_ smoke, the promise is not broken no matter what. There for you never got to the condition that triggers the commitment. The only way to prove the promise wrong is to find smoke with no fire.
 ]
 
+#v(2cm)
+
 Q11: What is _Modus Ponens_? Give an example.
 
 #answer[
@@ -114,25 +119,74 @@ Q11: What is _Modus Ponens_? Give an example.
   - Therefore: "The ground is wet" ($"WetGround"$)
 ]
 
+#pagebreak()
+
+
 = Part : Conjunctive Normal Form
 For the Folllowing questions (12-14) convert them into CNF.
 
 Q12: $(A or not B) <=> C$
-#v(3cm)
+
+#answer[
+  eliminate biconditional:
+
+  $((A or not B) => C) and (C => (A or not B)) $
+
+  eliminate implications:
+
+  $(not(A or not B) or C) and (not C or A or not B) $
+
+  Push negations inward (de morgs):
+
+  $((not A and B) or C) and (not C or A or not B) $
+
+  distribute OR over AND on the left conjunct:
+
+  $(not A or C) and (B or C) and (not C or A or not B) $
+]
 
 Q13: $not (A and B) => (not B or C)$
 
-#v(3cm)
+#answer[
+  Eliminate implication:
+  
+  $not(not(A and B)) or (not B or C) $
+
+  $= (A and B) or not B or C $
+
+  dsistribute OR over AND:
+  
+  $(A or not B or C) and (B or not B or C) $
+
+  The second clause $(B or not B or C)$ is a tautology and is dropped.
+
+  $A or not B or C $
+]
 
 Q14: $((A and B ) or C) => (not B and not (C or A))$
-#v(3cm)
+
+#answer[
+  eliminate implication:
+
+  $not((A and B) or C) or (not B and not(C or A)) $
+
+  Push negations inward (de morgs):
+
+  $not(A and B) = not A or not B, quad not(C or A) = not C and not A $
+
+  $((not A or not B) and not C) or (not B and not C and not A) $
+
+  the right disjunct $(not A and not B and not C)$ entails the left $((not A or not B) and not C)$, so the disjunction collapses to the left conjunct.
+
+  $(not A or not B) and not C $
+]
 
 
 #pagebreak()
 
 
 = Part : Logical Justification
-For the Folllowing questions (XX-XX) provide justification for whether each of the following are correct or incorrect.
+For the Folllowing questions (15-18) provide justification for whether each of the following are correct or incorrect.
 
 Q15: $(X and Y)  models Y$
 #v(3cm)
@@ -244,6 +298,8 @@ False: $D = {a, b}$, $F = {chevron.l a,a chevron.r, chevron.l b,b chevron.r}$, e
 In this example _friend_ is just a stand in for some nebulous predicate/relation that could mean anything, the important bit here is the mapping.
 ]
 
+#pagebreak()
+
 Q23: For each pair of sentences, determine whether they are logically equivalent. If not, clearly describe the difference in meaning and give a concrete counterexample interpretation.
 
 (a) $forall x exists y F(x, y)$ #h(1em) vs. #h(1em) $exists y forall x F(x, y)$
@@ -270,6 +326,9 @@ Counterexample where the second holds but the first fails: $D = {a, b}$, $P = {a
 
 $forall x P(x) = F$ (since $b$ is not in $P$), so the implication is vacuously true
 ]
+
+
+#pagebreak()
 
 Q24: Consider the following knowledge base:
 + $forall x ("CS_Student"(x) => "TakesExams"(x))$
