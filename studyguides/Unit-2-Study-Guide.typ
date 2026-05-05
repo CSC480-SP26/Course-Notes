@@ -23,7 +23,9 @@
 #sidenote(dy: 1.15em, numbered: false)[#outline(depth: 2)]
 
 
-= Part : Knowledge Based Agents #sidenote("Questions 4&% are mostly review from the last unit and wont be on this exam")
+= Part : Knowledge Based Agents 
+
+
 Q1: What is a knowledge base? What is a “sentence” in this context?
 #v(1.5cm)
 
@@ -43,7 +45,7 @@ Q5: Classify the student's environment in CSC480 using standard environment prop
 #v(2cm)
 
 
-
+#sidenote("Questions 4 & 5 are mostly review from the last unit and wont be on this exam")
 = Part : Propositional Logic
 Q: Define Propositional Logic in your own words. #sidenote[AIMA Chapter 7.4 Page 235]
 #v(2cm)
