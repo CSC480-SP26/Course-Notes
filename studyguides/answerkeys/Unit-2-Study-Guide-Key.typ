@@ -194,13 +194,33 @@ TRUE. Consider: $x = 1$. For $y = 2$: $1 eq.not 2$ and $"Less"(1, 2) = T$. For $
 Q: For each sentence below, decide if it is valid, satisfiable (but not valid), or unsatisfiable. Justify each answer, for satisfiable but not valid sentences, give both a model where it is true and one where it is false.
 
 (a) $forall x P(x) => exists x P(x)$
-#v(2cm)
+
+#answer[Valid. If $P$ holds for every element in the domain, then trivially at least one element satisfies $P$ (assuming a non-empty domain).]
+
 (b) $exists x P(x) => forall x P(x)$
-#v(2cm)
+
+#answer[Satisfiable but not valid. 
+
+True in: $D = {a}$, $P = {a}$. Then both sides are true.
+
+False in: $D = {a, b}$, $P = {a}$. $exists x P(x) = T$ (witness $a$), but $forall x P(x) = F$ ($P(b)$ is false). So $T => F = F$.]
+
 (c) $(forall x P(x)) => (forall x (P(x) or Q(x)))$
-#v(2cm)
+
+#answer[Valid. If $P(x)$ holds for every $x$, then $P(x) or Q(x)$ also holds for every $x$, since $P(x)$ is already sufficient.]
+
 (d) $forall x exists y F(x, y) => exists y forall x F(x, y)$
-#v(2cm)
+
+#answer[Satisfiable but not valid.
+
+Think of $F(x,y)$ as "x has y as a best friend." The left side says _"everyone has a best friend"_ , each person just needs one, and it can be a different person for each. The right side says _"there is one person who is everyone's best friend"_, a single universal friend for the whole group. Those are very different claims.
+
+True: one-person domain $D = {a}$, $F = {chevron.l a, a chevron.r}$ ($a$ is their own best friend). With only one person, both sides collapse to the same thing. $T => T = T$.
+
+False: $D = {a, b}$, $F = {chevron.l a,a chevron.r, chevron.l b,b chevron.r}$, everyone is their own best friend, and only their own. LHS: $a$ has $a$, $b$ has $b$, everyone has someone, so LHS is true. RHS: is there one person that both $a$ and $b$ call their best friend? $a$ only likes $a$, so $b$ doesn't count. $b$ only likes $b$, so $a$ doesn't count. No universal friend exists, so RHS is false. $T => F = F$.
+
+In this example _friend_ is just a stand in for some nebulous predicate/relation that could mean anything, the important bit here is the mapping.
+]
 
 Q: For each pair of sentences, determine whether they are logically equivalent. If not, clearly describe the difference in meaning and give a concrete counterexample interpretation.
 
