@@ -93,14 +93,29 @@ Q9: Fill out this truth table:
 
 Q10: Why is the statement “P $=>$ Q” true when P is false? Then give an example in your own words. #sidenote("Think of the example we talked through during lecture...")
 
-#answer[Smoke $=>$ Fire...]
+#answer[
+  In propositional logic, $P => Q$ is defined as a _material conditional_: it is only false when P is true and Q is false. When P is false, the implication is vacuously true #sidenote[The word vacuously will come up quite often it just means since the premise P is false the claim is if little value, but nevertheless inherently true.], so the statement makes no claim about what happens when P is false, so it cannot be violated.
+
+  Consider: "If it is smoking, then there is fire" ($"Smoke" => "Fire"$). Think of this claim like a promise. If there is _no_ smoke, the promise is not broken no matter what. There for you never got to the condition that triggers the commitment. The only way to prove the promise wrong is to find smoke with no fire.
+]
 
 Q11: What is _Modus Ponens_? Give an example.
 
-#answer[]
+#answer[
+  Modus Ponens is a rule of inference: 
+  
+  Given that $P => Q$ is true, and that $P$ is true, we can conclude $Q$.
+
+  $ (P => Q) and P tack.r Q $
+
+  Consider:
+  - "If it is raining, the ground is wet" ($"Rain" => "WetGround"$)
+  - "It is raining" ($"Rain"$)
+  - Therefore: "The ground is wet" ($"WetGround"$)
+]
 
 = Part : Conjunctive Normal Form
-For the Folllowing questions (XX-XX) convert them into CNF.
+For the Folllowing questions (12-14) convert them into CNF.
 
 Q12: $(A or not B) <=> C$
 #v(3cm)
