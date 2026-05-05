@@ -108,11 +108,129 @@ Q Explain the difference between model checking and theorem proving. When might 
 Q: What is _Modus Ponens_? Give an example.
 #v(3cm)
 
+#pagebreak()
 
-Q: What is And-Elimination?
+= Part : Conjunctive Normal Form
+For the Folllowing questions (XX-XX) convert them into CNF.
+
+Q: $(A or not B) <=> C$
+#v(3cm)
+
+Q: $not (A and B) => (not B or C)$
+
+#v(3cm)
+
+Q: $((A and B ) or C) => (not B and not (C or A))$
+#v(3cm)
+
+= Part : Logical Justification
+For the Folllowing questions (XX-XX) provide justification for whether each of the following are correct or incorrect.
+
+Q: $(X and Y)  models Y$
+#v(3cm)
+
+Q: $(not X and Y) or X  models X or Y$
+#v(3cm)
+
+
+Q: $not (X and Y) or (Z and not Y) models not X or Y$
+#v(3cm)
+
+
+Q: $not X or (Y and Z)  models (X => Y)$
+
+
+
+// = Part : Inference
+
+// Q: Define soundness and completeness. Why are both important?
+// #v(3cm)
+
+
+// Q: What is And-Elimination?
+// #v(2cm)
+
+#pagebreak()
+= Part : First-Order Logic
+
+Q: What is an interpretation (model) in First-Order Logic? #sidenote[AIMA Chapter 8.2 Page 274]
+
+#answer[See the textbook]
+
+Q: What does it mean for a FOL formula to be valid? Satisfiable? Unsatisfiabl? How do these concepts compare to the propositional logic versions?
+
+#answer[A First Order Logic formula is valid (a tautology) if it is true under every possible interpretation. It is satisfiable if there exists at least one interpretation that makes it true. It is unsatisfiable (a contradiction) if no interpretation makes it true. These are the same as the propositional definitions. The difference is that propositional models just assign T/F to symbols, while FOL interpretations additionally fix a domain and predicate extensions (so the the space of models is much larger).
+]
+
+Q: Consider the domain $D = {1, 2, 3}$ with interpretation $I$ where:
+- $"Even" = {2}$, $"Prime" = {2, 3}$
+- $"Less"(x, y)$ is true iff $x < y$ 
+
+Evaluate each sentence as true or false under $I$, and briefly justify:
+
+(a) $forall x ("Even"(x) => "Prime"(x))$
+
+#answer[TRUE. The only element where $"Even"(x)$ holds is $x=2$, and $"Prime"(2)$ is also true. For $x=1$ and $x=3$, the "Even"(x) is false, making the implication vacuously true.]
+
+(b) $forall x ("Prime"(x) => "Even"(x))$
+
+#answer[FALSE. Consider: $x = 3$. $"Prime"(3) = T$ but $"Even"(3) = F$, so $T => F = F$.]
+
+(c) $exists x ("Even"(x) and "Prime"(x))$
+
+#answer[TRUE. Witness: $x = 2$. $"Even"(2) = T$ and $"Prime"(2) = T$.]
+
+(d) $forall x exists y "Less"(x, y)$
+
+#answer[FALSE. Counterexample: $x = 3$. There is no $y in {1,2,3}$ with $3 < y$, so no witness exists for $x = 3$.]
+
+(e) $exists x forall y (x eq.not y => "Less"(x, y))$
+
+#answer[
+TRUE. Consider: $x = 1$. For $y = 2$: $1 eq.not 2$ and $"Less"(1, 2) = T$. For $y = 3$: $1 eq.not 3$ and $"Less"(1, 3) = T$.]
+
+#pagebreak()
+
+Q: For each sentence below, decide if it is valid, satisfiable (but not valid), or unsatisfiable. Justify each answer, for satisfiable but not valid sentences, give both a model where it is true and one where it is false.
+
+(a) $forall x P(x) => exists x P(x)$
+#v(2cm)
+(b) $exists x P(x) => forall x P(x)$
+#v(2cm)
+(c) $(forall x P(x)) => (forall x (P(x) or Q(x)))$
+#v(2cm)
+(d) $forall x exists y F(x, y) => exists y forall x F(x, y)$
 #v(2cm)
 
+Q: For each pair of sentences, determine whether they are logically equivalent. If not, clearly describe the difference in meaning and give a concrete counterexample interpretation.
+
+(a) $forall x exists y F(x, y)$ #h(1em) vs. #h(1em) $exists y forall x F(x, y)$
+#v(2.5cm)
+(b) $not forall x P(x)$ #h(1em) vs. #h(1em) $forall x not P(x)$
+#v(2.5cm)
+(c) $forall x (P(x) => Q(x))$ #h(1em) vs. #h(1em) $(forall x P(x)) => (forall x Q(x))$
+#v(2.5cm)
+
+Q: Consider the following knowledge base:
++ $forall x ("CS_Student"(x) => "TakesExams"(x))$
++ $forall x ("TakesExams"(x) and "StudiesHard"(x) => "Passes"(x))$
++ $forall x ("Passes"(x) => "Happy"(x))$
++ $"CS_Student"("John")$
++ $not "Happy"("John")$
+
+For each of the following, determine whether it is entailed by the KB. Show your chain of reasoning.
+
+(a) $"TakesExams"("John")$
+#v(1.5cm)
+(b) $not "StudiesHard"("John")$
+#v(1.5cm)
+(c) $exists x not "Happy"(x)$
+#v(1.5cm)
+(d) $forall x "CS_Student"(x)$
+#v(1.5cm)
+(e) $exists x ("CS_Student"(x) and not "StudiesHard"(x))$
+#v(1.5cm)
+
+#pagebreak()
 $models$
 $tack$
-
-
