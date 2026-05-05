@@ -166,14 +166,34 @@ $
 
 
 == Conditional Distribution
+Frequently we want to understand probability in a conditional manner (if Event A occurs what is the probability of Event B)#sidenote()[This is similar to implication, but note how it does not get defined in terms of negation and disjunction. Instead we have that conditional probability is more akin to _entailment_].
+
+We write this as $P(a | b)$ for: _"the probability of A given B"_. We can reason through how to calculate this. First to say "given B", if we know that B has occurred, then out new sample space is just the event space of B (since all joint outcomes must have B occurring by taking it as a given). We then can find the part of B that has A in it, the intersection. This leaves the formula:
+$
+  P(a | b) = P(a,b) / P(b)
+$
+
+The formula has two components, the first is _selection_ of the relevant outcomes from the joint, and the second is _normalization_ to ensure the resultant probability distribution is well formed.
+
+#discussion(vspace: 0em)[
+  In the previous example, find $P(italic("hot")|italic("sun"))$
+]
+
+This structure of conditional probabilities forms the primary means by which we will use probability theory to have agents reason in the presence of uncertainty. In general we want to find good models of $P("unknown"|"evidence")$.
+
 #discussion()[
   Monty Hall Problem
 ]
 
-== Renormalization
-
 == Conditional Independence
-
+Sometimes we will find that events may not be generally independent, but are effectively independent given the same background. We can retwite independence as:
+$
+  A bot B "iff" P(A | B) = P(A)
+$
+And _conditional independence_ is when this holds only with a certain condition
+$
+  (A bot B |C) "iff" P(A | B, C) = P(A | C)
+$
 
 = Bayesianism
 
