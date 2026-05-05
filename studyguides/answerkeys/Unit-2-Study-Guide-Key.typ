@@ -225,11 +225,29 @@ In this example _friend_ is just a stand in for some nebulous predicate/relation
 Q: For each pair of sentences, determine whether they are logically equivalent. If not, clearly describe the difference in meaning and give a concrete counterexample interpretation.
 
 (a) $forall x exists y F(x, y)$ #h(1em) vs. #h(1em) $exists y forall x F(x, y)$
-#v(2.5cm)
+
+#answer[Not equivalent. The first says "for each $x$, some $y$ exists (possibly different for each $x$)." The second says "there is a single $y$ that works for all $x$ simultaneously." The second implies the first, but not vice versa. See the answer for the prev questions part d]
+
 (b) $not forall x P(x)$ #h(1em) vs. #h(1em) $forall x not P(x)$
-#v(2.5cm)
+
+#answer[Not equivalent. The first is equivalent to $exists x not P(x)$ ("at least one thing fails $P$"). The second says "nothing satisfies $P$." The second implies the first, but not vice versa. Counterexample: $D = {a, b}$, $P = {a}$. First: $not forall x P(x) = T$ (since $P(b) = F$). Second: $forall x not P(x) = F$ (since $P(a) = T$).]
+
 (c) $forall x (P(x) => Q(x))$ #h(1em) vs. #h(1em) $(forall x P(x)) => (forall x Q(x))$
-#v(2.5cm)
+
+#answer[Not equivalent. Let $P(x) =$ "$x$ is a CS major" and $Q(x) =$ "$x$ owns a laptop."
+
+$forall x(P(x) => Q(x))$ = "Every CS major owns a laptop." This checks each individual: for each person, if they are a CS major, they must own a laptop.
+
+$(forall x P(x)) => (forall x Q(x))$ = "If everyone is a CS major, then everyone owns a laptop." This only fires if the entire domain consists of CS majors. In any realistic class with even one non-CS-major, the $(forall x P(x))$ is false and the whole statement is vacuously true, even if some CS majors don't own laptops.
+
+So the first is strictly stronger as it implies the second, but not vice versa. The second can be true for a completely trivial reason (not everyone is a CS major) while the first requires actually verifying each CS major.
+
+Counterexample where the second holds but the first fails: $D = {a, b}$, $P = {a}$, $Q = {b}$.
+
+ $P(a) => Q(a) = T => F = F$ 
+
+$forall x P(x) = F$ (since $b$ is not in $P$), so the implication is vacuously true
+]
 
 Q: Consider the following knowledge base:
 + $forall x ("CS_Student"(x) => "TakesExams"(x))$
