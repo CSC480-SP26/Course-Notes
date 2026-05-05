@@ -189,20 +189,40 @@ Q14: $((A and B ) or C) => (not B and not (C or A))$
 For the Folllowing questions (15-18) provide justification for whether each of the following are correct or incorrect.
 
 Q15: $(X and Y)  models Y$
-#v(3cm)
+
+#answer[
+  Correct: This is And Elimination. If $X and Y$ is true, both conjuncts must be true, so $Y$ is true. Every model satisfying the left side satisfies the right side.
+]
 
 Q16: $(not X and Y) or X  models X or Y$
-#v(3cm)
 
+#answer[
+  Correct. Look at $X$:
+
+  - $X = T$: the left side is true (X is a disjunct). The right $X or Y$ is also true since $X = T$.
+  - $X = F$: for the left to be true, $not X and Y$ must hold, so $Y = T$. Then $X or Y$ is true since $Y = T$.
+
+  In every model where the left is true, the right is true, so entailment holds.
+]
 
 Q17: $not (X and Y) or (Z and not Y) models not X or Y$
-#v(3cm)
 
+#answer[
+  Incorrect. Consider the counterexample: $X = T, Y = F, Z = F$.
+
+  - Left: $not(T and F) or (F and T) = T or F = T$
+  - Right: $not T or F = F or F = F$
+
+  The left side is true but the right side is false, so entailment fails.
+]
 
 Q18: $not X or (Y and Z)  models (X => Y)$
 
+#answer[
+  Correct. Note that $X => Y equiv not X or Y$.
 
-#v(3cm)
+  The left side is $not X or (Y and Z)$. Since $Y and Z$ implies $Y$, any model making the left true either has $not X$ (making $not X or Y$ true) or has $Y and Z$ (which gives $Y$, making $not X or Y$ true). So every model of the left satisfies $not X or Y equiv X => Y$.
+]
 
 // = Part : Inference
 
