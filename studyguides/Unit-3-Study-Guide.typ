@@ -106,7 +106,7 @@ Q9: Define independence between events $E_1$ and $E_2$. Write the formal definit
 Q10: Define conditional probability $P(a | b)$ and state the formula. Walk through the intuition: why do we restrict the sample space to $B$, and why do we then normalize by $P(b)$?
 #v(5cm)
 
-Q11: Using the joint distribution from Q3, compute $P("exam" | "weekday")$ — the probability that a session is exam-related, given that it falls on a weekday. Show your work using the conditional probability formula.
+Q11: Using the joint distribution from Q3, compute $P("exam" | "weekday")$, the probability that a session is exam-related, given that it falls on a weekday. Show your work using the conditional probability formula.
 #v(5cm)
 
 #pagebreak()
@@ -114,14 +114,14 @@ Q12: At the start of this unit's exam, professor Wright in all of his mischievou
 
 At the start of the class, students grab an exam from whichever pile they like and take them face down to their seats. You take from pile A and sit down with your mortified peers.
 
-Sam, having taken all three exams to test them, pitying the inevitable torment of the students, and knowing exactly which piles contain which exams, has annouced that pile C is one of the _hard exam_ piles. 
+Sam, having taken all three exams to test them, knows which exam pile is which, and is torn. Not wanting to let the students all take the easy exam for free, but pitying the inevitable torment of the students, has annouced that pile C is one of the _hard exam_ piles. 
 
-You are allowed to get up and swap your exam for one from pile B.
+You are allowed to get up and swap your exam for one from pile B if you so choose.
 
 (a) Before the Sam's announcement, what is $P("A is easy")$? #sidenote[Each pile is equally likely to be the easy one.]
 #v(1.2cm)
 
-(b) Enumerate the three possible states of the world (which pile is easy) and for each, compute the probability that Sam would announce pile C specifically, given what you know about the 3 exams. #sidenote[Hint: if A is easy, the Sam can choose between B and C. If B is easy, what would Sam announce? If C is easy?]
+(b) Enumerate the three possible states of the world (which pile is easy) and for each, compute the probability that Sam would announce pile C specifically, given what you know about the 3 exams. #sidenote[Hint: if A is easy, then Sam will choose between B and C. If B is easy, what would Sam announce? If C is easy?]
 
 #v(3.5cm)
 
