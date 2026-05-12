@@ -1,5 +1,5 @@
 
-#import "wdf.typ": *
+#import "../wdf.typ": *
 
 #show: template.with(
   title: [
@@ -18,7 +18,6 @@
   serif: true,
   exam: true,
 )
-#let answer(body) = text(fill: red, body)
 
 
 = Knowledge and Logic

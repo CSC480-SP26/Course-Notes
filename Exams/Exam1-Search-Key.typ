@@ -1,5 +1,5 @@
 
-#import "wdf.typ": *
+#import "../wdf.typ": *
 
 #show: template.with(
   title: [
@@ -30,13 +30,33 @@ In this part, consider the following agentic system: _Imagine a country with an 
   points: 0.25,
 )[  What are the agent's _perceptions_ and _actions_? Does the agent have a measure of _utility/performance_? If so, what is it?
 ]
-#v(1fr)
+
+#answer[
 
 
+  _Perceptions_ : Voter Demands, Voter signals,  Polling results 
+
+  _Actions_ : Policy changes, Legislation
+
+  _Utility/Performance_ : re-election results, Polling results 
+]
+
+#v(.6fr)
 
 #question(
   points: 0.25,
 )[  Is the agent best understood as _rational_? If so, in what sense? If not, why not?
+]
+
+#answer[
+This is a fairly open ended question, so below are some example answers. Either answer could work, but it depends entirely on how you articulate and defend your response.
+
+The answer we were looking for is yes, the agent would be rational. Theoretically, the agent would do everything in their power to be re-elected, including changing policy in response to voter demand. They would take actions that maximize their preferred outcome, re-election, especially considering that in this example we are assuming an “at least seemingly functional democracy.”
+
+However, given that we currently do not live in an “at least seemingly functional democracy,” it is understandable if one answers no. One could argue that the agent can not observe their entire constituency, nor can they properly evaluate the consequences of their actions on polling numbers. Given the number of factors that affect voter turnout and voter opinions, perhaps the agent is, in fact, acting irrationally #sidenote[https://en.wikipedia.org/wiki/Demagogue]. Moreover, one could argue that, at times, the policy that is best in the long run may run counter to the constituency's immediate demands #sidenote[Sometimes the policy that maximizes long run welfare is politically unpopular in the short run. For example, the Federal Reserve's dual mandate requires it to pursue both maximum employment and stable prices. Raising interest rates to fight inflation may be unpopular because it can slow hiring, increase borrowing costs, and reduce short term economic growth, but it may still be the rational course if the long run goal is price stability and sustainable employment.
+https://www.federalreserve.gov/faqs/what-economic-goals-does-federal-reserve-seek-to-achieve-through-monetary-policy.htm
+].   
+
 ]
 #v(1fr)
 
@@ -47,25 +67,53 @@ In this part, consider the following agentic system: _Imagine a country with an 
 #question(
   points: 0.25,
 )[In general, under what conditions, if any, is breadth first search an optimal search algorithm?]
-#v(1fr)
+
+#answer[ BFS is optimal when all costs are uniform/equal.]
+
+#v(.5fr)
 
 
 #question(
   points: 0.25,
 )[In a map-coloring problem, the aim is to color in a map of countries using a given set of colors so that no two adjacent countries are the same color. Give a precise formulation of map-coloring as a search problem.]
-#v(2fr)
+
+#answer[This question asks for a precise formulation, which you'll recall is given by six components. #sidenote[AIMA Chapter 3.1 Page 83] Before defining those components I would first define what we are given:#sidenote[We can just make an adjacency matrix, our definition is what we choose]
+$
+  K = {"Countries"}, "The set of all countries"\ 
+  C = {"Colors"}, "The set of all colors"\
+  "Adj"  subset.eq "K"times"K", "an adjacency matrix of the countries" 
+$
+  
+
+  (1) A state is a partial assignment $s: K' -> C$ for some $K' subset.eq K$. The state space is all such partial assignments: $cal(S) = {s mid(|) s: K' -> C, K' subset.eq K}$. This includes incomplete colorings, not just valid complete ones, otherwise there would be nothing to search through.
+
+  (2) $S_0 = emptyset$, Initial state: the empty assignment, where no country has been colored yet.
+
+  (3) Goal, given a state $s$, the goal is achieved iff $s: K -> C$ and $forall (k_i, k_j) in "Adj": s(k_i) != s(k_j)$ (no two adjacent countries share a color).
+
+  (4) Actions: in state $s$, the available actions are pairs $(k, c)$ where $k in K$ is uncolored in $s$ and $c in C$ such that $forall k' in K "colored in" s: (k', k) in "Adj" => s(k') != c$ (the chosen color is consistent with all already colored neighbors).
+
+  (5) $T(s, (k, c)) = s union {k |-> c}$, Transition model: applying action $(k, c)$ in state $s$ extends the partial assignment by mapping country $k$ to color $c$.
+
+  (6) $"Cost"(s, (k, c), s') = 1$, Cost function: each coloring action costs 1 (uniform). Map coloring is a satisfaction problem in that any valid complete coloring is acceptable, so path cost simply counts steps taken.
+
+  This is a very formal set theory formulation, other forumlations may also be correct based on how you defined each component.
+]
+
+
 
 #question(
   points: 0.25,
 )[Formulate a precise state space representation for your map coloring search problem. Give a tight upper bound on the size of the state space in terms of the number of countries $K$ and the number of colors $C$.]
-#v(1fr)
 
+#answer[There are $K$ countries, each with $C+1$ possible states (uncolored, or one of $C$ colors), giving $(C+1)^K$. Also, $C^K$ is acceptable if $C$ includes uncolored. Either is correct as long as it is consistent with your state definition.]
 
 #question(
   points: 0.25,
 )[Give a tight upper bound on the branching factor of the search problem.]
-#v(1fr)
 
+
+#answer[$C dot K$: an action is a pair $(k, c)$, where we choose an uncolored country and a color. The maximum number of such pairs occurs at the first step, where all $K$ countries are uncolored and all $C$ colors are available, giving $C dot K$ possible actions.]
 
 
 

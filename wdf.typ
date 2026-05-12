@@ -518,6 +518,23 @@
   }
 }
 
+#let blank(width: 10em) = {
+  h(0.5em)
+  box(
+    // width: 1fr,
+    line(length: width, stroke: (thickness: 0.5pt)),
+    baseline: 0.5em,
+  )
+}
+
+#let checkbox(size: 9pt) = {
+  box(
+    height: size,
+    stroke: 1pt,
+  )[#h(size)]
+  h(size)
+}
+
 
 
 
@@ -525,6 +542,7 @@
 #let max-node = metadata("max-node")
 #let leaf-node = metadata("leaf-node")
 #let average-node = metadata("average-node")
+#let highlight-node = metadata("highlight-node")
 
 #let minimax-tree = tidy-tree-graph.with(
   draw-node: (
@@ -545,6 +563,9 @@
         average-node: (
           (width: 20pt, height: 20pt, shape: circle)
         ),
+        highlight-node: (
+          (stroke: 1pt, extrude: (-5pt, -2pt))
+        ),
       ),
     ),
   ),
@@ -553,3 +574,6 @@
   ),
   spacing: (15pt, 25pt),
 )
+
+
+#let answer(body) = text(fill: red, body)
