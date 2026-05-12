@@ -165,13 +165,33 @@ $
 $
 
 
-== Conditional Distribution
-Frequently we want to understand probability in a conditional manner (if Event A occurs what is the probability of Event B)#sidenote()[This is similar to implication, but note how it does not get defined in terms of negation and disjunction. Instead we have that conditional probability is more akin to _entailment_].
+#discussion(vspace: 0em)[
+  Are X and Y Independent?
+  #table(
+    columns: 3,
+    [X], [Y], [$P(x,y)$],
+    [$a$], [$d$], [$0.1$],
+    [$a$], [$e$], [$0.3$],
+    [$a$], [$f$], [$0.1$],
+    [$b$], [$d$], [$0.04$],
+    [$b$], [$e$], [$0.12$],
+    [$b$], [$f$], [$0.04$],
+    [$c$], [$d$], [$0.07$],
+    [$c$], [$e$], [$0.16$],
+    [$c$], [$f$], [$0.07$],
+  )
+]
 
-We write this as $P(a | b)$ for: _"the probability of A given B"_. We can reason through how to calculate this. First to say "given B", if we know that B has occurred, then out new sample space is just the event space of B (since all joint outcomes must have B occurring by taking it as a given). We then can find the part of B that has A in it, the intersection. This leaves the formula:
+== Conditional Distribution
+Frequently we want to understand probability in a conditional manner (if Event A occurs what is the probability of Event B)#sidenote()[While this looks similar to implication, note how it does not get defined in terms of negation and disjunction. Instead conditional probability is more akin to _entailment_].
+
+We write this as $P(a | b)$ for: _"the probability of A given B"_. We can reason through how to calculate this. First to say "given B", if we know that B has occurred, then out new sample space is just the event space of B (since all joint outcomes must have B occurring by taking it as a given). We then can find the part of B that has A in it, the intersection. This leaves the formula#sidenote()[
+  Also note how we can use this to get the joint from the conditional, $P(a) P(b | a) = P(a,b)$
+]:
 $
   P(a | b) = P(a,b) / P(b)
 $
+
 
 The formula has two components, the first is _selection_ of the relevant outcomes from the joint, and the second is _normalization_ to ensure the resultant probability distribution is well formed.
 
@@ -181,12 +201,12 @@ The formula has two components, the first is _selection_ of the relevant outcome
 
 This structure of conditional probabilities forms the primary means by which we will use probability theory to have agents reason in the presence of uncertainty. In general we want to find good models of $P("unknown"|"evidence")$.
 
-#discussion()[
+#discussion(vspace: 0pt)[
   Monty Hall Problem
 ]
 
 == Conditional Independence
-Sometimes we will find that events may not be generally independent, but are effectively independent given the same background. We can retwite independence as:
+Sometimes we will find that events may not be generally independent, but are effectively independent given the same background. We can rewrite independence as:
 $
   A bot B "iff" P(A | B) = P(A)
 $
@@ -194,16 +214,68 @@ And _conditional independence_ is when this holds only with a certain condition
 $
   (A bot B |C) "iff" P(A | B, C) = P(A | C)
 $
+We can see how conditions could be interpreted under _specific conditions_ of $C=c$, or _general conditions_ of all values of $C$. If conditional independence is written without reference to a specific value, you may assume the general condition is what is implied.
 
+#discussion(vspace: 5em)[
+  Consider smoke detectors used to sound an alarm when it detects a fire. What does the statement: $("Alarm" bot "Fire" )| "Smoke"$ mean in this context and is it a true description of the system? What about just $("Alarm" bot "Fire" )$?
+]
+
+
+#discussion(vspace: 0em)[
+  Are Red and Blue independent? What about conditional on Yellow? Note the difference between the general case over all values of a random variable and the specific case of specific values of a random variable.
+  #figure()[
+    #image("Figures/Conditional_independence.png", width: 95%),
+  ]
+]
+
+
+#pagebreak()
 = Bayesianism
+After establishing the core language of probability, we can outline the _Bayesian_ interpretation of probability that is used in this course. For Bayesians, we understand probability to represent degrees of belief, or reasonable expectations, and are fundamentally properties of the internal beliefs of agents rather than an objective true hypothetical frequency. The task is to use these beliefs to do _probabilistic inference_ and reason in the presence of uncertainty.
+
+The core of probabilistic inference is to compute some desired probability from other known probabilities. We generally compute conditional probabilities which represent _the agent's beliefs given the evidence_. When an agent observes new evidence, _it must update its beliefs_.
+
+The other key concept to remember is that _all models are wrong (but some are useful)_. Your agent never has an accounting of every variable or interaction. The best we can do is act rationally in response to the information we do have.
+
+
+#discussion(vspace: 0pt)[
+  Card deck example. We have prior beliefs about the probabilities of certain events, but we want to be able to change those beliefs in response to new information.
+]
+
 
 == Bayes Rule
 
-== Updating Beliefs
+Note that there are two different ways to factor a joint distribution of two variables:
+$
+  P(a,b) = P(a | b)P(b) = P(b | a)P(a)
+$
+
+Rewriting this we can work between different "directions" of conditioning:
+$
+  P(x|y) = (P(y|x)P(x))/P(y)
+$
+
+This is _Bayes Rule_ and might be the single most important formula in all of AI and Machine Learning. This is because we can use Bayes rule to build agents which _update their beliefs in response to data_.
+$
+  P("cause"|"evidence") = (P("evidence"|"cause")P("cause"))/P("evidence")
+$
+
+We call the standalone $P("cause")$ term the _prior_ which represents the agents prior belief about an unseen variable before getting any evidence. We call $P("cause"|"evidence")$ the _posterior_ which represents the new belief the agent has about the variable updated in response to evidence. We refer to the $P("evidence" | "cause")$ term as the _likelihood_ which measures how well a model explains the data.
+
+
 #discussion()[
-  Card deck example
+  Suppose there is a rare disease, $italic("Senioritis")$ where $P(italic("Senioritis")) = 0.01$. A symptom of senioritis is not studying, and so we can have conditional probabilities:
+  $
+    & P(italic("study") | italic("senioritis")) = 0.1 \
+    & P(italic("study") | not italic("senioritis")) = 0.9 \
+  $
+  If we know that a student did not study, what is the probability that they have senioritis?
 ]
 
-== Priors
 
-= Bayes Networks
+
+== Choosing Priors
+
+A big component of Bayesian modeling is _choosing appropriate priors_. The effect of priors on analysis is one of the big differences between the Bayesian approach and the more common frequentist approach to probability (with the interpretation of what probability even is being the other big difference). We can use priors to encode pre-existing or expert knowledge about a domain, but be careful as biased and wrong priors can make learning and inference either much slower (i.e. needing more data to converge to the "right" posterior) or even just wrong (consider what setting a prior probability to $0$ or $1$ will do).
+
+The general best method for coming up with priors when you don't have any special external knowledge to encode, is to precisely encode this lack of understanding as a "flat prior". However, this can be tricker than it appears as it depends on the parameter space as well as the effect of those parameters on the data transformations they correspond to. A more principled approach is to use what are called "Jefferys Priors", which are priors which is proportional to the square root of the determinant of the Fisher information matrix of the parameters ($p(theta) prop sqrt(|I(theta)|)$) which has the special property of being _invariant under a change of coordinates for $theta$_.
