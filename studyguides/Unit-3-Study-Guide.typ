@@ -140,3 +140,7 @@ Q14: Explain the difference between general independence ($A perp B$) and condit
 #v(2cm)
 (b) $A$ and $B$ are conditionally independent given $C$, but not generally independent.
 #v(2cm)
+
+#pagebreak()
+
+= Part : Bayes Nets

@@ -169,27 +169,113 @@ In this section, consider the state space shown below. Node $A$ is the start sta
 #question(
   points: 0.25,
 )[Is $h_1$ admissible and/or consistent? What about $h_2$?]
-#v(1fr)
+
+#answer[
+  Step 1: Compute true costs $h^*(n)$ to goal G (working backwards):
+  $h^*(G)=0$, $h^*(E)=2$, $h^*(F)=5$, $h^*(D)=8$ (via $D arrow F arrow G$), $h^*(C)=11$, $h^*(B)=12$, $h^*(A)=13$.
+
+  _Admissibility_: check $h(n) <= h^*(n)$ at every node.
+
+  Both $h_1$ and $h_2$ satisfy this everywhere. Notably, $h_2(B)=12=h^*(B)$ and $h_2(D)=8=h^*(D)$ (equal, not over). So both are admissible.
+
+  _Consistency_: Check $h(n) <= c(n,n') + h(n')$ for every edge.
+
+  $h_1$ satisfies the triangle inequality on all edges ($B arrow C$: $9 <= 1+8=9$ and $D arrow F$: $7 <= 3+4=7$, both equalities). So $h_1$ is consistent.
+
+  $h_2$ has two violations:
+  - $B arrow C$: $h_2(B)=12 > 1 + h_2(C) = 1+9 = 10$ 
+  - $D arrow F$: $h_2(D)=8 > 3 + h_2(F) = 3+4.5 = 7.5$ 
+
+  So $h_2$ is not consistent.
+]
+
+
+#pagebreak()
 
 #question(
   points: 0.25,
 )[What is the order of search expansions of A\* _tree search_ using heuristic $h_2$.]
-#v(1fr)
+
+#answer[
+  $f = g + h_2$. Ties broken alphabetically.
+
+  + Expand $A_(0,10)$ ($f=10$, only node). Generates: $B_(1,12)$ ($f=13$), $C_(4,9)$ ($f=13$). \ 
+    Frontier: $B_(1,12)$, $C_(4,9)$, tie at $f=13$, pick B.
+  + Expand $B_(1,12)$ ($f=13$). Generates: $C_(2,9)$ ($f=11$), $D_(6,8)$ ($f=14$). \
+    Frontier: $C_(2,9)$, $C_(4,9)$, $D_(6,8)$, lowest $f=11$, pick $C_(2,9)$.
+  + Expand $C_(2,9)$ ($f=11$, via $A arrow B arrow C$). Generates: $B_(3,12)$ ($f=15$), $D_(5,8)$ ($f=13$). \ 
+    Frontier: $C_(4,9)$, $D_(5,8)$, $D_(6,8)$, $B_(3,12)$, tie at $f=13$ between $C_(4,9)$ and $D_(5,8)$, pick C.
+  + Expand $C_(4,9)$ ($f=13$, via $A arrow C$). Generates: $B_(5,12)$ ($f=17$), $D_(7,8)$ ($f=15$). \ 
+    Frontier: $D_(5,8)$, $D_(6,8)$, $B_(3,12)$, $D_(7,8)$, $B_(5,12)$, lowest $f=13$, pick $D_(5,8)$.
+  + Expand $D_(5,8)$ ($f=13$, via $A arrow B arrow C arrow D$). Generates: $E_(13,1)$ ($f=14$), $F_(8,4.5)$ ($f=12.5$), $G_(14,0)$ ($f=14$). \ 
+    Frontier includes $F_(8,4.5)$, lowest $f=12.5$, pick F.
+  + Expand $F_(8,4.5)$ ($f=12.5$, via $A arrow B arrow C arrow D arrow F$). Generates: $G_(13,0)$ ($f=13$). \ 
+    Frontier includes $G_(13,0)$, lowest $f=13$, pick G.
+  + Expand $G_(13,0)$ ($f=13$). _Goal reached_, cost $= 13$.
+
+  Expansion order: $A_((0,10)), B_((1,12)), C_((2,9)), C_((4,9)), D_((5,8)), F_((8,4.5)), G_((13,0))$
+]
 
 #question(
   points: 0.25,
 )[What range of possible values for $h_3(B)$ (i.e. the interval $[0,infinity)$ for all non-negative numbers, or $nothing$ for the empty set) would make $h_3$ _admissible_?]
-#v(1fr)
+
+#answer[
+  Recall the true optimal costs from earlier: 
+  $h^*(A)=13$\
+   $h^*(B)=12$\
+    $h^*(C)=11$\
+     $h^*(D)=8$\
+      $h^*(E)=2$\
+      $h^*(F)=5$\
+       $h^*(G)=0$.
+
+  The fixed $h_3$ values already satisfy admissibility at every node except $B$:
+
+  $h_3(C)=9 <= 11$\
+   $h_3(D)=7 <= 8$\
+    $h_3(E)=1.5 <= 2$\
+     $h_3(F)=4.5 <= 5$\
+      $h_3(G)=0 <= 0$.
+
+  For $B$, admissibility requires $h_3(B) <= h^*(B) = 12$. Since heuristics must be non-negative, the range is $[0, 12]$.
+]
+
+#pagebreak()
 
 #question(
   points: 0.25,
 )[What range of possible values for $h_3(B)$ would make $h_3$ _consistent_?]
-#v(1fr)
+
+
+#answer[
+  Consistency requires $h(n) <= c(n, n') + h(n')$ for every edge. All edges not involving $B$ already satisfy this with the fixed $h_3$ values. The four edges involving $B$ give:
+
+  - $A arrow B$: $h_3(A) <= c(A,B) + h_3(B)$ $arrow.r$ $10 <= 1 + h_3(B)$ $arrow.r$ $h_3(B) >= 9$
+  - $B arrow C$: $h_3(B) <= c(B,C) + h_3(C)$ $arrow.r$ $h_3(B) <= 1 + 9 = 10$
+  - $C arrow B$: $h_3(C) <= c(C,B) + h_3(B)$ $arrow.r$ $9 <= 1 + h_3(B)$ $arrow.r$ $h_3(B) >= 8$ (redundant)
+  - $B arrow D$: $h_3(B) <= c(B,D) + h_3(D)$ $arrow.r$ $h_3(B) <= 5 + 7 = 12$ (redundant)
+
+  The binding constraints are $h_3(B) >= 9$ (from $A arrow B$) and $h_3(B) <= 10$ (from $B arrow C$), giving the range $[9, 10]$.
+]
 
 #question(
   points: 0.25,
 )[What range of possible values for $h_3(B)$ would make the node expansion order of A\* _graph search_ using heuristic $h_3$ start in order: $A, C, B, D$.]
-#v(1fr)
+
+#answer[
+  Let $x = h_3(B)$ and use $f(n) = g(n) + h_3(n)$. Ties broken alphabetically.
+
+  _Step 1: A expands first_ (always): generates $B$ ($g=1$, $f=1+x$) and $C$ ($g=4$, $f=13$).
+
+  _Step 2: C must expand before B_: a tie at the same $f$-value would favor $B$ alphabetically, so we need a strict inequality: $f(C) < f(B)$, i.e. $13 < 1+x$, giving $x > 12$.
+
+  _Step 3: B must expand before D_: expanding $C$ generates $B$ ($g=5$, already dominated by $g=1$ in the frontier) and $D$ ($g=7$, $f=14$). The frontier is now ${B_(1,x+1), D_(7,14)}$. For $B$ to expand next, $f(B) <= f(D)$ (a tie is fine since $B < D$ alphabetically): $1 + x <= 14$, giving $x <= 13$.
+
+  Combining: $12 < x <= 13$, so the range is $(12, 13]$.
+
+]
+
 
 
 
@@ -200,7 +286,40 @@ In this section, consider the state space shown below. Node $A$ is the start sta
 #question(
   points: 0.25,
 )[Draw the smallest possible game tree on which $alpha beta$ will prune at least one leaf node. Make sure to clearly state your search order, label the leaves with values, and mark the edges for the branch or branches that will be pruned.]
-#v(1.5fr)
+
+#answer[There were a couple of possible answers but we were looking for some permutaiton the following: #sidenote[The highlighted nodes are pruned]
+
+#figure()[
+  #minimax-tree(spacing: (60pt, 5pt))[
+    - #max-node
+      - X #leaf-node
+      - #min-node
+        - Y #leaf-node
+        - Z #leaf-node #highlight-node
+  ] Such that Y < X
+
+]
+
+#v(.6cm)
+
+Interestingly the follwing tree is also acceptable:
+#figure()[
+  #minimax-tree(spacing: (60pt, 5pt))[
+    - #max-node
+      - #min-node
+        - -$oo$ #leaf-node
+        - X #leaf-node #highlight-node
+  ]
+]
+
+
+
+]
+
+
+
+
+
 
 #question(points: 0.25)[
   Imagine an agent is playing a game and choosing actions based on minimax. However, _unbeknownst to the agent_, their opponent has decided to play suboptimally. Would the actions chosen by the minimax agent in this scenario be better described as _optimistic_ or _pessimistic_? Are there scenarios where the secretly suboptimal adversary will score better than an optimal adversary?
