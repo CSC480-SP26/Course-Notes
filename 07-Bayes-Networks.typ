@@ -543,10 +543,10 @@ However, in the limit of a large number of samples#sidenote()[Of course, with su
 
 
 #discussion()[
-  Consider a two variable joint distribution where the probability distribution is uniform over a finite "checkerboard" in a continuous domain. What might be an issue with Gibbs sampling for this problem?
+  Consider a two variable joint distribution where the probability distribution is uniform over a finite "checkerboard" in a continuous domain. What might be an issue with Gibbs sampling for this problem? Would likelihood weighting have the same problem?
 ]
 
 
 #discussion()[
-  Consider a joint distribution over 100-bit vector where the probability distribution is uniform over all vectors except for the zero vector which has probability $1/2$. What happens with Gibbs sampling when we have a value in the nonzero region? What about the zero region? What does this imply about the effectiveness of Gibbs sampling in this context?
+  Consider a joint distribution over 100-bit vector where the probability distribution is uniform over all vectors except for the zero vector which has probability $1/2$. What happens with Gibbs sampling when we have a value in the nonzero region? What about the zero region? What does this imply about the effectiveness of Gibbs sampling in this context? Would likelihood weighting have the same problem?
 ]
