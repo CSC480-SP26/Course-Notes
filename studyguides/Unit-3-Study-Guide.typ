@@ -149,3 +149,21 @@ For each case below, argue whether it is possible and give a brief example or co
 #pagebreak()
 
 = Part : Bayes Nets
+Q15: What is a Bayes Net? List its two components. Write the general formula for the joint distribution of $N$ random variables as a product of conditionals according to the Bayes Net.
+
+#v(6cm)
+
+Q16: State the two conditional independence rules that follow directly from a Bayes Net's structure. For each, state the rule formally and explain the intuition in your own words.
+#v(6cm)
+
+
+
+
+Q17: Define the Markov Blanket of a node $X$ in a Bayes Net. State the conditional independence property that the Markov Blanket implies.
+
+#pagebreak()
+Q18: Name and describe the three canonical triple structures in a Bayes Net. For each, state whether information (influence) flows between the two endpoint nodes when the middle node is (i) unobserved, and (ii) observed.
+
+#v(10cm)
+
+Q19: Describe the D-separation algorithm step by step. What does it mean for two variables $X$ and $Y$ to be d-separated given a set of observed variables $bold(Z)$? What can we conclude probabilistically if they are d-separated?

@@ -367,3 +367,126 @@ Q14: Explain the difference between general independence ($A perp B$) and condit
 #pagebreak()
 
 = Part : Bayes Nets
+
+Q15: What is a Bayes Net? List its two components. Write the general formula for the joint distribution of $N$ random variables as a product of conditionals according to the Bayes Net.
+
+#answer[
+  A Bayes Net (or Probabilistic Graphical Model) is a compact representation of a joint distribution that exploits conditional independence. It consists of:
+  + A directed acyclic graph (DAG) where each node corresponds to one random variable $X_i$.
+  + A conditional probability distribution (CPT) for each node: $P(X_i | "parents"(X_i))$.
+
+  Together these encode the full joint distribution via the chain-rule factorization:
+  $ P(X_1, X_2, dots, X_N) = product_(i=1)^N P(X_i | "parents"(X_i)) $
+
+  Variables with no parents appear as $P(X_i)$ (an unconditional prior). The graph structure encodes exactly which conditional independence assumptions are being made as modeling choices.
+]
+
+Q16: State the two conditional independence rules that follow directly from a Bayes Net's structure. For each, state the rule formally and explain the intuition in your own words.
+
+#answer[
+  Rule 1: Non-descendants given parents
+
+  Each node $X$ is conditionally independent of all of its non-descendants given its parents:
+  $ X perp "NonDescendants"(X) | "Parents"(X) $
+
+  Intuition: a node's parents are its direct causes. They fully screen off $X$ from everything further upstream, because any influence an ancestor has on $X$ must pass through $X$'s parents. Once the parents are known, nothing earlier in the graph can add information about $X$.
+
+  Rule 2: All other variables given the Markov Blanket
+
+  Each node $X$ is conditionally independent of all other variables in the network given its Markov Blanket (parents + children + co-parents of children):
+  $ X perp "Everything else" | "MB"(X) $
+
+  Intuition: the Markov Blanket is $X$'s complete local neighbourhood. Parents directly cause $X$. Children are directly caused by $X$, but since children also have co-parents, those co-parents can carry indirect information about $X$ through the shared child, so they must be included too. Once the blanket is observed, no path from outside can reach $X$ without passing through it, cutting off all outside influence.
+]
+
+Q17: Define the Markov Blanket of a node $X$ in a Bayes Net. State the conditional independence property that the Markov Blanket implies.
+
+#answer[
+  The Markov Blanket of node $X$ is the set of:
+  - All parents of $X$
+  - All children of $X$
+  - All other parents of $X$'s children(ie co-parents)
+
+Importantly, $ X perp "all other variables" | "MarkovBlanket"(X) $
+
+  That is, $X$ is conditionally independent of every other node in the network once its Markov Blanket is observed. No information from outside the blanket can reach $X$ without passing through it.
+]
+
+
+Q18: Name and describe the three canonical triple structures in a Bayes Net. For each, state whether information (influence) flows between the two endpoint nodes when the middle node is (i) unobserved, and (ii) observed.
+
+#answer[
+  Causal Chain
+  #align(center)[#diagram(
+    edge-stroke: 0.75pt,
+    node-corner-radius: 8pt,
+    node-stroke: 1pt,
+    node((0, 0), [$X_1$], name: <cc1>),
+    node((2, 0), [$X_2$], name: <cc2>),
+    node((4, 0), [$X_3$], name: <cc3>),
+    edge(<cc1>, <cc2>, "->"),
+    edge(<cc2>, <cc3>, "->"),
+  )]
+
+  - $X_2$ unobserved: path is open. $X_1$ and $X_3$ are correlated. Information flows along the chain.
+  - $X_2$ observed: path is closed. $X_1 perp X_3 | X_2$. Once you know the middle link, the two ends carry no information about each other.
+
+  For example, think about how the season ($X_1$) $->$ temperature today ($X_2$ $->$ ice cream sales ($X_3$). Without knowing today's temperature, the season predicts ice cream sales. Once you know the temperature, the season tells you nothing extra.
+
+  #v(0.5em)
+  Common Cause
+
+  #align(center)[#diagram(
+    edge-stroke: 0.75pt,
+    node-corner-radius: 8pt,
+    node-stroke: 1pt,
+    node((2, 0), [$X_2$], name: <cx2>),
+    node((0, 1.5), [$X_1$], name: <cx1>),
+    node((4, 1.5), [$X_3$], name: <cx3>),
+    edge(<cx2>, <cx1>, "->"),
+    edge(<cx2>, <cx3>, "->"),
+  )]
+
+  - $X_2$ unobserved: path is open. $X_1$ and $X_3$ are correlated through their shared cause.
+  - $X_2$ observed: path is closed. $X_1 perp X_3 | X_2$. Once you know the common cause, the two effects become independent.
+
+  An example could be that rain ($X_2$) $->$ umbrella ($X_1$) and rain ($X_2$) $->$ wet streets ($X_3$). Without knowing whether it rained, seeing an umbrella predicts wet streets. Once you know it rained, umbrella status tells you nothing new about the streets.
+
+  #v(0.5em)
+  Common Effect (V-structure)
+
+  #align(center)[#diagram(
+    edge-stroke: 0.75pt,
+    node-corner-radius: 8pt,
+    node-stroke: 1pt,
+    node((0, 0), [$X_1$], name: <vx1>),
+    node((4, 0), [$X_3$], name: <vx3>),
+    node((2, 1.5), [$X_2$], name: <vx2>),
+    edge(<vx1>, <vx2>, "->"),
+    edge(<vx3>, <vx2>, "->"),
+  )]
+
+  - $X_2$ unobserved: path is closed. $X_1 perp X_3$. The two causes are independent when you haven't seen the effect.
+  - $X_2$ observed (or any descendant of $X_2$): path is open. $X_1$ and $X_3$ become dependent. This is explaining away that knowing the effect and one cause shifts your belief about the other cause.
+
+  Consider the example from the lecture notes, burglary ($X_1$) and earthquake ($X_3$) are independent events. But if the alarm ($X_2$) is going off, learning there was an earthquake makes a burglary less likely, the earthquake already explains the alarm. This is the only structure where observation _opens_ a path rather than closing one.
+]
+
+Q19: Describe the D-separation algorithm step by step. What does it mean for two variables $X$ and $Y$ to be d-separated given a set of observed variables $bold(Z)$? What can we conclude probabilistically if they are d-separated?
+
+#answer[
+  D-separation algorithm to determine whether $X tack.t.double Y | bold(Z)$ must hold:
+
+  + Shade all observed nodes $bold(Z)$ in the graph.
+  + Enumerate all undirected paths between $X$ and $Y$.
+  + For each path, decompose it into overlapping triples and check whether every triple is open:
+    - Causal chain or Common cause with middle node unshaded: open.
+    - Causal chain or Common cause with middle node shaded: closed (blocked).
+    - Common effect (v-structure) with middle node unshaded and no shaded descendant: closed.
+    - Common effect (v-structure) with middle node shaded (or shaded descendant): open.
+  + A path d-connects $X$ and $Y$ if every triple along it is open.
+  + If no path d-connects $X$ and $Y$, then $X$ and $Y$ are d-separated given $bold(Z)$.
+
+  If $X$ and $Y$ are d-separated given $bold(Z)$, then the Bayes Net guarantees $X tack.t.double Y | bold(Z)$, they are conditionally independent. (Note: d-connection does not guarantee dependence; it only means the network does not enforce independence.)
+]
+
