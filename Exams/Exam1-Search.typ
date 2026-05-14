@@ -1,5 +1,5 @@
 
-#import "wdf.typ": *
+#import "../wdf.typ": *
 
 #show: template.with(
   title: [
