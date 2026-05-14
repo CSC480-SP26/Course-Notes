@@ -433,20 +433,120 @@ $
 $
 
 
+#pagebreak()
+= Approximate Inference
 
-// #pagebreak()
-// = Approximate Inference: Sampling
+When reasoning with Bayes Nets, our primary task is probabilistic inference, or updating and calculating probabilities in response to new observations to condition on. We can do this exactly by inference by enumeration (exponentially hard), or by variable elimination (NP-Hard). However, since the Bayes Net itself is ultimately just an approximation, perhaps we can find solutions that are approximate themselves with respect to the Bayes Net instead of needing to find the exact solution. We do this by simply counting samples from our Bayes Net conditional distribution, and counting up those samples, which ends up being massively more efficient than exact solutions in most contexts and frequently serves as a good enough approximation. #sidenote()[We will discuss some of the situations where sampling either does not produce a good approximation or has other computational limitations, and how to address them. However I also want to point you towards other approximate inference techniques outside of the scope of the course that do not rely on sampling, such as _Variational Inference_, which is a core method for most contemporary deep learning and generative models that uses training parametrized approximations rather than sampling. ]
 
-// == Monte Carlo Methods
+== Monte-Carlo Methods
 
-// == Prior Sampling
+Our core idea for finding an approximation of an inferred probability is to use a class of solution called a Monte-Carlo method #sidenote()[In the literature you will also see reference to MCMC or Markov Chain Monte-Carlo which is the more well defined generalization of this kind of method. The approaches we will be discussing are special cases of MCMC, such as Gibbs sampling being a spacial case of the Metropolis-Hastings algorithm.].
 
-// == Rejection Sampling
+Monte Carlo methods take as the starting point that doing probabilistic inference is hard, because reasoning about the relations of information between whole probability distributions and transformations on probability distributions requires doing computational work for not just single values, but for the full sets of vales that the probability distribution covers in the sample space. Instead what we can do is simply sample individual values from our distributions, do whatever transformations need to be done on those values, and then count up the samples to get estimates of the final distribution. The work now becomes much simpler, computation now is over concrete rather than distributional variables, and can scale to whatever degree of accuracy is needed by generating a higher number of samples, which in general may be much smaller than the exponential work needed to perform exact inference. Furthermore, samples can often be generated and processed massively in parallel.
 
-// == Likelihood Weighting
+#discussion(
+  vspace: 17em,
+)[Recall the definition of what we think of as computationally hard, but not impossible, problems in NP#sidenote()[Obsiously assuming P $!=$ NP]. Loosely, the class of NP is all problems for which we can check a _specific_ solution easily, but it is hard to generate a _general_ solution. Consider how the Monte-Carlo approach might relate to such problems, where we can easily generate and work with _samples_ and count them up as an estimate of the general solution _distribution_.]
 
-// == Gibbs Sampling
+== Prior Sampling
+The primary thing that makes Monte-Carlo methods possible for us, is that given a Bayes Net, we can easily generate samples. For instance, consider the following simple network.
+
+#figure()[
+  #diagram(
+    edge-stroke: 0.75pt,
+    node-corner-radius: 10pt,
+    node-stroke: 1pt,
+    edge-corner-radius: 10pt,
+
+    node((0, 0), [$A$], name: <a>),
+    node((1, 0), [$B$], name: <b>),
+    edge(<a>, <b>, "->"),
+  )
+]
+
+For this network we must have the conditional distributions: $P(A), P(B|A)$. From these distributions we can very easily generate a sample of the joint distribution by first sampling the unconditioned variable $A$ from $P(A)$ yielding some value $a$, then using that sampled value to condition for a sample of $B$ from $P(B | A=a)$ yielding $b$. This pair, $(a,b)$, is now a sample from the joint distribution $P(A,B)$, and with enough samples the count frequencies will converge to the true distribution (assuming our sampling is unbiased).
+
+This is essentially all we need for Monte-Carlo approximate inference, the rest is just optimizations.
+
+== Rejection Sampling
+The first optimization we can do is noticing that if we have some _evidence_ that we want to condition our final distribution on, then samples that do not agree with the evidence don't help us at all. For instance, imagine in the previous example we wanted to query $P(B | A=a)$. Then every time we sampled a value $A!=a$, the resultant joint from sampling $P(B|A)$ is wasted work. Therefore we can use _rejection sampling_ to throw out any sample early once we learn that it is inconsistent with the conditioning of our query.
+
+== Likelihood Weighting
+The next optimization we can notice is that, depending on the actual probability of the conditional distributions "upstream" in a network, some joint outcomes can end up being very rare. But if we are interested in inference related to those rare outcomes, this would mean having to generate a very large number of samples in order to get enough samples in our relevant "end state".
+
+A first crack at this might say, instead of sampling and then rejecting samples, if we have a fixed evidence condition, just set the value to that condition (i.e., just set $A=a$ and only generate samples for $P(B|a)$. In fact, this would work for our simple example. However, in general, this can sometimes result in biased estimates. We can see this by considering a set of sample variables $Z_1, ... Z_n$ and a set of evidence variables $E_1, ... E_m$. Then the joint distribution which we are trying to approximate is $P(Z_1,...,Z_n,E_1,...,E_m)$. However is we simply set the values of the evidence directly we have
+$
+  & P(Z_1,...,Z_n,E_1,...,E_m) = product_(i=1)^(n) P(Z_i | "Parents"(Z_i))
+$
+Which is actually missing the sometimes important information of the conditional distributions of the evidence, $P(E_j | "Parents"(E_j))$. Think back to just applying Bayes rule, we cannot just throw out the evidence term $P(E)$, even if we actually know what the evidence is.
+
+We can solve this problem through  _likelihood weighting_, which works by setting a weight for each sample which is the probability of the observed evidence variables given the sample values. This way every conditional distribution contributes to the joint, where the weights serve to replace otherwise missing information. We can see how for a sample, the _weighted frequency_ becomes the true joint probability:
+#wideblock()[
+  $
+    & P(z_1,...,z_n,e_1,...,e_m) = [product_(i=1)^(n) P(z_i | "Parents"(z_i))] dot [product_(i=1)^(m) P(e_i | "Parents"(e_i))]
+  $
+]
+
+The algorithm for likelihood weighting, informally, proceeds as:
++ Initialize weight of a sample to $1$
++ For each of the variables in the Bayes Net in order, either:
+  + If it is not an evidence variable, simply sample the value based on the conditional distribution of the variable.
+  + If it is an evidence variable, set the value of the sample to the evidence value, and then multiply the weight of the sample by the conditional distribution of the evidence variable.
++ In the final inference probability aggregation calculation, weight each sample using its weight value.
+
+While this is much better than rejection sampling, we still have the issue of generating accurate estimates of small probabilities. Instead of simply throwing away a large number of samples, we end up where for those probabilities we still only have a small number of highly weighed samples which dominate the estimate and thus using an effectively small sample with higher variance.
+
+#discussion(vspace: 3em)[
+  Recall the model of diagnosis for senioritis:
+  $
+    & P(italic("senioritis")) = 0.01 \
+    & P(italic("study") | italic("senioritis")) = 0.1 \
+    & P(italic("study") | not italic("senioritis")) = 0.9 \
+  $
+  We have the corresponding network now:
+  #figure()[
+    #diagram(
+      edge-stroke: 0.75pt,
+      node-corner-radius: 10pt,
+      node-stroke: 1pt,
+      edge-corner-radius: 10pt,
+
+      node((0, 0), [Senioritis], name: <a>),
+      node((1, 0), [Study], name: <b>),
+      edge(<a>, <b>, "->"),
+    )
+  ]
+  For the query, $P("Senioritis"|"Study")$, if we generate 1000 samples, how many do we expect to have senioritis? What are their weights? What about samples without senioritis? What are thier weights? When calculating the final probability, what is the expected "effective" sample size (which we can think of as the sum of the weights)?
+
+]
+
+== Gibbs Sampling
+The fourth and final approach we will cover to sample based approximate inference is fairly different to the other approaches, but frequently much more efficient for really complex interconnected networks. Instead of starting from the "top" of the network and sampling through, for Gibbs sampling we will do operations over the whole network in a more distributed style. This may allow us to have the influence of evidence "flow both ways" where in likelihood weighting the evidence influences choices of children, but does not effect the samples of parents even though the evidence does give us information about the parents. For Gibbs sampling we want to consider the evidence when we sample _every variable_.
+
+To do this we start by setting all of the variables in the network to completely random values (entirely ignoring the conditional distributions). We then repeatedly choose one variable at a time (not in any kind of deterministic topological order), clear its current value, and resample the value given the current assigned values of its markov blanket. Note that this is _the whole markov blanket_, not just the parents, since we are treating all variables in the network as conditions, and thus we need to condition on the whole set of conditional variables to isolate the sampled variable from the rest of the network. Luckily this generalization of the provided Bayes Net conditionals can be calculated once before the sampling process using only the set of local conditional distributions of the blanket.
+This can be written as :
+#wideblock()[
+  $
+    P(x_i | x_1,...,x_N) &= 1/Z p(x_i | "parents"(x_i)) product_(j in "children"(x_i)) p(x_j | "parents"(x_j))\
+    Z &= sum_(x_i) p(x_i|"parents"(x_i))product_(j in "children"(x_i)) p(x_j | "parents"(x_j))
+  $
+]
+
+Over many iterations, our samples will eventually converge to the correct distribution#sidenote()[Except in some pathological cases which can generally be addressed by performing Gibbs sampling multiple times with different initializations.]. We can see how evidence can be accounted for by simply setting the evidence variables to the evidence values and never selecting evidence variables to resample from. Since we are including all of the relevant conditional distributions at each resample we do not have the same problem as naive sampling from above (since for each actual resample we are treating the whole rest of the network as fixed conditional anyway.) You can also notice how each sample is built from the previous sample in a "chain", which is _precisely_ the chain in Markov Chain Monte Carlo methods of this this is an example.
+
+Note that there are a few important caveats to this distribution.
++ The resultant samples are _highly dependent_ (since each sample will only differ from the previous sample in precisely one variable). This is sometimes addressed with _subsampling_ where we only include every $k^("th")$ sample in our final sample set.
++ It requires a "burn in" period where the initial samples are very unlikely due to the random initialization
++ Gibbs relies on being able to explore the whole sample space eventually  (and in principle visit each node infinitely many times). Since the initialization is a random and unlikely value, and each update only updates a single variable, if variables are strongly correlated enough to effectively "wall off" certain regions of the joint, convergence may be impossible or highly unlikely. This is frequently a consequence of the "curse of dimensionality".
+
+However, in the limit of a large number of samples#sidenote()[Of course, with such methods what constitutes a sufficiently large sample for representativeness and convergence is not generally known ahead of time and so may be an issue.] (and frequently with the ability to throw out some predetermined amount of the initial samples) this still acts as a valid sampler.
 
 
+#discussion()[
+  Consider a two variable joint distribution where the probability distribution is uniform over a finite "checkerboard" in a continuous domain. What might be an issue with Gibbs sampling for this problem?
+]
 
-// = Approximate Inference: Variational Inference
+
+#discussion()[
+  Consider a joint distribution over 100-bit vector where the probability distribution is uniform over all vectors except for the zero vector which has probability $1/2$. What happens with Gibbs sampling when we have a value in the nonzero region? What about the zero region? What does this imply about the effectiveness of Gibbs sampling in this context?
+]
