@@ -59,7 +59,7 @@ Q3: A CSC 480 student logs every study session by day type $D$ and type of work 
 (d) Are $D$ and $T$ independent? Check using the formal definition for at least two outcome pairs and state your conclusion.
 #v(2.5cm)
 
-Q4: Write the general formula for computing the marginal distribution $P(X = x)$ from a joint distribution $P(X, Y)$. Explain in words what "marginalizing out" $Y$ means.
+Q4: Write the general formula for computing the marginal distribution $P(X = x)$ from a joint distribution $P(X, Y)$.  Explain in your own words what "marginalizing out" $Y$ means.
 #v(2.5cm)
 
 Q5: What is the difference between an _outcome_ and an _event_? Write the formula #sidenote[Course notes: 06-Probability, Page 3] for computing the probability of an event $E$ from a joint distribution.
@@ -103,7 +103,7 @@ Q9: Define independence between events $E_1$ and $E_2$. Write the formal definit
 
 = Part : Conditional Probability and Independence
 
-Q10: Define conditional probability $P(a | b)$ and state the formula. Walk through the intuition: why do we restrict the sample space to $B$, and why do we then normalize by $P(b)$?
+Q10: Define conditional probability $P(a | b)$ and state the formula. Explain why we restrict the sample space to $B$, and why do we then normalize by $P(b)$?
 #v(5cm)
 
 Q11: Using the joint distribution from Q3, compute $P("exam" | "weekday")$, the probability that a session is exam-related, given that it falls on a weekday. Show your work using the conditional probability formula.
@@ -134,11 +134,16 @@ You are allowed to get up and swap your exam for one from pile B if you so choos
 Q13: Define _conditional independence_ $(A perp B | C)$. Write the formal condition both in terms of $P(A | B, C)$ and in terms of $P(A and B | C)$.
 #v(2cm)
 
-Q14: Explain the difference between general independence ($A perp B$) and conditional independence ($A perp B | C$). For each case below, argue whether it is possible and give a brief example or counterexample:
+Q14: Explain the difference between general independence ($A perp B$) and conditional independence ($A perp B | C$). 
 
-(a) $A$ and $B$ are independent, but not conditionally independent given $C$.
+(a)
+#v(1cm)
+
+For each case below, argue whether it is possible and give a brief example or counterexample:
+
+(b) $A$ and $B$ are independent, but not conditionally independent given $C$.
 #v(2cm)
-(b) $A$ and $B$ are conditionally independent given $C$, but not generally independent.
+(c) $A$ and $B$ are conditionally independent given $C$, but not generally independent.
 #v(2cm)
 
 #pagebreak()
