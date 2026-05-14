@@ -169,7 +169,7 @@ Derive a formula for $P(E_1 or E_2)$ in terms of $P(E_1)$, $P(E_2)$, and $P(E_1 
 Q8: When are two events $E_1$ and $E_2$ said to be _mutually exclusive_? How does mutual exclusivity simplify the formula from Q7?
 
 #answer[
-  $E_1$ and $E_2$ are mutually exclusive when they share no outcomes: $E_1 sect E_2 = emptyset$, equivalently $P(E_1 and E_2) = 0$.
+  $E_1$ and $E_2$ are mutually exclusive when they share no outcomes: $E_1 inter E_2 = emptyset$, equivalently $P(E_1 and E_2) = 0$.
 
   The disjunction formula then simplifies to:
   $ P(E_1 or E_2) = P(E_1) + P(E_2) $
@@ -488,5 +488,116 @@ Q19: Describe the D-separation algorithm step by step. What does it mean for two
   + If no path d-connects $X$ and $Y$, then $X$ and $Y$ are d-separated given $bold(Z)$.
 
   If $X$ and $Y$ are d-separated given $bold(Z)$, then the Bayes Net guarantees $X tack.t.double Y | bold(Z)$, they are conditionally independent. (Note: d-connection does not guarantee dependence; it only means the network does not enforce independence.)
+]
+
+#pagebreak()
+Q20: Consider the following BayesNet:
+
+#figure(
+  diagram(
+    edge-stroke: 0.75pt,
+    node-corner-radius: 10pt,
+    node-stroke: 1pt,
+    edge-corner-radius: 10pt,
+
+    node((0, 0), [$H$], name: <h>),
+    node((2, 0), [$L$], name: <l>),
+    node((0, 1), [$I$], name: <i>),
+    node((2, 1), [$M$], name: <m>),
+    node((0, 2), [$J$], name: <j>),
+    node((1, 2), [$K$], name: <k>),
+    node((1, 3), [$N$], name: <n>),
+
+    edge(<h>, <i>, "->"),
+    edge(<i>, <j>, "->"),
+    edge(<i>, <k>, "->"),
+    edge(<l>, <k>, "->"),
+    edge(<l>, <m>, "->"),
+    edge(<j>, <n>, "->"),
+    edge(<m>, <n>, "->"),
+  ),
+)
+
+For each of the following, determine whether the conditional independence _must_ hold. Apply D-separation to justify your answer.
+
+$
+  & H tack.t.double L \
+  & H tack.t.double L | K \
+  & H tack.t.double N \
+  & H tack.t.double N | J \
+  & J tack.t.double M \
+  & J tack.t.double M | N \
+  & K tack.t.double M \
+  & K tack.t.double M | L \
+  & K tack.t.double N | I, L \
+$
+
+#answer[
+  The network has two v-structures: $I -> K <- L$ and $J -> N <- M$. All analysis uses d-separation: shade conditioning variables, then check every undirected path for a blocking triple.
+
+  #v(0.4em)
+  *$H tack.t.double L$: HOLDS.*
+
+  Every path from $H$ to $L$ passes through an unobserved collider:
+  - $H -> I -> K <- L$: v-structure at $K$, $K$ unobserved $->$ blocked.
+  - $H -> I -> J -> N <- M <- L$: v-structure at $N$, $N$ unobserved $->$ blocked.
+
+  All paths blocked; $H$ and $L$ are d-separated.
+
+  #v(0.4em)
+  *$H tack.t.double L | K$: does NOT hold.*
+
+  Conditioning on $K$ activates the v-structure $I -> K <- L$ (observing a collider opens the path). The path $H -> I -> K <- L$ is now active. $H$ and $L$ are not d-separated.
+
+  #v(0.4em)
+  *$H tack.t.double N$: does NOT hold.*
+
+  The path $H -> I -> J -> N$ is a chain with all middle nodes ($I$, $J$) unobserved, every triple is open. $H$ is a direct ancestor of $N$ with an unblocked causal path.
+
+  #v(0.4em)
+  *$H tack.t.double N | J$: HOLDS.*
+
+  Conditioning on $J$:
+  - $H -> I -> J -> N$: $J$ is an observed chain node (middle of $I -> J -> N$) $->$ blocked.
+  - $H -> I -> K <- L -> M -> N$: v-structure at $K$, $K$ unobserved $->$ blocked.
+
+  All paths blocked; d-separated.
+
+  #v(0.4em)
+  *$J tack.t.double M$: HOLDS.*
+
+  Both paths between $J$ and $M$ pass through unobserved colliders:
+  - $J <- I -> K <- L -> M$: v-structure at $K$, $K$ unobserved $->$ blocked.
+  - $J -> N <- M$: v-structure at $N$, $N$ unobserved $->$ blocked.
+
+  All paths blocked; d-separated.
+
+  #v(0.4em)
+  *$J tack.t.double M | N$: does NOT hold.*
+
+  Conditioning on $N$ activates the v-structure $J -> N <- M$. The path $J -> N <- M$ is now active. This is explaining away: knowing the effect $N$ induces a dependence between its two causes $J$ and $M$.
+
+  #v(0.4em)
+  *$K tack.t.double M$: does NOT hold.*
+
+  The path $K <- L -> M$ is a common-cause structure with $L$ unobserved, the triple $K <- L -> M$ is open. $K$ and $M$ share the common cause $L$ and are marginally correlated.
+
+  #v(0.4em)
+  *$K tack.t.double M | L$: HOLDS.*
+
+  Conditioning on $L$:
+  - $K <- L -> M$: $L$ is an observed common-cause node $->$ blocked.
+  - $K <- I -> J -> N <- M$: v-structure at $N$, $N$ unobserved $->$ blocked.
+
+  All paths blocked; d-separated. Once $L$ is known, $K$ and $M$ carry no information about each other.
+
+  #v(0.4em)
+  *$K tack.t.double N | I, L$: HOLDS.*
+
+  Conditioning on both $I$ and $L$ blocks the only two paths:
+  - $K <- I -> J -> N$: $I$ is an observed common-cause node $->$ blocked.
+  - $K <- L -> M -> N$: $L$ is an observed common-cause node $->$ blocked.
+
+  All paths blocked; d-separated. Note that conditioning on $I$ alone leaves the second path open, and conditioning on $L$ alone leaves the first path open, both must be observed simultaneously to achieve d-separation.
 ]
 
