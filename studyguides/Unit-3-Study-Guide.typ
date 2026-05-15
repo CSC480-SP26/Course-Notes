@@ -59,7 +59,7 @@ Q3: A CSC 480 student logs every study session by day type $D$ and type of work 
 (d) Are $D$ and $T$ independent? Check using the formal definition for at least two outcome pairs and state your conclusion.
 #v(2.5cm)
 
-Q4: Write the general formula for computing the marginal distribution $P(X = x)$ from a joint distribution $P(X, Y)$. Explain in words what "marginalizing out" $Y$ means.
+Q4: Write the general formula for computing the marginal distribution $P(X = x)$ from a joint distribution $P(X, Y)$.  Explain in your own words what "marginalizing out" $Y$ means.
 #v(2.5cm)
 
 Q5: What is the difference between an _outcome_ and an _event_? Write the formula #sidenote[Course notes: 06-Probability, Page 3] for computing the probability of an event $E$ from a joint distribution.
@@ -103,7 +103,7 @@ Q9: Define independence between events $E_1$ and $E_2$. Write the formal definit
 
 = Part : Conditional Probability and Independence
 
-Q10: Define conditional probability $P(a | b)$ and state the formula. Walk through the intuition: why do we restrict the sample space to $B$, and why do we then normalize by $P(b)$?
+Q10: Define conditional probability $P(a | b)$ and state the formula. Explain why we restrict the sample space to $B$, and why do we then normalize by $P(b)$?
 #v(5cm)
 
 Q11: Using the joint distribution from Q3, compute $P("exam" | "weekday")$, the probability that a session is exam-related, given that it falls on a weekday. Show your work using the conditional probability formula.
@@ -134,13 +134,80 @@ You are allowed to get up and swap your exam for one from pile B if you so choos
 Q13: Define _conditional independence_ $(A perp B | C)$. Write the formal condition both in terms of $P(A | B, C)$ and in terms of $P(A and B | C)$.
 #v(2cm)
 
-Q14: Explain the difference between general independence ($A perp B$) and conditional independence ($A perp B | C$). For each case below, argue whether it is possible and give a brief example or counterexample:
+Q14: Explain the difference between general independence ($A perp B$) and conditional independence ($A perp B | C$). 
 
-(a) $A$ and $B$ are independent, but not conditionally independent given $C$.
+(a)
+#v(1cm)
+
+For each case below, argue whether it is possible and give a brief example or counterexample:
+
+(b) $A$ and $B$ are independent, but not conditionally independent given $C$.
 #v(2cm)
-(b) $A$ and $B$ are conditionally independent given $C$, but not generally independent.
+(c) $A$ and $B$ are conditionally independent given $C$, but not generally independent.
 #v(2cm)
 
 #pagebreak()
 
 = Part : Bayes Nets
+Q15: What is a Bayes Net? List its two components. Write the general formula for the joint distribution of $N$ random variables as a product of conditionals according to the Bayes Net.
+
+#v(6cm)
+
+Q16: State the two conditional independence rules that follow directly from a Bayes Net's structure. For each, state the rule formally and explain the intuition in your own words.
+#v(6cm)
+
+
+
+
+Q17: Define the Markov Blanket of a node $X$ in a Bayes Net. State the conditional independence property that the Markov Blanket implies.
+
+#pagebreak()
+Q18: Name and describe the three canonical triple structures in a Bayes Net. For each, state whether information (influence) flows between the two endpoint nodes when the middle node is (i) unobserved, and (ii) observed.
+
+#v(10cm)
+
+Q19: Describe the D-separation algorithm step by step. What does it mean for two variables $X$ and $Y$ to be d-separated given a set of observed variables $bold(Z)$? What can we conclude probabilistically if they are d-separated?
+
+#v(8cm)
+
+#pagebreak()
+Q20: Consider the following BayesNet:
+
+#figure(
+  diagram(
+    edge-stroke: 0.75pt,
+    node-corner-radius: 10pt,
+    node-stroke: 1pt,
+    edge-corner-radius: 10pt,
+
+    node((0, 0), [$H$], name: <h>),
+    node((2, 0), [$L$], name: <l>),
+    node((0, 1), [$I$], name: <i>),
+    node((2, 1), [$M$], name: <m>),
+    node((0, 2), [$J$], name: <j>),
+    node((1, 2), [$K$], name: <k>),
+    node((1, 3), [$N$], name: <n>),
+
+    edge(<h>, <i>, "->"),
+    edge(<i>, <j>, "->"),
+    edge(<i>, <k>, "->"),
+    edge(<l>, <k>, "->"),
+    edge(<l>, <m>, "->"),
+    edge(<j>, <n>, "->"),
+    edge(<m>, <n>, "->"),
+  ),
+)
+
+For each of the following, determine whether the conditional independence _must_ hold. Apply D-separation to justify your answer.
+
+$
+  & H tack.t.double L \
+  & H tack.t.double L | K \
+  & H tack.t.double N \
+  & H tack.t.double N | J \
+  & J tack.t.double M \
+  & J tack.t.double M | N \
+  & K tack.t.double M \
+  & K tack.t.double M | L \
+  & K tack.t.double N | I, L \
+$
