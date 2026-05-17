@@ -1,4 +1,4 @@
-#import "../../wdf.typ": *
+﻿#import "../../wdf.typ": *
 
 
 #show: template.with(
@@ -601,3 +601,245 @@ $
   All paths blocked; d-separated. Note that conditioning on $I$ alone leaves the second path open, and conditioning on $L$ alone leaves the first path open, both must be observed simultaneously to achieve d-separation.
 ]
 
+
+
+#pagebreak()
+Q21: The following joint distribution is defined over three binary random variables $A$, $B$, $C$ (values T and F): #sidenote[Course notes: 07-Bayes-Networks, Pages 3--5]
+
+#table(
+  columns: 4,
+  align: (center, center, center, center),
+  stroke: 0.5pt,
+  [*A*], [*B*], [*C*], [*P(A, B, C)*],
+  [T], [T], [T], [0.36],
+  [T], [T], [F], [0.04],
+  [T], [F], [T], [0.01],
+  [T], [F], [F], [0.09],
+  [F], [T], [T], [0.09],
+  [F], [T], [F], [0.01],
+  [F], [F], [T], [0.04],
+  [F], [F], [F], [0.36],
+)
+
+(a) Compute $P(A = T)$, $P(C = T)$, and $P(A = T, C = T)$. Are $A$ and $C$ marginally independent? Justify using the definition of independence.
+
+#answer[
+  Marginalizing from the table:
+  - $P(A=T) = 0.36 + 0.04 + 0.01 + 0.09 = 0.50$
+  - $P(C=T) = 0.36 + 0.01 + 0.09 + 0.04 = 0.50$
+  - $P(A=T, C=T) = P(T,T,T) + P(T,F,T) = 0.36 + 0.01 = 0.37$
+
+  Independence requires $P(A=T, C=T) = P(A=T) dot P(C=T)$, but:
+  $ P(A=T) dot P(C=T) = 0.50 times 0.50 = 0.25 quad \
+  != quad 0.37 = P(A=T, C=T) $
+
+  Thus $A$ and $C$ are not marginally independent.
+]
+
+(b) Compute $P(A = T | B = T)$ and $P(A = T | B = T, C = T)$. Use these to determine whether $A tack.t.double C | B$ holds.
+
+#answer[
+  First compute the needed marginals from the table:
+  - $P(B=T) = 0.36 + 0.04 + 0.09 + 0.01 = 0.50$
+  - $P(A=T, B=T) = 0.36 + 0.04 = 0.40$
+  - $P(B=T, C=T) = 0.36 + 0.09 = 0.45$
+
+  $ P(A=T | B=T) = P(A=T, B=T) / P(B=T) = 0.40 / 0.50 = 0.80 $
+  $ P(A=T | B=T, C=T) = P(A=T, B=T, C=T) / P(B=T, C=T) = \
+  0.36 / 0.45 = 0.80 $
+
+  Since $P(A=T | B=T) = P(A=T | B=T, C=T) = 0.80$, observing $C$ provides no additional information about $A$ once $B$ is known. $A tack.t.double C | B$ holds.
+]
+
+#pagebreak()
+
+(c) For each of the four Bayes Net structures below, determine whether it _could_ correctly represent the joint distribution above. Use D-separation to state the key independence claims the structure makes, compare them to your results from (a) and (b), and justify your conclusion.
+
+#grid(
+  columns: (1fr, 1fr),
+  align: center,
+  gutter: 1.5em,
+  [
+    *(i)*
+    #figure(
+      diagram(
+        edge-stroke: 0.75pt,
+        node-corner-radius: 10pt,
+        node-stroke: 1pt,
+        node((0, 0), [$A$], name: <a1>),
+        node((1, 0), [$B$], name: <b1>),
+        node((2, 0), [$C$], name: <c1>),
+        edge(<a1>, <b1>, "->"),
+        edge(<b1>, <c1>, "->"),
+      ),
+    )
+  ],
+  [
+    *(ii)*
+    #figure(
+      diagram(
+        edge-stroke: 0.75pt,
+        node-corner-radius: 10pt,
+        node-stroke: 1pt,
+        node((1, 0), [$B$], name: <b2>),
+        node((0, 1), [$A$], name: <a2>),
+        node((2, 1), [$C$], name: <c2>),
+        edge(<b2>, <a2>, "->"),
+        edge(<b2>, <c2>, "->"),
+      ),
+    )
+  ],
+  [
+    *(iii)*
+    #figure(
+      diagram(
+        edge-stroke: 0.75pt,
+        node-corner-radius: 10pt,
+        node-stroke: 1pt,
+        node((0, 0), [$A$], name: <a3>),
+        node((2, 0), [$C$], name: <c3>),
+        node((1, 1), [$B$], name: <b3>),
+        edge(<a3>, <b3>, "->"),
+        edge(<c3>, <b3>, "->"),
+      ),
+    )
+  ],
+  [
+    *(iv)*
+    #figure(
+      diagram(
+        edge-stroke: 0.75pt,
+        node-corner-radius: 10pt,
+        node-stroke: 1pt,
+        node((0, 0), [$A$], name: <a4>),
+        node((1, 0), [$C$], name: <c4>),
+        node((2, 0), [$B$], name: <b4>),
+        edge(<a4>, <c4>, "->"),
+        edge(<c4>, <b4>, "->"),
+      ),
+    )
+  ],
+)
+
+#answer[
+  Parts (a) and (b) established two things that any valid Bayes Net for the given data must reproduce in that, $A$ and $C$ are not marginally independent (they are correlated when $B$ is unknown), and $A tack.t.double C | B$ (they become independent once $B$ is observed). So:
+
+  #v(0.5em)
+  (i) $A -> B -> C$ which is valid.
+
+  This is a causal chain. To check whether $A$ and $C$ are marginally independent, we apply d-separation with no variables shaded. The only path between $A$ and $C$ runs $A -> B -> C$, which is a head-to-tail configuration at $B$. Since $B$ is unobserved, this triple is open, meaning $A$ and $C$ are d-connected. They are (possibly) dependent. This is consistent with part (a). Now shade $B$ and repeat. The same path $A -> B -> C$ now passes through an observed head-to-tail node, which closes it. With every path blocked, $A tack.t.double C | B$ holds, consistent with part (b). Both facts match, so this structure is valid.
+
+  #v(0.5em)
+  (ii) $B -> A$, $B -> C$ (common cause) which is valid.
+
+  Here $B$ is a common cause of both $A$ and $C$. Without observing $B$, the only path between $A$ and $C$ is $A <- B -> C$, a tail-to-tail configuration at $B$. An unobserved tail-to-tail node leaves the path open, so $A$ and $C$ are d-connected and (possibly) dependent which is consistent with part a. Once $B$ is shaded, the tail-to-tail node is now observed, which blocks the path and gives $A tack.t.double C | B$ meaning its consistent with part b. Importantly, despite having completely different causal semantics from structure (i), the d-separation properties are identical.
+
+  #v(0.5em)
+  (iii) $A -> B <- C$ (common effect / v-structure) which is invalid.
+
+  This is a v-structure at $B$. The difference from the other structures is that d-separation rules are inverted at b. When $B$ is unobserved (and has no observed descendants), the path $A -> B <- C$ is blocked, not open. This means the structure claims $A$ and $C$ are marginally independent so they carry no information about each other as long as $B$ is unknown. But part (a) showed $A$ and $C$ are not marginally independent ($P(A=T, C=T) = 0.37 != 0.25 = P(A=T) dot P(C=T)$). This is a direct contradiction, so no choice of CPTs for this structure can reproduce the given distribution. The structure is invalid.
+
+  #v(0.5em)
+  (iv) $A -> C -> B$ which is invalid.
+
+  This is a causal chain, but with the variables in a different order. $A$ causes $C$, which in turn causes $B$. To check whether this structure encodes $A tack.t.double C | B$, consider all paths between $A$ and $C$ when $B$ is shaded. The direct edge $A -> C$ is itself a path between $A$ and $C$, and it does not pass through $B$ at all (no amount of conditioning on $B$ can block a path that doesn't involve $B$). So $A$ and $C$ remain d-connected given $B$, meaning this structure does not encode $A tack.t.double C | B$. Since part b confirmed that $A tack.t.double C | B$ holds in the data, the structure contradicts the distribution and is invalid. (What this structure actually encodes is $A tack.t.double B | C$, since once $C$ is known it screens off $A$ from $B$ along the only path $A -> C -> B$. But that is a different conditional independence that the data does not require.)
+]
+
+#pagebreak()
+
+= Part: Approximate Inference
+
+Q22: This question asks you to reason about the four sampling-based approximate inference methods covered in class: _Prior Sampling_, _Rejection Sampling_, _Likelihood Weighting_, and _Gibbs Sampling_. #sidenote[Course notes: 07-Bayes-Networks, Pages 8--12]
+
+(a) For each pair below, identify which method is more appropriate for the given scenario and explain in 1--2 sentences.
+
+(i) You want to estimate $P(Y | X = x)$ where $P(X = x) approx 0.001$ is very rare. Compare _Prior Sampling_ and _Rejection Sampling_.
+
+#answer[
+  Rejection sampling is probably preferable because it can terminate a sample early the moment an evidence variable is drawn inconsistently, wasting less computation per rejected sample. However, both methods ultimately rely on generating samples that happen to have $X = x$, so with $P(X=x) approx 0.001$ roughly only 1 in 1,000 samples will be useful either way. Neither method is truly appropriate for very rare evidence, but likelihood weighting would be the right tool here.
+]
+
+(ii) You are estimating a posterior in a large Bayes Net where evidence is observed at leaf nodes (no children), and this evidence should substantially update beliefs about root nodes (no parents) several levels above. Compare _Likelihood Weighting_ and _Gibbs Sampling_.
+
+#answer[
+  Gibbs sampling is more appropriate. In likelihood weighting, root/ancestor variables are always sampled from their priors without being directly informed by downstream evidence, so the evidence only enters through sample weights, so the upstream sampling distribution itself is never updated. Gibbs resamples each variable conditioned on its full Markov blanket(which includes its children), allowing leaf node evidence to propagate backward and directly adjust beliefs about root nodes.
+]
+
+#pagebreak()
+
+(iii) You need a quick, simple estimate, the evidence event has probability around 0.15, and the Bayes Net is a short chain. Compare _Rejection Sampling_ and _Likelihood Weighting_.
+
+#answer[
+  At $P(E) approx 0.15$, about 1,500 of every 10,000 prior samples would pass rejection which is a reasonable acceptance rate(it really depends but thats probably fine). Rejection sampling is simpler to implement and practical at this evidence probability. Likelihood weighting is strictly more efficient (in that it uses all samples with weights) but the gain is small for a short chain at this evidence rate, so rejection sampling's simplicity is often preferred.
+]
+
+(b) Musty the mustang claims: "Likelihood weighting is always better than rejection sampling because it never wastes a generated sample." Describe a specific network and evidence scenario where likelihood weighting could produce a _higher-variance_ estimate than rejection sampling for the same number of generated samples. (Hint: consider what happens to effective sample size when nearly all sample weights are close to zero.)
+
+#answer[
+  The claim can fail when the evidence has very low conditional probability given typical prior samples. Suppose we have the network $"Studied" -> "Failed"$, where 99% of students study ($P("Studied"=T) = 0.99$), students who studied rarely fail ($P("Failed"=T | "Studied"=T) = 0.001$), and students who didn't study almost always fail ($P("Failed"=T | "Studied"=F) = 0.99$). We want to estimate $P("Studied" | "Failed" = T)$ using 10,000 samples.
+
+  With likelihood weighting, every sample first draws Studied from its prior, then locks $"Failed" = T$ and assigns a weight equal to $P("Failed"=T | "Studied")$. Because 99% of students study, about 9,900 of our 10,000 samples will have Studied = T, but each of those receives weight 0.001, essentially nothing. The remaining $~100$ samples have Studied = F and each receives weight 0.99, so nearly all the influence on the final estimate comes from those 100 samples. If those 100 happen to be unrepresentative (which is likely, since 100 is a small number), the estimate will be way off.
+
+  With rejection sampling, we generate a full sample (draw Studied from its prior, then draw Failed from its conditional) and keep it only if $"Failed" = T$. Since $P("Failed"=T) approx 0.99 times 0.001 + 0.01 times 0.99 approx 0.011$, only about 110 of 10,000 samples survive, but each survivor is an equally weighted, unbiased draw from the true posterior. So there is no weight skew.
+
+  In this case both methods end up with roughly the same number of truly informative samples (~100-110), so likelihood weighting's "no wasted samples" advantage evaporates. And because likelihood weighting concentrates all its influence on those $~100$ high weight survivors while the other 9,900 samples contribute nearly nothing, its variance can actually be higher than rejection sampling's uniformly weighted survivors.
+]
+
+#pagebreak()
+
+(c) Consider the following Bayes Net and the query $P("Storm" | "Delay" = T)$: 
+
+#figure(
+  diagram(
+    edge-stroke: 0.75pt,
+    node-corner-radius: 10pt,
+    node-stroke: 1pt,
+    edge-corner-radius: 10pt,
+    node((0, 0), [Storm], name: <st>),
+    node((0, 1), [Delay], name: <dl>),
+    edge(<st>, <dl>, "->"),
+  ),
+)
+
+with $P("Storm" = T) = 0.05$, $P("Delay" = T | "Storm" = T) = 0.90$, and $P("Delay" = T | "Storm" = F) = 0.05$.
+
+(i) Using prior sampling with 10,000 samples, approximately how many samples would be consistent with the evidence $"Delay" = T$? Of those consistent samples, how many would you expect to have $"Storm" = T$?
+
+#answer[
+  $ P("Delay"=T) =\
+   P("Storm"=T) dot P("Delay"=T | "Storm"=T)\
+   + P("Storm"=F) dot P("Delay"=T | "Storm"=F) $
+  $ = 0.05 times 0.90 + 0.95 times 0.05 = 0.045 + 0.0475 = 0.0925 $
+
+  Expected samples with Delay = T: $0.0925 times 10,000 = 925$ samples.
+
+  Of those 925:
+  - $P("Storm"=T, "Delay"=T) = 0.05 times 0.90 = 0.045 => 450$ samples with Storm = T.
+  - The remaining $925 - 450 = 475`$ samples have Storm = F.
+]
+
+(ii) Using likelihood weighting with 10,000 samples, what weight is assigned to each sample with $"Storm" = T$? What weight to each sample with $"Storm" = F$? Use expected sample counts and these weights to estimate $P("Storm" = T | "Delay" = T)$.
+
+#answer[
+  Delay is the evidence variable, so it is set to T rather than sampled. Storm is sampled normally with $~500$ samples with Storm = T, $~9,500$ with Storm = F.
+
+  Each sample's weight $= P("Delay"=T | "Storm")$:
+  - Storm = T: weight $= 0.90$
+  - Storm = F: weight $= 0.05$
+
+  Weighted counts:
+  - Storm = T: $500 times 0.90 = 450$
+  - Storm = F: $9,500 times 0.05 = 475$ #h(1em) Total: $925$
+
+  $ P("Storm"=T | "Delay"=T) approx 450 / 925 approx 0.486 $
+
+  True value= $(0.90 times 0.05) / 0.0925 = 0.045 / 0.0925 approx 0.486$ 
+]
+
+(iii) For this simple two-node chain, does Gibbs sampling offer any meaningful advantage over likelihood weighting? In what kind of network structure would Gibbs sampling be most beneficial compared to likelihood weighting, and why?
+
+#answer[
+  For this two-node chain, Gibbs sampling offers no meaningful advantage over likelihood weighting. Storm has no other relatives whose values could influence it beyond what Delay already provides through weights; both methods converge to the same estimate with comparable effort here.
+
+  Gibbs sampling is most beneficial over likelihood weighting in large, densely connected networks where evidence is at intermediate or leaf nodes and should update beliefs about ancestor variables. Because Gibbs resamples each variable conditioned on its full Markov blanket, including its children, evidence "flows both ways"(ie downstream observations directly reshape the sampling distribution of upstream variables). Likelihood weighting cannot do this as ancestors are always drawn from their priors regardless of what is observed below, so the evidence signal is absorbed into weights rather than into the samples themselves.
+]

@@ -211,3 +211,147 @@ $
   & K tack.t.double M | L \
   & K tack.t.double N | I, L \
 $
+
+
+#pagebreak()
+Q21: The following joint distribution is defined over three binary random variables $A$, $B$, $C$ (values T and F): #sidenote[Course notes: 07-Bayes-Networks, Pages 3--5]
+
+#table(
+  columns: 4,
+  align: (center, center, center, center),
+  stroke: 0.5pt,
+  [*A*], [*B*], [*C*], [*P(A, B, C)*],
+  [T], [T], [T], [0.36],
+  [T], [T], [F], [0.04],
+  [T], [F], [T], [0.01],
+  [T], [F], [F], [0.09],
+  [F], [T], [T], [0.09],
+  [F], [T], [F], [0.01],
+  [F], [F], [T], [0.04],
+  [F], [F], [F], [0.36],
+)
+
+(a) Compute $P(A = T)$, $P(C = T)$, and $P(A = T, C = T)$. Are $A$ and $C$ marginally independent? Justify using the definition of independence.
+#v(4cm)
+
+(b) Compute $P(A = T | B = T)$ and $P(A = T | B = T, C = T)$. Use these to determine whether $A tack.t.double C | B$ holds.
+#v(4.5cm)
+
+#pagebreak()
+
+(c) For each of the four Bayes Net structures below, determine whether it _could_ correctly represent the joint distribution above. Use D-separation to state the key independence claims the structure makes, compare them to your results from (a) and (b), and justify your conclusion.
+
+#grid(
+  columns: (1fr, 1fr),
+  align: center,
+  gutter: 1.5em,
+  [
+    *(i)*
+    #figure(
+      diagram(
+        edge-stroke: 0.75pt,
+        node-corner-radius: 10pt,
+        node-stroke: 1pt,
+        node((0, 0), [$A$], name: <a1>),
+        node((1, 0), [$B$], name: <b1>),
+        node((2, 0), [$C$], name: <c1>),
+        edge(<a1>, <b1>, "->"),
+        edge(<b1>, <c1>, "->"),
+      ),
+    )
+  ],
+  [
+    *(ii)*
+    #figure(
+      diagram(
+        edge-stroke: 0.75pt,
+        node-corner-radius: 10pt,
+        node-stroke: 1pt,
+        node((1, 0), [$B$], name: <b2>),
+        node((0, 1), [$A$], name: <a2>),
+        node((2, 1), [$C$], name: <c2>),
+        edge(<b2>, <a2>, "->"),
+        edge(<b2>, <c2>, "->"),
+      ),
+    )
+  ],
+  [
+    *(iii)*
+    #figure(
+      diagram(
+        edge-stroke: 0.75pt,
+        node-corner-radius: 10pt,
+        node-stroke: 1pt,
+        node((0, 0), [$A$], name: <a3>),
+        node((2, 0), [$C$], name: <c3>),
+        node((1, 1), [$B$], name: <b3>),
+        edge(<a3>, <b3>, "->"),
+        edge(<c3>, <b3>, "->"),
+      ),
+    )
+  ],
+  [
+    *(iv)*
+    #figure(
+      diagram(
+        edge-stroke: 0.75pt,
+        node-corner-radius: 10pt,
+        node-stroke: 1pt,
+        node((0, 0), [$A$], name: <a4>),
+        node((1, 0), [$C$], name: <c4>),
+        node((2, 0), [$B$], name: <b4>),
+        edge(<a4>, <c4>, "->"),
+        edge(<c4>, <b4>, "->"),
+      ),
+    )
+  ],
+)
+
+#v(6cm)
+
+#pagebreak()
+
+= Part: Approximate Inference
+
+Q22: This question asks you to reason about the four sampling-based approximate inference methods covered in class: _Prior Sampling_, _Rejection Sampling_, _Likelihood Weighting_, and _Gibbs Sampling_. #sidenote[Course notes: 07-Bayes-Networks, Pages 8--12]
+
+(a) For each pair below, identify which method is more appropriate for the given scenario and explain in 1--2 sentences.
+
+(i) You want to estimate $P(Y | X = x)$ where $P(X = x) approx 0.001$ is very rare. Compare _Prior Sampling_ and _Rejection Sampling_.
+#v(7cm)
+
+(ii) You are estimating a posterior in a large Bayes Net where evidence is observed at leaf nodes (no children), and this evidence should substantially update beliefs about root nodes (no parents) several levels above. Compare _Likelihood Weighting_ and _Gibbs Sampling_.
+#v(4cm)
+#pagebreak()
+
+(iii) You need a quick, simple estimate, the evidence event has probability around 0.15, and the Bayes Net is a short chain. Compare _Rejection Sampling_ and _Likelihood Weighting_.
+#v(7cm)
+
+(b) Musty the mustang claims: "Likelihood weighting is always better than rejection sampling because it never wastes a generated sample." Describe a specific network and evidence scenario where likelihood weighting could produce a _higher-variance_ estimate than rejection sampling for the same number of generated samples. (Hint: consider what happens to effective sample size when nearly all sample weights are close to zero.)
+#v(4cm)
+#pagebreak()
+
+(c) Consider the following Bayes Net and the query $P("Storm" | "Delay" = T)$: 
+
+#figure(
+  diagram(
+    edge-stroke: 0.75pt,
+    node-corner-radius: 10pt,
+    node-stroke: 1pt,
+    edge-corner-radius: 10pt,
+    node((0, 0), [Storm], name: <st>),
+    node((0, 1), [Delay], name: <dl>),
+    edge(<st>, <dl>, "->"),
+  ),
+)
+
+with $P("Storm" = T) = 0.05$, $P("Delay" = T | "Storm" = T) = 0.90$, and $P("Delay" = T | "Storm" = F) = 0.05$.
+
+(i) Using prior sampling with 10,000 samples, approximately how many samples would be consistent with the evidence $"Delay" = T$? Of those consistent samples, how many would you expect to have $"Storm" = T$?
+#v(3cm)
+
+(ii) Using likelihood weighting with 10,000 samples, what weight is assigned to each sample with $"Storm" = T$? What weight to each sample with $"Storm" = F$? Use expected sample counts and these weights to estimate $P("Storm" = T | "Delay" = T)$.
+#v(4cm)
+
+(iii) For this simple two-node chain, does Gibbs sampling offer any meaningful advantage over likelihood weighting? In what kind of network structure would Gibbs sampling be most beneficial compared to likelihood weighting, and why?
+#v(3cm)
