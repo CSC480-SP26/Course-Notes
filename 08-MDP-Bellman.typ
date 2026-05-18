@@ -86,10 +86,10 @@ For now lets ignore the discount factor and explore our example, the full transi
     columns: 6,
     align: center,
     table.header([State], [Action], [$P'($Writing$)$], [$P'($Googling$)$], [$P'($DS$)$], [Reward]),
-    [Writing],       [Focus],  [$1.0$], [$0.0$], [$0.0$], [$+1$],
-    [Writing],       [Browse], [$0.5$], [$0.5$], [$0.0$], [$+2$],
-    [Googling],      [Focus],  [$0.5$], [$0.5$], [$0.0$], [$+1$],
-    [Googling],      [Browse], [$0.0$], [$0.0$], [$1.0$], [$-10$],
+    [Writing],[Focus],  [$1.0$], [$0.0$], [$0.0$], [$+1$],
+    [Writing],[Browse], [$0.5$], [$0.5$], [$0.0$], [$+2$],
+    [Googling],[Focus],  [$0.5$], [$0.5$], [$0.0$], [$+1$],
+    [Googling],[Browse], [$0.0$], [$0.0$], [$1.0$], [$-10$],
   )
 )
 
@@ -346,9 +346,9 @@ So Focus wins by an even wider margin. Value iteration was converging on the rig
 
 == Expectimax
 
-The structure of the Bellman equation should look familiar. The $max_a$ is an agent node; the agent picks the action that maximizes its value. The $sum_(s') T(s,a,s')[dots]$ is a chance node, where the environment picks the next state according to the transition probabilities. This is the expectimax tree from earlier in the course, but written as a set of equations over all states simultaneously rather than a tree expanded from a single root. The key difference is that the Bellman equation handles cycles: because we write equations for every state at once, we do not need to expand the tree and risk infinite loops.
+The structure of the Bellman equation should look familiar. The $max_a$ is an agent node; the agent picks the action that maximizes its value. The $sum_(s') T(s,a,s')[dots]$ is a chance node, where the environment picks the next state according to the transition probabilities. This is the expectimax tree from earlier in the course, but written as a set of equations over all states simultaneously rather than a tree expanded from a single root. Importantly, the Bellman equation handles cycles elegantly. While a tree would need to unroll cycles into infinitely deep recursive loops, the Bellman equations form a finite system, with one equation per state, that can be solved all at once regardless of cycles.
 
-The circle nodes in the tree below are _Q-states_, with each one representing a specific $(s, a)$ pair, the moment after the agent has committed to an action but before the environment has revealed where it lands. This is the same structure as the chance nodes from expectimax, as the agent controls the edge going into a Q-state (by choosing an action), and the environment controls the edges going out of it (by sampling $s'$ according to $T(s, a, X)$). Agent nodes take a $max$ over their children just as in expectimax, and Q-states take the expectation over theirs.
+To illustrate this, look at the tree in Figure 3 and compare it to our transition model in figure 2. In this tree, the circle nodes are _Q-states_, with each one representing a specific $(s, a)$ pair, the moment after the agent has committed to an action but before the environment has revealed where it lands. This is the same structure as the chance nodes from expectimax, as the agent controls the edge going into a Q-state (by choosing an action), and the environment controls the edges going out of it (by sampling $s'$ according to $T(s, a, X)$). Agent nodes take a $max$ over their children just as in expectimax, and Q-states take the expectation over theirs.
 
 #figure(
   caption: [Expectimax trees for Writing. Square nodes are agent (max) nodes, circle nodes are Q-states where the environment resolves the outcome.],
@@ -398,9 +398,9 @@ The circle nodes in the tree below are _Q-states_, with each one representing a 
   )
 )
    
-== Applying to the Example
+== Applying Bellman
 
-Expanding the Bellman equation directly for each non-terminal state:
+Our example leaves us with three possible outcomes, Writting, Googling and DoomScrolling. With in mind, lets expand the Bellman equation directly for each non-terminal state:
 #[
   #set math.equation(numbering: none)
   $
@@ -417,10 +417,10 @@ Expanding the Bellman equation directly for each non-terminal state:
   $
 ]
 
-We already know Browse dominates from Writing and Focus dominates from Googling for all $gamma in [0,1)$, so the $max$ resolves and we recover exactly the simultaneous equations from the previous section. The Bellman equation did not tell us anything we did not already know, but it gives us a general procedure that works even when the optimal policy is not obvious by inspection.
+We already know Browse dominates from Writing and Focus dominates from Googling for all $gamma in [0,1)$, so the $max$ resolves and we get the same equations from the previous section#sidenote[Equation 5 from the analysis of the discussion. Page 6.]. The Bellman equation did not tell us anything we did not already know, but it gives us a general procedure that works even when the optimal policy is not obvious by inspection.
 
 
-Putting it together, starting from Writing and expanding two full rounds:
+So now if we combined the trees from figures three and four, starting from Writing and expanding two full rounds we end up with the tree below:
 
 #figure(
   caption: [Depth-2 expectimax tree rooted at Writing. Square = agent node, circle = Q-state. W = Writing, G = Googling, D = DS. Probabilities on edges match Table 1; and they are omitted at depth 2 for clarity.],
@@ -431,64 +431,64 @@ Putting it together, starting from Writing and expanding two full rounds:
     node-inset: 4pt,
     spacing: (0.9em, 1.8em),
 
-    // Level 0: root
+    //root
     node((6.25, 0), [W],  name: <root>,  shape: shapes.rect),
 
-    // Level 1: Q-states
-    node((1.5,  1), [f],  name: <q1f>,   shape: circle),
-    node((11,   1), [b],  name: <q1b>,   shape: circle),
+    // Q-states
+    node((1.5,  1), [f], name: <q1f>, shape: circle),
+    node((11,1), [b],  name: <q1b>, shape: circle),
 
-    // Level 2: states after round 1
-    node((1.5,  2), [W],  name: <w1>,    shape: shapes.rect),
-    node((7.5,  2), [W],  name: <w2>,    shape: shapes.rect),
-    node((14.5, 2), [G],  name: <g2>,    shape: shapes.rect),
+    // states after round 1
+    node((1.5, 2), [W], name: <w1>,  shape: shapes.rect),
+    node((7.5, 2), [W], name: <w2>, shape: shapes.rect),
+    node((14.5, 2), [G], name: <g2>, shape: shapes.rect),
 
-    // Level 3: Q-states
-    node((0,    3), [f],  name: <qw1f>,  shape: circle),
-    node((3,    3), [b],  name: <qw1b>,  shape: circle),
-    node((6,    3), [f],  name: <qw2f>,  shape: circle),
-    node((9,    3), [b],  name: <qw2b>,  shape: circle),
-    node((13,   3), [f],  name: <qgf>,   shape: circle),
-    node((16,   3), [b],  name: <qgb>,   shape: circle),
+    //Q-states
+    node((0,3), [f], name: <qw1f>,  shape: circle),
+    node((3,3), [b], name: <qw1b>, shape: circle),
+    node((6,3), [f],  name: <qw2f>, shape: circle),
+    node((9,3), [b], name: <qw2b>, shape: circle),
+    node((13,3), [f], name: <qgf>,   shape: circle),
+    node((16,3), [b], name: <qgb>, shape: circle),
 
-    // Level 4: leaves
-    node((0,    4), [W],  name: <l0>,    shape: shapes.rect),
-    node((2,    4), [W],  name: <l1>,    shape: shapes.rect),
-    node((4,    4), [G],  name: <l2>,    shape: shapes.rect),
-    node((6,    4), [W],  name: <l3>,    shape: shapes.rect),
-    node((8,    4), [W],  name: <l4>,    shape: shapes.rect),
-    node((10,   4), [G],  name: <l5>,    shape: shapes.rect),
-    node((12,   4), [W],  name: <l6>,    shape: shapes.rect),
-    node((14,   4), [G],  name: <l7>,    shape: shapes.rect),
-    node((16,   4), [D],  name: <l8>,    shape: shapes.rect),
+    // leaves
+    node((0,4), [W], name: <l0>,shape: shapes.rect),
+    node((2,4), [W], name: <l1>,shape: shapes.rect),
+    node((4,4), [G],  name: <l2>,shape: shapes.rect),
+    node((6,4), [W], name: <l3>,shape: shapes.rect),
+    node((8,4), [W], name: <l4>,shape: shapes.rect),
+    node((10,4), [G], name: <l5>,shape: shapes.rect),
+    node((12,4),[W], name: <l6>,shape: shapes.rect),
+    node((14, 4), [G], name: <l7>,shape: shapes.rect),
+    node((16,4), [D], name: <l8>,shape: shapes.rect),
 
-    // Root -> level-1 Q-states (labeled with action)
-    edge(<root>, <q1f>,  "->", text(size: 0.75em)[Focus],  label-side: left),
-    edge(<root>, <q1b>,  "->", text(size: 0.75em)[Browse], label-side: right),
+    // Root ->Q-states 
+    edge(<root>, <q1f>, "->", text(size: 0.75em)[Focus],  label-side: left),
+    edge(<root>, <q1b>, "->", text(size: 0.75em)[Browse], label-side: right),
 
-    // Level-1 Q-states -> level-2 states (probability)
-    edge(<q1f>,  <w1>,   "->", text(size: 0.75em)[$1.0$]),
-    edge(<q1b>,  <w2>,   "->", text(size: 0.75em)[$0.5$],  label-side: left),
-    edge(<q1b>,  <g2>,   "->", text(size: 0.75em)[$0.5$],  label-side: right),
+    //  Q-states -> states 
+    edge(<q1f>, <w1>, "->", text(size: 0.75em)[$1.0$]),
+    edge(<q1b>,<w2>,  "->", text(size: 0.75em)[$0.5$], label-side: left),
+    edge(<q1b>, <g2>,"->", text(size: 0.75em)[$0.5$], label-side: right),
 
-    // Level-2 states -> level-3 Q-states (no label, action implied by circle letter)
-    edge(<w1>,   <qw1f>, "->"),
-    edge(<w1>,   <qw1b>, "->"),
-    edge(<w2>,   <qw2f>, "->"),
-    edge(<w2>,   <qw2b>, "->"),
-    edge(<g2>,   <qgf>,  "->"),
-    edge(<g2>,   <qgb>,  "->"),
+    //states -> Q-states 
+    edge(<w1>,<qw1f>, "->"),
+    edge(<w1>, <qw1b>, "->"),
+    edge(<w2>,  <qw2f>, "->"),
+    edge(<w2>,<qw2b>, "->"),
+    edge(<g2>,  <qgf>,  "->"),
+    edge(<g2>, <qgb>,  "->"),
 
-    // Level-3 Q-states -> level-4 leaves (no label)
-    edge(<qw1f>, <l0>,   "->"),
-    edge(<qw1b>, <l1>,   "->"),
-    edge(<qw1b>, <l2>,   "->"),
-    edge(<qw2f>, <l3>,   "->"),
-    edge(<qw2b>, <l4>,   "->"),
-    edge(<qw2b>, <l5>,   "->"),
-    edge(<qgf>,  <l6>,   "->"),
-    edge(<qgf>,  <l7>,   "->"),
-    edge(<qgb>,  <l8>,   "->"),
+    // Q-states -> leaves
+    edge(<qw1f>, <l0>,"->"),
+    edge(<qw1b>,<l1>,"->"),
+    edge(<qw1b>, <l2>,"->"),
+    edge(<qw2f>,<l3>,"->"),
+    edge(<qw2b>, <l4>,"->"),
+    edge(<qw2b>, <l5>,"->"),
+    edge(<qgf>, <l6>,"->"),
+    edge(<qgf>, <l7>,"->"),
+    edge(<qgb>,<l8>,"->"),
   )
 )
 
