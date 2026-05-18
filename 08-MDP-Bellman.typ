@@ -329,12 +329,24 @@ Substituting back: $V^*("Writing") = 2 + 0.9(15) = 15.5$ and $V^*("Googling") = 
 
 There is something circular about this. We needed to know the optimal policy (Browse from Writing, Focus from Googling) before we could drop the $max$ and write a linear system, but the whole point was to find the optimal policy in the first place. In this example we could figure out the policy by inspection, but in general that is not possible. Value iteration sidesteps this as it never assumes a fixed policy. It keeps the $max$ in place and just repeatedly applies the full Bellman equation as an update rule. Each round the estimates get closer to $V^*$, and the $max$ at each step naturally selects whichever action looks best given the current estimates.
 
-The absolute values take many rounds to converge, but the relative ordering of actions is often correct early on. After just one update, the Q-values from Writing are $2$ for Browse and $1$ for Focus, so Browse wins. The true Q-values are $Q^*("Writing", "Browse") = 15.5$ and $Q^*("Writing", "Focus") = 1 + 0.9 dot 15.5 = 14.95$, so Browse still wins. From Googling, round one gives $1$ for Focus and $-10$ for Browse. The true values are $Q^*("Googling", "Focus") = 14.5$ and $Q^*("Googling", "Browse") = -10 + 0.9(-100) = -100$, so Focus wins by an even wider margin. Value iteration was converging on the right policy immediately, it just needed more rounds to get the magnitudes right.
+The absolute values take many rounds to converge, but the relative ordering of actions is often correct early on. After just one update, the Q-values from Writing are $2$ for Browse and $1$ for Focus, so Browse wins. 
+The true Q-values are:
+$
+Q^*("Writing", "Browse") = 15.5 \
+
+Q^*("Writing", "Focus") = 1 + 0.9 dot 15.5 = 14.95
+$ 
+So Browse still wins. From Googling, round one gives $1$ for Focus and $-10$ for Browse. The true values are:
+$
+Q^*("Googling", "Focus") = 14.5\
+Q^*("Googling", "Browse") = -10 + 0.9(-100) = -100
+$
+So Focus wins by an even wider margin. Value iteration was converging on the right policy immediately, however it just needs more rounds to get the magnitudes right.
 
 
 == Expectimax
 
-The structure of the Bellman equation should look familiar. The $max_a$ is an agent node; the agent picks the action that maximizes its value. The $sum_(s') T(s,a,s')[dots]$ is a chance node; the environment picks the next state according to the transition probabilities. This is the expectimax tree from earlier in the course, but written as a set of equations over all states simultaneously rather than a tree expanded from a single root. The key difference is that the Bellman equation handles cycles: because we write equations for every state at once, we do not need to expand the tree and risk infinite loops.
+The structure of the Bellman equation should look familiar. The $max_a$ is an agent node; the agent picks the action that maximizes its value. The $sum_(s') T(s,a,s')[dots]$ is a chance node, where the environment picks the next state according to the transition probabilities. This is the expectimax tree from earlier in the course, but written as a set of equations over all states simultaneously rather than a tree expanded from a single root. The key difference is that the Bellman equation handles cycles: because we write equations for every state at once, we do not need to expand the tree and risk infinite loops.
 
 The circle nodes in the tree below are _Q-states_, with each one representing a specific $(s, a)$ pair, the moment after the agent has committed to an action but before the environment has revealed where it lands. This is the same structure as the chance nodes from expectimax, as the agent controls the edge going into a Q-state (by choosing an action), and the environment controls the edges going out of it (by sampling $s'$ according to $T(s, a, X)$). Agent nodes take a $max$ over their children just as in expectimax, and Q-states take the expectation over theirs.
 
@@ -496,8 +508,8 @@ To see this in action, start with $pi^0 = {"Writing": "Focus", "Googling": "Focu
 #[
   #set math.equation(numbering: none)
   $
-    V^(pi^0)("Writing") &= 1 + 0.9 dot V^(pi^0)("Writing") arrow.r.double V^(pi^0)("Writing") = 10 \
-    V^(pi^0)("Googling") &= 1 + 0.9(0.5 dot 10 + 0.5 dot V^(pi^0)("Googling")) arrow.r.double V^(pi^0)("Googling") = 10
+    V^(pi^0)("Writing") &= 1 + 0.9 dot V^(pi^0)("Writing") => V^(pi^0)("Writing") = 10 \
+    V^(pi^0)("Googling") &= 1 + 0.9(0.5 dot 10 + 0.5 dot V^(pi^0)("Googling")) => V^(pi^0)("Googling") = 10
   $
 ]
 Now improve. For each state, compute Q-values using $V^(pi^0)$:
@@ -505,9 +517,9 @@ Now improve. For each state, compute Q-values using $V^(pi^0)$:
   #set math.equation(numbering: none)
   $
     Q("Writing", "Focus")  &= 1 + 0.9 dot 10 = 10 \
-    Q("Writing", "Browse") &= 2 + 0.9(0.5 dot 10 + 0.5 dot 10) = 11 arrow.r "Browse wins" \
+    Q("Writing", "Browse") &= 2 + 0.9(0.5 dot 10 + 0.5 dot 10) = 11 -> "Browse wins" \
     Q("Googling", "Focus")  &= 1 + 0.9(0.5 dot 10 + 0.5 dot 10) = 10 \
-    Q("Googling", "Browse") &= -10 + 0.9 dot (-100) = -100 arrow.r "Focus wins"
+    Q("Googling", "Browse") &= -10 + 0.9 dot (-100) = -100 -> "Focus wins"
   $
 ]
 The improved policy is $pi^1 = {"Writing": "Browse", "Googling": "Focus"}$. Evaluating $pi^1$ gives $V^(pi^1)("Writing") = 15.5$ and $V^(pi^1)("Googling") = 14.5$ (the same linear system we solved before). Running improvement again produces the same policy, so we stop. Policy iteration found the optimal policy in a single iteration.
