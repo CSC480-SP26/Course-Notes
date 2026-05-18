@@ -24,14 +24,13 @@
 
 = Markov Decision Process
 
-What should an agent do when it doesn't know where it will start, or whether there's an end?
+From the first lecture we have been describing an agent as something that perceives its environment and chooses actions. The agent framework asks us to explore our choices. To evalaute and select actions deliberately, in pursuit of a goal, in a way we can call rational.
 
-Search and expectimax plan from a single starting state outward through a tree of futures. That works when the world is a one way road. It starts to have problems when:
-- States _cycle_ (the agent may return to a state it has already visited)#sidenote[During Lab 1 some of you may have experienced the issue of agents getting stuck in action loops like circling a wall/pillar or moving back and fourth one spot to avoid a goblin]
-- Decisions must be made from _any_ state the agent might occupy
-- The agent acts continuously, with no clear terminal goal
+In the settings we have studied so far, rationality was easy to define. The agent has a goal, it searches forward through consequences, and the rational choice is whichever action leads there. That works because determinism is doing a lot of the heavy lifting. When every action has a guaranteed outcome, "choose optimally" has a clean answer.
 
-Instead of a plan, we want a _policy_: a complete prescription for what to do in every possible situation. Markov Decision Processes give us a framework for computing exactly that.
+Take away that certainty and the question gets harder. Probability gave us a framework for uncertain worlds, where the agent holds _beliefs_ about its environment rather than certain knowledge. But belief alone does not tell us what to do. How does an agent choose _optimally_ when it cannot be certain where its actions will lead? 
+
+A fixed plan, computed from a single starting point, is no longer enough. Instead of a plan, we want a _policy_: a complete prescription for what to do in every possible situation. Markov Decision Processes give us a framework for computing exactly that.
 
 == A totally unrelated example
 
@@ -142,7 +141,7 @@ $
   P(s_(t+1) | s_t, a_t, s_(t-1), a_(t-1), ..., s_0, a_0) = P(s_(t+1) | s_t, a_t)
 $
 
-The current state is a sufficient summary of all relevant history. This is the same assumption underlying the Markov Blanket from Bayes Networks, and it is what makes MDPs tractable. Rather than reasoning about arbitrarily long decision histories, we only need to reason about where we are right now.
+This is a statement of _conditional independence_. Given the current state $s_t$ and action $a_t$, the next state $s_(t+1)$ is independent of everything that came before. The same logic underpins d-separation in Bayes Networks, where observing a node blocks information flow through it. Here, the current state is a sufficient summary of all relevant history, and that is precisely what makes MDPs tractable, or solvable without the state space blowing up. Rather than reasoning about arbitrarily long decision histories, we only need to reason about where we are right now.
 
 In our example, whether our poor lecturer spirals from Googling into Doomscrolling depends only on being in the Googling state at that exact moment, not on how many times they have previously cycled between Writing and Googling, or how many hours the deadline has been looming.
 
@@ -161,7 +160,7 @@ The important difference from search is that the solution to an MDP is a _comple
 ]
 
 
-The optimal policy is to Focus in both Writing and Googling. From Writing, Browse earns a higher immediate reward of $+2$ but risks landing in Googling, from which Browse sends you deterministically into Doomscrolling(a state with no exit and a reward of $-10$ every step for the rest of time). Browse from Googling is therefore _never_ rational under this model as no immediate reward, however large, can outweigh the infinite stream of $-10$ penalties that follows. For Browse from Googling to become rational, the model would need to give Doomscrolling a way out (some non-zero $T($DS, $dot$, Writing$)$), or make the reward from Doomscrolling positive. 
+The optimal policy is to Focus in both Writing and Googling. From Writing, Browse earns a higher immediate reward of $+2$ but risks landing in Googling, from which Browse sends you deterministically into Doomscrolling(a state with no exit and a reward of $-10$ every step for the rest of time). Browse from Googling is therefore _never_ rational under this model as no immediate reward, however large, can outweigh the infinite stream of $-10$ penalties that follows. For Browse from Googling to become rational, the model would need to give Doomscrolling a way out (some non-zero $T($DS, X, Writing$)$), or make the reward from Doomscrolling positive. 
 
 
 == Horizons
