@@ -60,9 +60,9 @@ Suppose it's the night before a given lecture, and our unassuming lecturer was p
   )
 )
 
-The lecturer has exactly two actions available in both Writing and Googling: _Focus_ (the safe, steady option) and _Browse_ (the tempting but risky one). From Writing, Focus always keeps you writing. Browse is a coin flip: half the time you find something useful and stay productive, half the time you end up down a Googling rabbit hole. From Googling, Focus gives you even odds of snapping back to Writing or staying stuck. But choosing Browse from Googling? That sends you straight to Doomscrolling, every single time.
+The lecturer has exactly two actions available in both Writing and Googling: _Focus_ (the safe, steady option) and _Browse_ (the tempting but risky one). From Writing, Focus always keeps you writing. Browse is a coin flip, half the time you find something useful and stay productive, half the time you end up down a Googling rabbit hole. From Googling, Focus gives you even odds of snapping back to Writing or staying stuck. But choosing Browse from Googling? That sends you straight to Doomscrolling.
 
-A Markov Decision Process gives us the formal language to describe exactly this kind of problem.
+A Markov Decision Process gives us the formal language to describe exactly this kind of problem. So right now we have the states(Writting, Googling, and Doomscrolling), and the actions(Focus and Browse), so whats next?
 
 #def(term: [Markov Decision Process])[
   A Markov Decision Process (MDP) consists of:
