@@ -227,8 +227,10 @@ Since rewards are bounded (say $|R_t| <= R_"max"$), this geometric series conver
 
 There are two useful ways to think about $gamma$. First, as a _preference for sooner rewards_, a reward of $+1$ now is worth more than a reward of $+1$ next step, just as a dollar today is worth more than a dollar next year. Second, as a model of _uncertain termination_. Imagine that after each step, a coin is flipped, with probability $1 - gamma$ the game simply ends and the agent collects no further reward, and with probability $gamma$ it carries on. The reward at step $t$ is then only collected if the agent survives all $t$ preceding flips, which happens with probability $gamma^t$(the factor multiplying that reward in the discounted sum). 
 
+#pagebreak()
+
 The parameter $gamma$ directly controls the agent's patience:
-- $gamma = 0$: completely myopic, only the immediate reward matters, future consequences are ignored entirely. Think your average gen $alpha$ gremlin hedonistically seeking rewards.
+- $gamma ->0 0$: completely myopic, only the immediate reward matters, future consequences are ignored entirely. Think your average gen $alpha$ gremlin hedonistically seeking rewards.
 - $gamma -> 1$: increasingly patient, distant future rewards count nearly as much as immediate ones. Think of the lecturer who refuses to Browse from Googling precisely because they know exactly where it leads and they feel the full weight of infinite future procrastination bearing down on each decision.
 
 
@@ -242,12 +244,18 @@ As $gamma -> 1$ this diverges to $-infinity$, which is precisely why $gamma < 1$
 
 #discussion()[
   + When $lim(gamma -> 0)$, what is the optimal action from Writing? From Googling? Now consider any $gamma in (0, 1)$: is there a value of $gamma$ for which Browse from Writing is _not_ optimal?
-  + Now if $lim(gamma -> 1)$, and we use $V^*(s)$ to dennote the total expected discounted reward from state $s$ under the optimal policy, write $V^*("Writing")$ as an equation involving $V^*("Writing")$ and $V^*("Googling")$, then do the same for $V^*("Googling")$. Do you notice anything interesting about these equations?
+
 ]
 
 As $gamma$ approaches 0 the agent effectively ignores all future consequences, so from Writing it simply takes whichever action yields the highest immediate reward: Browse ($+2$) beats Focus ($+1$). From Googling, Browse yields $+20$ and Focus yields $+1$, so Browse is the clear choice, especially as the discount factor means that the punishment for Browsing while Doomscrolling is effectively nothing. 
 
 Browse from Writing remains optimal for _every_ $gamma in [0, 1)$, as there is no threshold at which Focus becomes preferable. The reason is that Googling under Focus is not a bad state to be in is that it yields $+1$ per step and returns to Writing with probability $0.5$ each step. The extra $+1$ immediate reward from Browse always outweighs the modest cost of occasionally landing in Googling rather than staying in Writing. Browse from Googling, by contrast, is not rational unless $gamma$ is low, since it leads with certainty to Doomscrolling, a state whose value $-10\/(1-gamma)$ is catastrophically negative for any reasonable $gamma$.
+
+
+#discussion()[
+  + Now if $lim(gamma -> 1)$, and we use $V^*(s)$ to dennote the total expected discounted reward from state $s$ under the optimal policy, write $V^*("Writing")$ as an equation involving $V^*("Writing")$ and $V^*("Googling")$, then do the same for $V^*("Googling")$. Do you notice anything interesting about these equations?
+]
+
 
 Now if we assume a high $gamma$ (ie $lim(gamma -> 1)$) then the the optimal policy:
 
