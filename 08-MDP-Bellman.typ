@@ -88,7 +88,9 @@ For now lets ignore the discount factor and explore our example, the full transi
     [Writing],[Focus],  [$1.0$], [$0.0$], [$0.0$], [$+1$],
     [Writing],[Browse], [$0.5$], [$0.5$], [$0.0$], [$+2$],
     [Googling],[Focus],  [$0.5$], [$0.5$], [$0.0$], [$+1$],
-    [Googling],[Browse], [$0.0$], [$0.0$], [$1.0$], [$-10$],
+    [Googling],[Browse], [$0.0$], [$0.0$], [$1.0$], [$+20$],
+    [DS],[Browse], [$0.0$], [$0.0$], [$1.0$], [$-10$],
+
   )
 )
 
@@ -111,7 +113,7 @@ $
 Browse yields $+2$ from Writing when it goes well, but the catastrophic $R("Googling", "Browse", "DS") = -10$ makes it a bad idea when Googling.
 
 Updating the diagram with rewards on each state and transition probabilities labeled by action:
-#figure(caption: [State Transition Diagram with Rewards and Transition Probabilities],
+#figure(caption: [State Transition Diagram with Transition Probabilities],
   diagram(
     edge-stroke: 0.75pt,
     node-corner-radius: 10pt,
@@ -129,7 +131,29 @@ Updating the diagram with rewards on each state and transition probabilities lab
     edge(<g>, <w>, "->", [Focus: 0.5], bend: 20deg),
     edge(<g>, <g>, "->", [Focus: 0.5], bend: -130deg),
     edge(<g>, <d>, "->", [Browse: 1.0], bend: 20deg),
-    edge(<d>, <d>, "->", [terminal], bend: -130deg),
+    edge(<d>, <d>, "->", [Browse: 1.0], bend: -130deg),
+  )
+)
+
+#figure(caption: [State Transition Diagram with Rewards],
+  diagram(
+    edge-stroke: 0.75pt,
+    node-corner-radius: 10pt,
+    node-stroke: 1pt,
+    edge-corner-radius: 10pt,
+    spacing: 3em,
+
+    node((0, 0), align(center)[Writing], name: <w>),
+    node((3, 0), align(center)[Googling], name: <g>),
+    node((6, 0), align(center)[Doomscrolling], name: <d>),
+
+    edge(<w>, <w>, "->", [Focus: +1], bend: -130deg),
+    edge(<w>, <w>, "->", [Browse: +2], bend: 130deg),
+    edge(<w>, <g>, "->", [Browse: +2], bend: 20deg),
+    edge(<g>, <w>, "->", [Focus: +1], bend: 20deg),
+    edge(<g>, <g>, "->", [Focus: +1], bend: -130deg),
+    edge(<g>, <d>, "->", [Browse: +20], bend: 20deg),
+    edge(<d>, <d>, "->", [Browse: -10], bend: -130deg),
   )
 )
 
@@ -142,6 +166,28 @@ $
 $
 
 This is a statement of _conditional independence_. Given the current state $s_t$ and action $a_t$, the next state $s_(t+1)$ is independent of everything that came before. The same logic underpins d-separation in Bayes Networks, where observing a node blocks information flow through it. Here, the current state is a sufficient summary of all relevant history, and that is precisely what makes MDPs tractable, or solvable without the state space blowing up. Rather than reasoning about arbitrarily long decision histories, we only need to reason about where we are right now.
+
+#figure(caption: [An example iteration],
+  diagram(
+    edge-stroke: 0.75pt,
+    node-corner-radius: 10pt,
+    node-stroke: 1pt,
+    edge-corner-radius: 10pt,
+    spacing: .75em,
+
+    node((0, 0), align(center)[Writing], name: <w1>),
+    node((1.5, 0), align(center)[Googling], name: <g1>),
+    node((3, 0), align(center)[Writing], name: <w2>),
+    node((4.5, 0), align(center)[Googling], name: <g2>),
+    node((6, 0), align(center)[Doomscrolling], name: <d1>),
+
+
+    edge(<w1>, <g1>, "->", [Browse], bend: -30deg),
+    edge(<g1>, <w2>, "->", [Focus], bend: 30deg),
+    edge(<w2>, <g2>, "->", [Browse], bend: -30deg),
+    edge(<g2>, <d1>, "->", [*Browse?*], bend: 20deg),
+  )
+)
 
 In our example, whether our poor lecturer spirals from Googling into Doomscrolling depends only on being in the Googling state at that exact moment, not on how many times they have previously cycled between Writing and Googling, or how many hours the deadline has been looming.
 
@@ -160,7 +206,7 @@ The important difference from search is that the solution to an MDP is a _comple
 ]
 
 
-A policy assigns actions _per state_, so the optimal action can and often does differ across states. Here: $pi^*("Writing") = "Browse"$ and $pi^*("Googling") = "Focus"$. From Writing, Browse earns $+2$ versus $+1$ for Focus, and occasionally landing in Googling is not catastrophic since Focus from Googling recovers to Writing with probability 0.5. Browse from Googling is a completely different story: $T("Googling", "Browse", "DS") = 1.0$ sends you to a state with no exit and $-10$ every step forever. No immediate reward, however large, can outweigh that. For Browse from Googling to ever be rational the model would need to give Doomscrolling a way out (some non-zero $T("DS", dot, "Writing")$) or make its reward positive.
+A policy assigns actions _per state_, so the optimal action can and often does differ across states. Here: $pi^*("Writing") = "Browse"$ and $pi^*("Googling") = "Focus"$. From Writing, Browse earns $+2$ versus $+1$ for Focus, and occasionally landing in Googling is not catastrophic since Focus from Googling recovers to Writing with probability 0.5. Browse from Googling is a completely different story: $T("Googling", "Browse", "DS") = 1.0$ sends you to a state with no exit and $-10$ every step forever. No immediate reward, however large, can outweigh that. For Browse from Googling to ever be rational the model would need to give Doomscrolling a way out (some non-zero $T("DS", X, "Writing")$) or make its reward positive.
 
 
 == Horizons
@@ -195,22 +241,25 @@ As $gamma -> 1$ this diverges to $-infinity$, which is precisely why $gamma < 1$
 
 
 #discussion()[
-  + When $gamma = 0$, what is the optimal action from Writing? From Googling? Now consider any $gamma in (0, 1)$: is there a value of $gamma$ for which Browse from Writing is _not_ optimal?
-  + Let $V(s)$ denote the total expected discounted reward from state $s$ under the optimal policy. Write $V("Writing")$ as an equation involving $V("Writing")$ and $V("Googling")$, then do the same for $V("Googling")$. Do you notice anything interesting about these equations?
+  + When $lim(gamma -> 0)$, what is the optimal action from Writing? From Googling? Now consider any $gamma in (0, 1)$: is there a value of $gamma$ for which Browse from Writing is _not_ optimal?
+  + Now if $lim(gamma -> 1)$, and we use $V^*(s)$ to dennote the total expected discounted reward from state $s$ under the optimal policy, write $V^*("Writing")$ as an equation involving $V^*("Writing")$ and $V^*("Googling")$, then do the same for $V^*("Googling")$. Do you notice anything interesting about these equations?
 ]
 
-When $gamma = 0$ the agent ignores all future consequences, so from Writing it simply takes whichever action yields the highest immediate reward: Browse ($+2$) beats Focus ($+1$). From Googling, Browse yields $-10$ and Focus yields $+1$, so Focus is the clear choice. The optimal policy when $gamma = 0$ is therefore Browse from Writing and Focus from Googling.
+As $gamma$ approaches 0 the agent effectively ignores all future consequences, so from Writing it simply takes whichever action yields the highest immediate reward: Browse ($+2$) beats Focus ($+1$). From Googling, Browse yields $+20$ and Focus yields $+1$, so Browse is the clear choice, especially as the discount factor means that the punishment for Browsing while Doomscrolling is effectively nothing. 
 
-Perhaps surprisingly, Browse from Writing remains optimal for _every_ $gamma in [0, 1)$, as there is no threshold at which Focus becomes preferable. The reason is that Googling under Focus is not a bad state to be in is that it yields $+1$ per step and returns to Writing with probability $0.5$ each step. The extra $+1$ immediate reward from Browse always outweighs the modest cost of occasionally landing in Googling rather than staying in Writing. Browse from Googling, by contrast, is never rational for any $gamma > 0$, since it leads with certainty to Doomscrolling, a state whose value $-10\/(1-gamma)$ is catastrophically negative for any reasonable $gamma$.
+Browse from Writing remains optimal for _every_ $gamma in [0, 1)$, as there is no threshold at which Focus becomes preferable. The reason is that Googling under Focus is not a bad state to be in is that it yields $+1$ per step and returns to Writing with probability $0.5$ each step. The extra $+1$ immediate reward from Browse always outweighs the modest cost of occasionally landing in Googling rather than staying in Writing. Browse from Googling, by contrast, is not rational unless $gamma$ is low, since it leads with certainty to Doomscrolling, a state whose value $-10\/(1-gamma)$ is catastrophically negative for any reasonable $gamma$.
 
-Under the optimal policy ($pi^*($Writing$) =$ Browse, $pi^*($Googling$) =$ Focus), the values satisfy:
+Now if we assume a high $gamma$ (ie $lim(gamma -> 1)$) then the the optimal policy:
+
+($pi^*($Writing$) =$ Browse, $pi^*($Googling$) =$ Focus, $pi^*($DS$) =$ Browse#sidenote[Since Browse is our only option is must be the optimal option.])
+
+ Which we can then use to create the following equasions:
 $
   V("Writing") &= 2 + gamma (0.5 dot V("Writing") + 0.5 dot V("Googling")) \
   V("Googling") &= 1 + gamma (0.5 dot V("Writing") + 0.5 dot V("Googling"))
 $
-#pagebreak()
 
-These are two simultaneous linear equations in two unknowns, and they can be solved directly. These equations make each state equal the immediate reward of the optimal action plus the discounted expected value of the states it leads to. This recursive structure, with value defined in terms of other values, is the core concept behind _dynamic programming_#sidenote[Richard Bellmanm, who lends his name to the next section, coined the term "dynamic programming" deliberately to obscure the mathematical research he was doing. https://en.wikipedia.org/wiki/Dynamic_programming#History_of_the_name]. Rather than searching over the exponentially many possible action sequences, dynamic programming breaks the problem into overlapping subproblems and once we know the value of every state, we know the optimal action from every state, and those values can be computed by solving the system of equations above . Generalizing it and using it to compute optimal policies is exactly what we will do next.
+These are two simultaneous linear equations each with two unknowns, and they can be solved directly. These equations make each state equal the immediate reward of the optimal action plus the discounted expected value of the states it leads to. This recursive structure, with value defined in terms of other values, is the core concept behind _dynamic programming_#sidenote[Richard Bellmanm, who lends his name to the next section, coined the term "dynamic programming" deliberately to obscure the mathematical research he was doing. https://en.wikipedia.org/wiki/Dynamic_programming#History_of_the_name]. Rather than searching over the exponentially many possible action sequences, dynamic programming breaks the problem into overlapping subproblems and once we know the value of every state, we know the optimal action from every state, and those values can be computed by solving the system of equations above . Generalizing it and using it to compute optimal policies is exactly what we will do next.
 #pagebreak()
 
 = The Bellman Equation
