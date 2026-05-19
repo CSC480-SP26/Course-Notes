@@ -185,7 +185,7 @@ Q9: Define independence between events $E_1$ and $E_2$. Write the formal definit
   Equivalently, using conditional probability:
   $ P(E_1 | E_2) = P(E_1) quad "and" quad P(E_2 | E_1) = P(E_2) $
 
-  So learning that one event occurred would gives insight about the probability of the other.
+  So learning that one event occurred would not give insight about the probability of the other.
 ]
 
 #pagebreak()
