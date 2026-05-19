@@ -193,7 +193,6 @@ $
 $
 As $gamma -> 1$ this diverges to $-infinity$, which is precisely why $gamma < 1$ is required for infinite horizon problems, without it, values are undefined and no meaningful policy comparison is possible.
 
-#pagebreak()
 
 #discussion()[
   + When $gamma = 0$, what is the optimal action from Writing? From Googling? Now consider any $gamma in (0, 1)$: is there a value of $gamma$ for which Browse from Writing is _not_ optimal?
@@ -209,6 +208,7 @@ $
   V("Writing") &= 2 + gamma (0.5 dot V("Writing") + 0.5 dot V("Googling")) \
   V("Googling") &= 1 + gamma (0.5 dot V("Writing") + 0.5 dot V("Googling"))
 $
+#pagebreak()
 
 These are two simultaneous linear equations in two unknowns, and they can be solved directly. These equations make each state equal the immediate reward of the optimal action plus the discounted expected value of the states it leads to. This recursive structure, with value defined in terms of other values, is the core concept behind _dynamic programming_#sidenote[Richard Bellmanm, who lends his name to the next section, coined the term "dynamic programming" deliberately to obscure the mathematical research he was doing. https://en.wikipedia.org/wiki/Dynamic_programming#History_of_the_name]. Rather than searching over the exponentially many possible action sequences, dynamic programming breaks the problem into overlapping subproblems and once we know the value of every state, we know the optimal action from every state, and those values can be computed by solving the system of equations above . Generalizing it and using it to compute optimal policies is exactly what we will do next.
 #pagebreak()
