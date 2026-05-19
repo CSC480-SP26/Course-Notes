@@ -160,7 +160,7 @@ The important difference from search is that the solution to an MDP is a _comple
 ]
 
 
-The optimal policy is to Focus in both Writing and Googling. From Writing, Browse earns a higher immediate reward of $+2$ but risks landing in Googling, from which Browse sends you deterministically into Doomscrolling(a state with no exit and a reward of $-10$ every step for the rest of time). Browse from Googling is therefore _never_ rational under this model as no immediate reward, however large, can outweigh the infinite stream of $-10$ penalties that follows. For Browse from Googling to become rational, the model would need to give Doomscrolling a way out (some non-zero $T($DS, X, Writing$)$), or make the reward from Doomscrolling positive. 
+A policy assigns actions _per state_, so the optimal action can and often does differ across states. Here: $pi^*("Writing") = "Browse"$ and $pi^*("Googling") = "Focus"$. From Writing, Browse earns $+2$ versus $+1$ for Focus, and occasionally landing in Googling is not catastrophic since Focus from Googling recovers to Writing with probability 0.5. Browse from Googling is a completely different story: $T("Googling", "Browse", "DS") = 1.0$ sends you to a state with no exit and $-10$ every step forever. No immediate reward, however large, can outweigh that. For Browse from Googling to ever be rational the model would need to give Doomscrolling a way out (some non-zero $T("DS", dot, "Writing")$) or make its reward positive.
 
 
 == Horizons
