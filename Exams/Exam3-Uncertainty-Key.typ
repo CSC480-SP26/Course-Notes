@@ -3,7 +3,7 @@
 
 #show: template.with(
   title: [
-    Exam 2: Uncertainty
+    Exam 3: Uncertainty
   ],
   title-short: none,
   authors: "CSC 480: Artificial Intelligence, Spring 2026",
@@ -29,7 +29,7 @@
   $
     P(H|"evidence") = (P("evidence"|H)P(H))/P("evidence")
   $
-  In order to update our beleifs, the term $P("evidence")$ is needed, yet is rarely something that can be measured directly. Instead it is calculated by marginalizing over all possible hypotheses. Which sample space(s) describe the set over which we will sum in order to calculate $P("evidence")$?]
+  In order to update our beliefs, the term $P("evidence")$ is needed, yet is rarely something that can be measured directly. Instead it is calculated by marginalizing over all possible hypotheses. Which sample space(s) describe the set over which we will sum in order to calculate $P("evidence")$?]
 #columns(2)[
   #answer[$qed$] The sample space of the _prior_: $Omega_("prior")$
 
@@ -450,23 +450,42 @@ Let us return to the emergency response problem from the start of the exam. For 
   )
   $[F=0,#h(0.75em) H=0,#h(0.75em) E=0,#h(0.75em) S=0,#h(0.75em) A=0,#h(0.75em) C=0]$
 ]
-#v(1fr)
+
+#answer[In rejection sampling we sample variables left to right and discard everything remaining the moment a sampled evidence variable contradicts the observation ($H=1$, $A=1$).
+
+- Sample 1: nothing crossed out. $H=1$ matches and $A=1$ matches, so the full sample is accepted.
+- Sample 2: #strike[$E=1$], #strike[$S=0$], #strike[$A=1$], #strike[$C=0$]. $H=0$ contradicts the evidence at the second variable, so all four remaining draws are wasted.
+- Sample 3: #strike[$C=0$]. $H=1$ matches, but $A=0$ contradicts at the fifth variable, so only $C$ is wasted.
+- Sample 4: #strike[$E=1$], #strike[$S=0$], #strike[$A=1$], #strike[$C=1$]. $H=0$ contradicts at the second variable.
+- Sample 5: #strike[$C=1$]. $H=1$ matches, but $A=0$ contradicts at the fifth variable, so only $C$ is wasted.
+- Sample 6: #strike[$E=0$], #strike[$S=0$], #strike[$A=0$], #strike[$C=0$]. $H=0$ contradicts at the second variable.]
 
 #subquestion()[
   To improve efficiency even more, you decide to use likelihood weighting to generate samples. For the following samples, write out the weight of each sample in terms of the conditional probabilities of the Bayes Net.]
 
-Sample 1: $[F=1, #h(0.75em) H=1, #h(0.75em) E=0, #h(0.75em) S=1,#h(0.75em) A=1,#h(0.75em) C=0]$ #h(0.75em) Weight: #blank(width: 15em)\ #v(1em)
-Sample 2: $[F=1, #h(0.75em) H=1, #h(0.75em) E=0, #h(0.75em) S=1,#h(0.75em) A=1,#h(0.75em) C=1]$ #h(0.75em) Weight: #blank(width: 15em)\ #v(1em)
-Sample 3: $[F=0, #h(0.75em) H=1, #h(0.75em) E=1, #h(0.75em) S=0,#h(0.75em) A=1,#h(0.75em) C=1]$ #h(0.75em) Weight: #blank(width: 15em)\ #v(1em)
-Sample 4: $[F=0, #h(0.75em) H=1, #h(0.75em) E=0, #h(0.75em) S=0,#h(0.75em) A=1,#h(0.75em) C=0]$ #h(0.75em) Weight: #blank(width: 15em)\ #v(1em)
+Sample 1: $[F=1, #h(0.75em) H=1, #h(0.75em) E=0, #h(0.75em) S=1,#h(0.75em) A=1,#h(0.75em) C=0]$ #h(0.75em) 
 
-#v(1fr)
+Weight: #answer[$P(H=1|F=1) dot P(A=1|S=1,E=0)$]\ #v(1em)
+Sample 2: $[F=1, #h(0.75em) H=1, #h(0.75em) E=0, #h(0.75em) S=1,#h(0.75em) A=1,#h(0.75em) C=1]$ #h(0.75em) 
+
+Weight: #answer[$P(H=1|F=1) dot P(A=1|S=1,E=0)$]\ #v(1em)
+Sample 3: $[F=0, #h(0.75em) H=1, #h(0.75em) E=1, #h(0.75em) S=0,#h(0.75em) A=1,#h(0.75em) C=1]$ #h(0.75em) 
+
+Weight: #answer[$P(H=1|F=0) dot P(A=1|S=0,E=1)$]\ #v(1em)
+Sample 4: $[F=0, #h(0.75em) H=1, #h(0.75em) E=0, #h(0.75em) S=0,#h(0.75em) A=1,#h(0.75em) C=0]$ #h(0.75em) 
+
+Weight: #answer[$P(H=1|F=0) dot P(A=1|S=0,E=0)$]\ #v(1em)
+
+#answer[The weight of each likelihood-weighted sample is the product of the conditional probabilities of the evidence variables given their parents' values in that sample. The evidence variables are $H$ (parent: $F$) and $A$ (parents: $S$, $E$). The non evidence variables $F$, $E$, $S$, and $C$ are sampled freely and do not contribute to the weight. Note that samples 1 and 2 have identical weights because they share the same values of $F$, $S$, and $E$, which are the only variables that determine the weight.]
 
 #subquestion()[
   Based on the likelihood weighted samples, what is the estimated probability for the query $P(E=1| H=1,A=1)$? Write your answer in terms of the weights of the samples: $w_1, w_2, w_3$, and  $w_4$.]
-#v(5em)
 
-#v(1fr)
+#answer[$
+  P(E=1 | H=1, A=1) approx w_3 / (w_1 + w_2 + w_3 + w_4)
+$
+
+Only sample 3 has $E=1$. The estimate is the sum of weights of samples consistent with the query ($E=1$) divided by the total weight of all samples. Samples 1, 2, and 4 have $E=0$ and appear in the denominator only.]
 
 #pagebreak()
 #question(
@@ -476,24 +495,48 @@ Sample 4: $[F=0, #h(0.75em) H=1, #h(0.75em) E=0, #h(0.75em) S=0,#h(0.75em) A=1,#
   We then choose $S$ as a variable to resample. What is the probability that our resampled value is $S=0$. Write your answer in terms of the conditional distributions of the Bayes Net.
 ]
 
-#answer[$
-  (P(S=0|F=1) P(A=1|E=0,S=0)) / (P(S=0|F=1) P(A=1|E=0,S=0)+P(S=1|F=1) P(A=1|E=0,S=1))
-$]
+#answer[In Gibbs sampling we resample one variable at a time by drawing from its conditional distribution given all other variables held at their current values. With everything else fixed at $[F=1, H=1, E=0, S=1, A=1, C=1]$, we want:
+
+$ P(S=0 | F=1, H=1, E=0, A=1, C=1) $
+
+$S$ is conditionally independent of every variable outside its Markov blanket given its Markov blanket. The Markov blanket of $S$ consists of its parents, its children, and the co-parents of its children:
+- Parent of $S$: $F$
+- Child of $S$: $A$
+- Co-parent of $A$ (i.e. $A$'s other parent): $E$
+
+So $H$ and $C$ drop out, and the expression simplifies to:
+
+$ P(S=0 | F=1, E=0, A=1) $
+
+We then apply Bayes rule to flip the conditioning, since the Bayes net gives us $P(A|S,E)$ and $P(S|F)$ but not $P(S|A,E,F)$ directly:
+
+$ P(S=0 | F=1, E=0, A=1) prop P(A=1 | S=0, E=0) dot P(S=0 | F=1) $
+
+This is the unnormalized probability for $S=0$. We compute the same expression for $S=1$ and divide by the sum of both to normalize, giving the final result:
+
+$
+  P(S=0 | F=1,E=0,A=1) = 
+$
+
+$
+(P(S=0|F=1) P(A=1|E=0,S=0)) / (P(S=0|F=1) P(A=1|E=0,S=0)+P(S=1|F=1) P(A=1|E=0,S=1))
+$
+]
 #v(5fr)
 
 #question(
   points: 0.1,
-)[What is the probability that your answer to this question is correct, given that you mark exactly one answer?#footnote()[Dont worry, any answer will get full credit]]
+)[What is the probability that your answer to this question is correct, given that you mark exactly one answer?#footnote()[#answer[Dont worry, any answer will get full credit]]]
 #columns(2)[
-  #checkbox() $0.25$
+  #answer[$qed$] $0.25$
 
-  #checkbox() $0.5$
+  #answer[$qed$] $0.5$
 
   #colbreak()
 
-  #checkbox() $0$
+  #answer[$qed$] $0$
 
-  #checkbox()$0.25$
+  #answer[$qed$] $0.25$
 ]
 #v(1fr)
 

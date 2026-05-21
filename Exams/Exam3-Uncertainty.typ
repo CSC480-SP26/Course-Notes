@@ -3,7 +3,7 @@
 
 #show: template.with(
   title: [
-    Exam 2: Uncertainty
+    Exam 3: Uncertainty
   ],
   title-short: none,
   authors: "CSC 480: Artificial Intelligence, Spring 2026",
@@ -29,7 +29,7 @@
   $
     P(H|"evidence") = (P("evidence"|H)P(H))/P("evidence")
   $
-  In order to update our beleifs, the term $P("evidence")$ is needed, yet is rarely something that can be measured directly. Instead it is calculated by marginalizing over all possible hypotheses. Which sample space(s) describe the set over which we will sum in order to calculate $P("evidence")$?]
+  In order to update our beliefs, the term $P("evidence")$ is needed, yet is rarely something that can be measured directly. Instead it is calculated by marginalizing over all possible hypotheses. Which sample space(s) describe the set over which we will sum in order to calculate $P("evidence")$?]
 #columns(2)[
   #checkbox() The sample space of the _prior_: $Omega_("prior")$
 
