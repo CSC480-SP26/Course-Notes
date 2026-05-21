@@ -192,7 +192,7 @@
       edge(<x>, <y>, "->"),
     )
     #v(3em)
-    #diagram(
+    #answer[ #diagram(
       edge-stroke: 0.75pt,
       node-corner-radius: 10pt,
       node-stroke: 1pt,
@@ -204,7 +204,7 @@
 
       edge(<x>, <y>, "->"),
       edge(<w>, <z>, "->"),
-    )
+    )]
     #v(3em)
     #diagram(
       edge-stroke: 0.75pt,
@@ -235,7 +235,7 @@
       edge(<z>, <y>, "->"),
     )
     #v(3em)
-    #diagram(
+   #answer[ #diagram(
       edge-stroke: 0.75pt,
       node-corner-radius: 10pt,
       node-stroke: 1pt,
@@ -248,7 +248,7 @@
 
       edge(<x>, <y>, "->"),
       edge(<z>, <w>, "->"),
-    )
+    )]
     #v(3em)
     #diagram(
       edge-stroke: 0.75pt,
@@ -269,6 +269,36 @@
 ]
 
 #pagebreak()
+
+Three facts from the conditional probability tables drive every decision below:
++ $P(W|X)$ is identical for $X=0$ and $X=1$, so $W tack.t.double X$. Any edge between $X$ and $W$ is wrong.
++ $P(Y|X)$ differs across $X$, so $Y$ depends on $X$. An $X -> Y$ edge is required.
++ $P(W|Z)$ differs across $Z$, so $W$ and $Z$ are dependent. An edge between them (in either direction) is required.
+
+The minimum number of edges is therefore *2*: one $X -> Y$ edge and one $W$-$Z$ edge.
+
+#answer[Graph 5 ($X -> Y$, $W -> Z$) is correct. This graph has two edges, which is the minimum required. The $X -> Y$ edge correctly encodes the fact that $P(Y|X)$ differs across values of $X$, meaning $Y$ is not independent of $X$. Because $P(W|X)$ is the same for both values of $X$, $W$ is independent of $X$ and there is no edge between them. $W$ is therefore a root node, and its marginal distribution can be read directly from the tables as $P(W=0)=0.4$ and $P(W=1)=0.6$. The $W -> Z$ edge encodes the dependency between $W$ and $Z$ that we observe in $P(W|Z)$. In this direction, $Z$ is a child of $W$, so the CPT we need is $P(Z|W)$, which is not given directly but can be derived from $P(W|Z)$ and $P(W)$ via Bayes rule, and the result is consistent with all the provided tables.
+
+Graph 6 ($X -> Y$, $Z -> W$) is correct. This graph also has two edges. The $X -> Y$ edge is correct for the same reason as in Graph 5. In this graph the $W$-$Z$ edge is reversed: $Z$ is the root and $W$ is the child. This means the CPT we need is $P(W|Z)$, which is given directly in the tables, so no derivation is required. To find the marginal distribution of the root $Z$, we marginalize: $P(W=0) = P(W=0|Z=0) dot P(Z=0) + P(W=0|Z=1) dot P(Z=1) = 0.2 dot P(Z=0) + 0.8 dot P(Z=1) = 0.4$, which solves to $P(Z=1) = 1/3$. There is again no $X$-$W$ edge, preserving $W tack.t.double X$. Graphs 5 and 6 represent the same set of conditional independencies and both produce joint distributions consistent with all four tables. The direction of the $W$-$Z$ edge cannot be determined from the given CPTs alone, so both are valid.
+
+Graph 1 ($X -> Y$, $Y -> Z$) is wrong. This graph uses two edges but assigns them to the wrong variables. The $X -> Y$ edge is correct. The second edge is $Y -> Z$, which places $Z$ as a child of $Y$. The problem with this is that $W$ is left completely disconnected from the rest of the graph. A node with no edges is independent of every other variable in the network. However, the table $P(W|Z)$ shows that $W$ and $Z$ are dependent, since the distribution of $W$ changes depending on the value of $Z$. Because this graph cannot represent any dependency between $W$ and $Z$, it is inconsistent with the provided tables.
+
+Graph 2 ($X -> Y$ only) is wrong. This graph uses only one edge, which is fewer than the minimum of two. The single $X -> Y$ edge correctly captures the dependence of $Y$ on $X$, but both $W$ and $Z$ are left as isolated root nodes with no edges between them. Two nodes with no connecting path are marginally independent in a Bayes net. However, $P(W|Z)$ varies with $Z$, which is direct evidence that $W$ and $Z$ are not independent. This graph therefore cannot be consistent with the tables.
+
+Graph 3 ($X -> Y$, $W -> Y$, $Z -> Y$) is wrong. This graph uses three edges, and we have established that two are sufficient, so it violates the "fewest possible edges" requirement and can be eliminated on that basis alone. Additionally, the structure is problematic in its own right: making $Y$ a child of $W$, $X$, and $Z$ simultaneously turns $Y$ into a collider node. A collider creates a dependency between its parents conditioned on it, meaning that observing $Y$ would make $W$ and $Z$ dependent even if they are marginally independent. This induced dependency is not supported by the CPTs and would make the graph encode a different joint distribution than intended.
+
+Graph 4 ($X -> W$, $X -> Y$, $Z -> W$) is wrong. This graph uses three edges, so it is immediately eliminated by the minimality requirement. Beyond the edge count, the $X -> W$ edge is structurally incorrect. That edge asserts that the distribution of $W$ depends on the value of $X$. The CPT $P(W|X)$ shows the opposite: $W$ has the same distribution whether $X=0$ or $X=1$, which means $W tack.t.double X$. No graph that includes an $X$-$W$ edge can be consistent with this independence.
+
+Graph 7 ($X -> Z$, $W -> Y$) is wrong. This graph uses two edges, so it is not eliminated by the minimality requirement, but neither edge is correct. The $X -> Y$ edge that every valid graph must include is missing. Instead, $X$ is connected only to $Z$, and $W$ is connected only to $Y$. Because there is no directed path from $X$ to $Y$, the graph implies that $Y$ and $X$ are independent. The CPT $P(Y|X)$ directly contradicts this: the distribution of $Y$ shifts substantially between $X=0$ and $X=1$, so $Y$ must depend on $X$. This graph is therefore inconsistent with the provided tables.
+
+Graph 8 ($X -> W$, $Y -> Z$) is wrong. This graph has two edges but both are wrong. The $X -> W$ edge asserts that $W$ depends on $X$, but $P(W|X)$ is constant, so $W tack.t.double X$ and this edge should not exist. The $Y -> Z$ edge creates a dependency between $Y$ and $Z$, but the tables give no CPT relating $Y$ and $Z$ directly, and there is no evidence such a dependency is required. Furthermore, the $X -> Y$ edge required by $P(Y|X)$ is absent, and the $W$-$Z$ dependency required by $P(W|Z)$ is also unrepresented. This graph fails on every count.
+
+Graph 9 ($X -> W$, $Z -> W$) is wrong. The $X -> W$ edge is again incorrect for the same reason as in Graphs 4 and 8: $P(W|X)$ is constant, so $W tack.t.double X$. The $Z -> W$ edge is correct in isolation since $P(W|Z)$ shows that $W$ depends on $Z$. However, the required $X -> Y$ edge is entirely absent. $Y$ has no parents and no edges into it, making it a root with a fixed marginal distribution. This contradicts $P(Y|X)$, which shows that the distribution of $Y$ changes with $X$. So while one of the two edges is correct, the other is wrong and the required $X -> Y$ edge is missing.
+]
+
+#pagebreak()
+
+
 #question(
   points: 0.6,
 )[Consider the following Bayes Net. For the nodes $B$ and $E$ we will be adding to a set $Z$ of nodes which will effect the conditional independence of the nodes $B$ and $E$ (i.e. whether the network ensures $B tack.t.double E | Z$).]
@@ -305,14 +335,42 @@
   ),
 )
 #subquestion()[What is the _smallest_ set of nodes $Z$ that we can condition on such that  $B tack.t.double E | Z$?]
-#v(1fr)
+
+#answer[$Z = emptyset$ (the empty set). To check whether $B tack.t.double E$ holds we enumerate every undirected path between $B$ and $E$ and verify that each one is blocked. There are exactly three such paths:
+
++ $B -> C <- D -> E$: the node $C$ has two arrows pointing into it from $B$ and from $D$, forming a V-shape where $C$ sits at the bottom with both edges directed inward. This makes $C$ a common effect (sometimes called a collider#sidenote[https://en.wikipedia.org/wiki/Bayesian_network#Structure_learning]) on this path, since $C$ is jointly caused by both $B$ and $D$. A common effect blocks a path when neither it nor any of its descendants is conditioned on. With $Z = emptyset$, $C$ is not conditioned on and neither are its descendants $F$, $G$, $H$. Path blocked.
+
++ $B -> C -> F <- E$: the node $F$ has two arrows pointing into it from $C$ and from $E$, again a V-shape with both edges directed into the center node, making $F$ a common effect on this path. $F$ and its descendants $G$, $H$ are not in $Z$. Path blocked.
+
++ $B -> C -> G <- F <- E$: the node $G$ has two arrows pointing into it from $C$ and from $F$, making $G$ a common effect. $G$ and its only descendant $H$ are not in $Z$. Path blocked.
+
+Every path is blocked, so $B tack.t.double E$ holds without conditioning on anything at all.]
 
 #subquestion()[After conditioning on Z from the previous question, which additional _individual nodes_ could be added to $Z$ such that B and E _would no longer be ensured to be conditionally independent when adding that single node?_ That is, name all nodes, X, such that $B tack.t.double E | (Z union {X})$ ceases to hold.]
-#v(1fr)
 
+#answer[$C$, $F$, $G$, and $H$ each break the independence. Adding any of these to $Z$ activates at least one of the three paths because each one is either a common effect on a path or a descendant of a common effect, and the rule is that conditioning on a common effect or any of its descendants opens the path.
+
+- Adding $C$: On path 1 ($B -> C <- D -> E$), $C$ is once again a common effect with both arrows pointing inward. Placing $C$ in $Z$ opens path 1. The only other internal node on that path, $D$, is a common cause and is not in $Z$, so nothing else blocks the path. Path 1 becomes active.
+
+- Adding $F$: $F$ is a descendant of $C$ (via $C -> F$), so conditioning on $F$ also opens path 1 through the descendant rule. On path 2 ($B -> C -> F <- E$), $F$ is itself a common effect with arrows coming in from both $C$ and $E$, so placing $F$ in $Z$ opens path 2 directly as well. On path 3, $F$ appears as a causal chain (one arrow in, one arrow out), so path 3 remains blocked, but paths 1 and 2 are now active.
+
+- Adding $G$: $G$ is a descendant of both $C$ and $F$ (via $C -> G$ and $F -> G$), opening paths 1 and 2 through the descendant rule. On path 3 ($B -> C -> G <- F <- E$), $G$ is once again a common effect with arrows coming in from both $C$ and $F$, so placing $G$ in $Z$ opens path 3 directly. All three paths become active.
+
+- Adding $H$: $H$ is a descendant of $G$, which is itself a descendant of $C$ and $F$. Because $H$ is therefore a descendant of all three common effects across the three paths, conditioning on $H$ opens all three paths simultaneously.
+
+Adding $A$ or $D$ does not break independence. $A$ is not on any path between $B$ and $E$ and is not a descendant of any common effect. $D$ is a common cause ($C <- D -> E$, with both arrows pointing outward from $D$) on path 1, so conditioning on $D$ only further blocks path 1 rather than opening it, and the other two paths remain blocked by their common effects.]
 
 #subquestion()[After adding all of the nodes found from the previous question to Z, does there exist another single node that when _also_ added to Z, makes B and E once again conditionally independent? If so what is that node?]
-#v(1fr)
+
+#answer[Yes: adding $D$ restores independence. With $Z = {C, F, G, H}$, we re-examine the three paths.
+
+- Path 1 ($B -> C <- D -> E$): $C$ is a common effect and is now in $Z$, so that V-shape is open. $D$ is a common cause with both arrows pointing outward and is not in $Z$, so nothing on this path blocks it. Path 1 is active.
+
+- Path 2 ($B -> C -> F <- E$): $C$ appears on this path as a causal chain. The arrows at $C$ go $B -> C -> F$, meaning one arrow comes in and one goes out. $C$ is in $Z$, and conditioning on a causal chain blocks the path. Path 2 is blocked.
+
+- Path 3 ($B -> C -> G <- F <- E$): $C$ is once again a causal chain on this path ($B -> C -> G$, one in and one out). $C$ is in $Z$. Path 3 is blocked.
+
+Only path 1 remains active. The only internal node on path 1 that is not yet in $Z$ is $D$, a common cause with both arrows pointing outward. Conditioning on a common cause blocks the path, so adding $D$ to $Z$ blocks path 1. With $Z = {C, F, G, H, D}$, all three paths are blocked and $B tack.t.double E | {C, F, G, H, D}$ holds.]
 
 
 
@@ -320,18 +378,18 @@
   points: 0.5,
 )[Using the same Bayes net as the previous question, what are the _Markov Blankets_ of each of the nodes?]
 #columns(2)[
-  #subquestion()[Markov Blanket of $A$: #blank()
+  #subquestion()[Markov Blanket of $A$: #answer[$\{B\}$]
   ]
-  #subquestion()[Markov Blanket of $B$: #blank()
+  #subquestion()[Markov Blanket of $B$: #answer[$\{A, C, D\}$]
   ]
-  #subquestion()[Markov Blanket of $C$: #blank()
+  #subquestion()[Markov Blanket of $C$: #answer[$\{B, D, E, F, G\}$]
   ]
   #colbreak()
-  #subquestion()[Markov Blanket of $D$: #blank()
+  #subquestion()[Markov Blanket of $D$: #answer[$\{B, C, E\}$]
   ]
-  #subquestion()[Markov Blanket of $E$: #blank()
+  #subquestion()[Markov Blanket of $E$: #answer[$\{C, D, F\}$]
   ]
-  #subquestion()[Markov Blanket of $F$: #blank()
+  #subquestion()[Markov Blanket of $F$: #answer[$\{C, E, G\}$]
   ]
 ]
 
