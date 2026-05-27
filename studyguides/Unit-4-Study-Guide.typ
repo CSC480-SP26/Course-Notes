@@ -78,3 +78,32 @@ _Explore_ sends the robot into unexplored territory: 40% of the time it finds a 
 
 (d) For Messy, write $Q^*("Messy", "Explore")$ in terms of $V^*("Clean")$, $V^*("Messy")$, and $V^*("Jammed")$. 
 For Jammed, write both $Q^*("Jammed", "Reset")$ and $Q^*("Jammed", "Force")$ in terms of $V^*("Clean")$, $V^*("Messy")$, and $V^*("Broken")$. Argue qualitatively which action dominates at Jammed as $gamma -> 1$.
+
+#pagebreak()
+= Part II: Horizons and Discounting
+
+Q5: A key structural choice in any MDP is whether the agent acts for a fixed number of steps or indefinitely. #sidenote[08-MDP-Bellman, Page 5]
+
+(a) What is a _finite horizon_ MDP, and why may the optimal policy be _non-stationary_? What is an _infinite horizon_ MDP, and why is the optimal policy _stationary_ in that setting?
+#v(3.5cm)
+
+(b) Infinite-horizon MDPs require a discount factor $gamma in [0, 1)$. Using the Robot Vacuum MDP from Q4, demonstrate concretely why $gamma = 1$ causes a problem for two scenarios:
+
+(i) Write the undiscounted total reward for an agent stuck in Broken forever, and for an agent cycling optimally between Clean and Messy forever. Why can these not be compared?
+#v(5cm)
+
+(ii) Now consider an agent that repeatedly uses Force from Jammed. 50% of the time it escapes to Clean (positive total reward), and 50% of the time it reaches Broken (negative total reward). Why does this make the expected undiscounted return of Force undefined when $gamma = 1$?
+#v(4cm)
+#pagebreak()
+(c) Discounting is justified two ways. First, as a _preference for sooner rewards_. Second, as a model of _uncertain termination_. Describe both interpretations in your own words.
+#v(4cm)
+
+(d) Write a closed-form expression for $V^*("Broken")$ in terms of $gamma$. Show the derivation using the Bellman equation for the absorbing state. What happens to this value as $gamma -> 1$, and why does this matter for Jammed's Force action?
+#v(5cm)
+
+(e) The discount parameter $gamma$ directly controls the agent's patience. For the Jammed state specifically:
+
+- When $gamma -> 0$: Write the approximate values of $Q("Jammed", "Reset")$ and $Q("Jammed", "Force")$ (the future terms vanish). Which action does the myopic agent select and why?
+
+- When $gamma -> 1$: Use your closed-form $V^*("Broken")$ from (d) to write $Q^*("Jammed", "Force")$ explicitly. What happens to this Q-value as $gamma -> 1$? Compare to $Q^*("Jammed", "Reset")$ and state which action now dominates.
+#v(3.5cm)
