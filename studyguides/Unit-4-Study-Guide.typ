@@ -107,3 +107,63 @@ Q5: A key structural choice in any MDP is whether the agent acts for a fixed num
 
 - When $gamma -> 1$: Use your closed-form $V^*("Broken")$ from (d) to write $Q^*("Jammed", "Force")$ explicitly. What happens to this Q-value as $gamma -> 1$? Compare to $Q^*("Jammed", "Reset")$ and state which action now dominates.
 #v(3.5cm)
+
+#pagebreak()
+= Part III: The Bellman Equation
+
+Q6: Define the _optimal value function_ $V^*(s)$ and the _Q-value_ (action-value) $Q^*(s, a)$. #sidenote[Course notes: 08-MDP-Bellman, Page 8]
+
+(a) Write the formula for $Q^*(s, a)$ in full, identifying what each term represents.
+#v(2.5cm)
+
+(b) Express $V^*(s)$ in terms of $Q^*(s, a)$. Then write the optimal policy $pi^*(s)$ in terms of $Q^*(s, a)$.
+#v(2.5cm)
+
+(c) Combine your answers to derive the _Bellman equation_ for $V^*(s)$. Label which part represents the agent's choice, which part represents the environment's randomness, and which part captures the recursive structure.
+#v(2.5cm)
+
+Q7: Using the Robot Vacuum MDP from Q4 with $gamma = 0.9$, perform two rounds of value iteration starting from $V^0(s) = 0$ for all states. The update rule is $V^(k+1)(s) = max_a sum_(s') T(s,a,s')[R(s,a,s') + gamma V^k(s')]$. #sidenote[Course notes: 08-MDP-Bellman, Pages 9--10]
+
+(a) Compute $V^1(s)$ for all four states. Note that Broken has only one action (Wait), so no max is needed there. For Clean and Messy, show both Q-values. For Jammed, compare Reset and Force explicitly.
+#v(5cm)
+#pagebreak()
+
+(b) Compute $V^2(s)$ for all four states. Again show all Q-values at each non-absorbing state. _Hint: notice how $V^1("Broken") = -20$ now feeds into $Q^2("Jammed", "Force")$ via the $0.5 dot V^1("Broken")$ term._
+#v(8cm)
+
+(c) At Jammed, which action did the max select in round 1? Which does it select in round 2? The answer changes, explain intuitively why in terms of what $V^1("Broken")$ contributes to Force's Q-value once it is no longer zero.
+#v(3cm)
+
+#pagebreak()
+Q8: Now solve for the _true_ $V^*(s)$ directly as a linear system. The optimal policy from Q7 (once estimates settled) is $pi^* = {"Clean": "Patrol", "Messy": "Explore", "Jammed": "Reset"}$. Because the policy is known, substitute the chosen action at each state and drop the $max$(this turns the recursive Bellman equation into a solvable linear system). #sidenote[Course notes: 08-MDP-Bellman, Page 10]
+
+(a) Solve for $V^*("Broken")$. Broken is termial with only Wait available, write $V^*("Broken") = R + gamma dot V^*("Broken")$, then solve for $V^*("Broken")$ in terms of $gamma$. Plug in $gamma = 0.9$.
+#v(4cm)
+
+(b) Write the Bellman equation for $V^*("Jammed")$ under Reset. Reset transitions deterministically to Messy, so Broken does _not_ appear here. You will get: $V^*("Jammed") = -5 + 0.9 dot V^*("Messy")$. #sidenote[_Don't this solve yet_, keep this as an expression; you'll substitute it in part (c)]
+#v(5.5cm)
+
+(c) Write the Bellman equation for $V^*("Clean")$ under Patrol. Collect $V^*("Clean")$ on the left to get the form: $alpha dot V^*("Clean") = c_1 + beta dot V^*("Messy")$. (Identify $alpha$, $c_1$, $beta$.)
+#v(3.5cm)
+
+#pagebreak()
+
+(d) Write the Bellman equation for $V^*("Messy")$ under Explore. The Explore transitions go to Clean (40%), Messy (30%), and Jammed (30%). Substitute your expression from (b) to eliminate $V^*("Jammed")$, then collect $V^*("Messy")$ on the left. You should arrive at: $delta dot V^*("Messy") = c_2 + epsilon dot V^*("Clean")$. (Identify $delta$, $c_2$, $epsilon$.)
+#v(3.5cm)
+
+(e) You now have two equations in $V^*("Clean")$ and $V^*("Messy")$ from (c) and (d). Solve this $2 times 2$ linear system (substitute one into the other). Then use (b) to find $V^*("Jammed")$.
+#v(5cm)
+
+(f) Verify: compute $Q^*("Jammed", "Force")$ and $Q^*("Messy", "Vacuum")$ using your exact values. Confirm Reset beats Force at Jammed and Explore beats Vacuum at Messy.
+#v(3cm)
+
+#pagebreak()
+Q9: The structure of the Bellman equation should look familiar from earlier in the course. #sidenote[Course notes: 08-MDP-Bellman, Page 11]
+
+(a) Identify the correspondence between the Bellman equation and an expectimax tree. What do the agent (square) nodes correspond to? What do the Q-state (circle) nodes correspond to?
+#v(2.5cm)
+
+(b) Expectimax expands a tree from a single root, which cannot handle cycles without unrolling into an infinite recursion. How does the Bellman equation handle the same problem? What makes it more efficient?
+#v(2.5cm)
+
+#pagebreak()
