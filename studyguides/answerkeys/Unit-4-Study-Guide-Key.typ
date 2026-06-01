@@ -208,9 +208,96 @@ Q5: A key structural choice in any MDP is whether the agent acts for a fixed num
 ]
 
 #pagebreak()
+
+(f) Now suppose every non-Broken state receives a _living reward_ of $r_L = -1$ on every step, added on top of the action rewards already in the table. How does this change the agents urgency to escape Jammed compared to its urgency to avoid reaching Broken in the first place?
+
+#answer[
+  The living reward of $-1$ applies to every step spent in Clean, Messy, or Jammed, but _not_ Broken, which is terminal and earns no living reward. This creates two distinct effects:
+
+  Urgency to escape Jammed increases. Each step in Jammed now costs an extra $-1$ on top of the action reward. The effective reward of Reset becomes $-5 + (-1) = -6$ and Force becomes $+1 + (-1) = 0$. More importantly, every step of delay compounds: the agent bleeds $-1$ per step regardless of which recovery action it eventually takes, adding time pressure that did not exist before.
+
+  Urgency to avoid Broken is unchanged. $V^*("Broken")$ is unaffected because Broken is excluded from the living reward, the per-step penalty never applies there. The catastrophic sink $V^*("Broken") = -20/(1-gamma)$ remains exactly the same.
+
+  Net effect is the living reward makes lingering in Jammed more costly, so the agent is pushed to escape sooner. The absolute incentive to avoid Broken does not change, but the relative cost of staying Jammed has risen, making prompt escape via Reset even more attractive relative to gambling on Force.
+]
+
+Q6: Consider the Roomba MDP from Q4 with no discounting ($gamma = 1$) and a finite horizon of $h = 3$ steps. At each step the agent picks an action and receives the listed reward; after 3 steps the episode ends and no further reward is collected. #sidenote[Course notes: 08-MDP-Bellman, Page 5]
+
+(a) At $h = 0$ steps remaining, $V_0(s) = 0$ for all states. Using the backward induction formula $V_k(s) = max_a sum_(s') T(s, a, s')[R(s, a, s') + V_(k-1)(s')]$, compute $V_1(s)$ for all four states. Show the Q-values for each available action.
+
+#answer[
+  With $V_0 = 0$ everywhere and $gamma = 1$, each Q-value reduces to the expected immediate reward (all future value terms are zero):
+
+  *Clean:* $Q_1("Patrol") = 3$, $quad Q_1("Charge") = 1$ $->$ $V_1("Clean") = 3$ (Patrol)
+
+  *Messy:* $Q_1("Vacuum") = 5$, $quad Q_1("Explore") = 8$ $->$ $V_1("Messy") = 8$ (Explore)
+
+  *Jammed:* $Q_1("Reset") = -5$, $quad Q_1("Force") = 0.5(1) + 0.5(1) = 1$ $->$ $V_1("Jammed") = 1$ (Force)
+
+  *Broken:* $Q_1("Wait") = -20$ $->$ $V_1("Broken") = -20$
+]
+#pagebreak()
+
+(b) Compute $V_2(s)$ using your $V_1$ values. At Jammed, does the same action win as in step (a)?
+
+#answer[
+  *Clean:*
+  $ Q_2("Patrol") = \
+  0.7(3 + V_1("Clean")) + 0.3(3 + V_1("Messy")) =\
+   0.7(6) + 0.3(11) = 4.2 + 3.3 = 7.5 $
+  $ Q_2("Charge") = 1.0(1 + V_1("Clean")) = 1 + 3 = 4 $
+  $V_2("Clean") = 7.5$ (Patrol)
+
+  *Messy:*
+  $ Q_2("Vacuum") = 0.6(5+3) + 0.35(5+8) + 0.05(5+1) = \
+  4.8 + 4.55 + 0.3 = 9.65 $
+  $ Q_2("Explore") = 0.4(8+3) + 0.3(8+8) + 0.3(8+1) =\
+   4.4 + 4.8 + 2.7 = 11.9 $
+  $V_2("Messy") = 11.9$ (Explore)
+
+  *Jammed:*
+  $ Q_2("Reset") = 1.0(-5 + V_1("Messy")) = -5 + 8 = 3 $
+  $ Q_2("Force") = 0.5(1 + V_1("Clean")) + 0.5(1 + V_1("Broken")) =\
+   0.5(4) + 0.5(-19) = 2 - 9.5 = -7.5 $
+  $V_2("Jammed") = 3$ (Reset), _action changed_ from Force to Reset.
+
+  *Broken:* $V_2("Broken") = -20 + V_1("Broken") = -20 + (-20) = -40$
+
+  No, the winning action at Jammed flipped, with 1 step left Force wins (immediate $+1 > -5$), but with 2 steps left Reset wins because Force's 50% chance of landing in Broken (worth $-20$ with one step left) drags its Q-value to $-7.5$.
+]
+#pagebreak()
+
+(c) Compute $V_3(s)$. Does the optimal action at Jammed depend on how many steps remain? What does this concretely illustrate about why finite-horizon optimal policies are _non-stationary_?
+
+#answer[
+  *Clean:*
+  $ Q_3("Patrol") = 0.7(3 + 7.5) + 0.3(3 + 11.9) = \
+  0.7(10.5) + 0.3(14.9) = 7.35 + 4.47 = 11.82 $
+  $ Q_3("Charge") = 1 + 7.5 = 8.5 $
+  $V_3("Clean") = 11.82$ (Patrol)
+
+  *Messy:*
+  $ Q_3("Vacuum") = 0.6(5+7.5) + 0.35(5+11.9) + 0.05(5+3) = \
+  7.5 + 5.915 + 0.4 = 13.815 $
+  $ Q_3("Explore") = 0.4(8+7.5) + 0.3(8+11.9) + 0.3(8+3) =\
+   6.2 + 5.97 + 3.3 = 15.47 $
+  $V_3("Messy") = 15.47$ (Explore)
+
+  *Jammed:*
+  $ Q_3("Reset") = -5 + V_2("Messy") = -5 + 11.9 = 6.9 $
+  $ Q_3("Force") = 0.5(1 + V_2("Clean")) + 0.5(1 + V_2("Broken")) =\
+   0.5(8.5) + 0.5(-39) = 4.25 - 19.5 = -15.25 $
+  $V_3("Jammed") = 6.9$ (Reset)
+
+  *Broken:* $V_3("Broken") = -20 + (-40) = -60$
+
+  Yes, the optimal action at Jammed depends on how many steps remain: Force is optimal at $k=1$ but Reset is optimal at $k=2$ and $k=3$. This concretely illustrates non-stationarity, the same state (Jammed) calls for a different action depending on _when_ in the episode the agent finds itself. In an infinite-horizon MDP, the same state always calls for the same action; here the time-to-end changes what is rational.
+]
+
+#pagebreak()
 = Part III: The Bellman Equation
 
-Q6: Define the _optimal value function_ $V^*(s)$ and the _Q-value_ (action-value) $Q^*(s, a)$. #sidenote[Course notes: 08-MDP-Bellman, Page 8]
+Q7: Define the _optimal value function_ $V^*(s)$ and the _Q-value_ (action-value) $Q^*(s, a)$. #sidenote[Course notes: 08-MDP-Bellman, Page 8]
 
 (a) Write the formula for $Q^*(s, a)$ in full, identifying what each term represents.
 
@@ -237,7 +324,7 @@ Q6: Define the _optimal value function_ $V^*(s)$ and the _Q-value_ (action-value
   The agent picks the action ($max_a$), the environment rolls the dice ($sum T$), and the future value of the next state feeds back into the current value ($gamma V^*$).
 ]
 
-Q7: Using the Robot Vacuum MDP from Q4 with $gamma = 0.9$, perform two rounds of value iteration starting from $V^0(s) = 0$ for all states. The update rule is $V^(k+1)(s) = max_a sum_(s') T(s,a,s')[R(s,a,s') + gamma V^k(s')]$. #sidenote[Course notes: 08-MDP-Bellman, Pages 9--10]
+Q8: Using the Robot Vacuum MDP from Q4 with $gamma = 0.9$, perform two rounds of value iteration starting from $V^0(s) = 0$ for all states. The update rule is $V^(k+1)(s) = max_a sum_(s') T(s,a,s')[R(s,a,s') + gamma V^k(s')]$. #sidenote[Course notes: 08-MDP-Bellman, Pages 9--10]
 
 (a) Compute $V^1(s)$ for all four states. Note that Broken has only one action (Wait), so no max is needed there. For Clean and Messy, show both Q-values. For Jammed, compare Reset and Force explicitly.
 
@@ -288,7 +375,7 @@ Q7: Using the Robot Vacuum MDP from Q4 with $gamma = 0.9$, perform two rounds of
 ]
 
 #pagebreak()
-Q8: Now solve for the _true_ $V^*(s)$ directly as a linear system. The optimal policy from Q7 (once estimates settled) is $pi^* = {"Clean": "Patrol", "Messy": "Explore", "Jammed": "Reset"}$. Because the policy is known, substitute the chosen action at each state and drop the $max$(this turns the recursive Bellman equation into a solvable linear system). #sidenote[Course notes: 08-MDP-Bellman, Page 10]
+Q9: Now solve for the _true_ $V^*(s)$ directly as a linear system. The optimal policy from Q8 (once estimates settled) is $pi^* = {"Clean": "Patrol", "Messy": "Explore", "Jammed": "Reset"}$. Because the policy is known, substitute the chosen action at each state and drop the $max$(this turns the recursive Bellman equation into a solvable linear system). #sidenote[Course notes: 08-MDP-Bellman, Page 10]
 
 (a) Solve for $V^*("Broken")$. Broken is termial with only Wait available, write $V^*("Broken") = R + gamma dot V^*("Broken")$, then solve for $V^*("Broken")$ in terms of $gamma$. Plug in $gamma = 0.9$.
 
@@ -345,7 +432,7 @@ Q8: Now solve for the _true_ $V^*(s)$ directly as a linear system. The optimal p
   $ 0.487 M = 6.65 + frac(0.36, 0.37)(3 + 0.27 M) $
   $ 0.487 M = 6.65 + 2.919 + 0.2627 M $
   $ 0.2243 M = 9.569 $
-  $ M = V^*("Messy") approx 42.66 $ 
+  $ M = V^*("Messy") approx 42.66 $
 
   $ V^*("Clean") = (3 + 0.27 times 42.66) / 0.37 = 14.52 / 0.37 approx 39.24 $
 
@@ -358,16 +445,16 @@ Q8: Now solve for the _true_ $V^*(s)$ directly as a linear system. The optimal p
   $ Q^*("Jammed", "Force") = \
   1 + 0.9(0.5 times 39.24 + 0.5 times (-200)) =\
   1 + 0.9(19.62 - 100) approx -71.34 $
-  $V^*("Jammed") approx 33.39 >> -71.34$ -> Reset wins 
+  $V^*("Jammed") approx 33.39 >> -71.34$ -> Reset wins
 
   $ Q^*("Messy", "Vacuum") =\
    5 + 0.9(0.6 times 39.24 + 0.35 times 42.66 + 0.05 times 33.39) $
   $ = 5 + 0.9(23.54 + 14.93 + 1.67) = 5 + 0.9 times 40.14 approx 41.13 $
-  $V^*("Messy") approx 42.66 > 41.13$ -> Explore wins 
+  $V^*("Messy") approx 42.66 > 41.13$ -> Explore wins
 ]
 
 #pagebreak()
-Q9: The structure of the Bellman equation should look familiar from earlier in the course. #sidenote[Course notes: 08-MDP-Bellman, Page 11]
+Q10: The structure of the Bellman equation should look familiar from earlier in the course. #sidenote[Course notes: 08-MDP-Bellman, Page 11]
 
 (a) Identify the correspondence between the Bellman equation and an expectimax tree. What do the agent (square) nodes correspond to? What do the Q-state (circle) nodes correspond to?
 
@@ -387,7 +474,7 @@ Q9: The structure of the Bellman equation should look familiar from earlier in t
 #pagebreak()
 = Part IV: Value and Policy Iteration
 
-Q10: Value iteration finds the optimal value function by repeatedly applying the Bellman equation as an update rule, without ever fixing a policy in advance. #sidenote[Course notes: 08-MDP-Bellman, Pages 9--10]
+Q11: Value iteration finds the optimal value function by repeatedly applying the Bellman equation as an update rule, without ever fixing a policy in advance. #sidenote[Course notes: 08-MDP-Bellman, Pages 9--10]
 
 (a) Write the value iteration update rule $V^(k+1)(s)$ in full. Why does keeping the $max$ inside the update rule allow the algorithm to work without knowing the optimal policy ahead of time?
 
@@ -417,7 +504,7 @@ Q10: Value iteration finds the optimal value function by repeatedly applying the
 ]
 #pagebreak()
 
-(d) Consider the relationship between value convergence and policy convergence. In the Roomba MDP from Q4, the action selected at Jammed flipped between rounds 1 and 2 of your value iteration (Q7c). Does the policy need to be fully stable for the values to be correct? Explain what "the relative ordering of actions is often correct early on" means in practice.
+(d) Consider the relationship between value convergence and policy convergence. In the Roomba MDP from Q4, the action selected at Jammed flipped between rounds 1 and 2 of your value iteration (Q8c). Does the policy need to be fully stable for the values to be correct? Explain what "the relative ordering of actions is often correct early on" means in practice.
 
 #answer[
   No, the values don't need a stable policy to be correct; value convergence and policy convergence are separate things. Values converge asymptotically ($V^k -> V^*$), but the implicit policy (argmax of $V^k$) often stabilizes much earlier.
@@ -426,7 +513,7 @@ Q10: Value iteration finds the optimal value function by repeatedly applying the
 ]
 
 
-Q11: Policy iteration is an alternative algorithm that alternates between two steps: _policy evaluation_ and _policy improvement_. #sidenote[Course notes: 08-MDP-Bellman, Pages 12--13] Describe both steps precisely:
+Q12: Policy iteration is an alternative algorithm that alternates between two steps: _policy evaluation_ and _policy improvement_. #sidenote[Course notes: 08-MDP-Bellman, Pages 12--13] Describe both steps precisely:
 
 - _Policy evaluation_: Given a fixed policy $pi$, what system of equations do you solve? Why is there no $max$ in this system, and what does that allow you to do?
 
@@ -446,7 +533,7 @@ Q11: Policy iteration is an alternative algorithm that alternates between two st
 ]
 #pagebreak()
 
-Q12: Using the Robot Vacuum MDP from Q4 with $gamma = 0.9$, run one full iteration of policy iteration starting from the all-safe policy $pi^0 = {"Clean": "Charge", "Messy": "Vacuum", "Jammed": "Reset"}$.
+Q13: Using the Robot Vacuum MDP from Q4 with $gamma = 0.9$, run one full iteration of policy iteration starting from the all-safe policy $pi^0 = {"Clean": "Charge", "Messy": "Vacuum", "Jammed": "Reset"}$.
 
 (a) _Policy evaluation_: Broken is absorbing with $V^*("Broken") = -200$. For the remaining states, write and solve the three linear equations under $pi^0$. Show how you eliminate variables.
 
@@ -499,10 +586,10 @@ Q12: Using the Robot Vacuum MDP from Q4 with $gamma = 0.9$, run one full iterati
 #answer[
   Compute the exact values $V^(pi^1)$ for the new policy (solve the linear system under Patrol/Explore/Reset). Then for every non-absorbing state, verify that the current policy action achieves the maximum Q-value (ie check that no other action would be preferred)
   $ pi^1(s) = op("argmax")_a sum_(s') T(s,a,s')[R(s,a,s') + gamma V^(pi^1)(s')] quad forall s $
-  If the improvement step would reproduce $pi^1$ unchanged, the policy is optimal. In this MDP, $pi^1$ is in fact $pi^*$ (it matches the policy we solved for in Q8).
+  If the improvement step would reproduce $pi^1$ unchanged, the policy is optimal. In this MDP, $pi^1$ is in fact $pi^*$ (it matches the policy we solved for in Q9).
 ]
 
-Q13: Compare and contrast value iteration and policy iteration. #sidenote[Course notes: 08-MDP-Bellman, Page 13]
+Q14: Compare and contrast value iteration and policy iteration. #sidenote[Course notes: 08-MDP-Bellman, Page 13]
 
 (a) Both algorithms are guaranteed to converge to the same $V^*$ and $pi^*$. Describe the key structural difference in _how_ each algorithm reaches that result. In one sentence each: what does value iteration commit to at each step, and what does policy iteration commit to?
 
@@ -533,7 +620,7 @@ Q13: Compare and contrast value iteration and policy iteration. #sidenote[Course
 #pagebreak()
 = Part V: Reinforcement Learning
 
-Q14: Reinforcement learning addresses the setting where the agent still has an MDP but does not know $T$ or $R$. #sidenote[Course notes: 09-Reinforcement-Learning, Page 1] List the four components of the MDP that still exist in the RL setting. What is the one critical difference from the planning setting?
+Q15: Reinforcement learning addresses the setting where the agent still has an MDP but does not know $T$ or $R$. #sidenote[Course notes: 09-Reinforcement-Learning, Page 1] List the four components of the MDP that still exist in the RL setting. What is the one critical difference from the planning setting?
 
 #answer[
   The four components that still exist: $S$ (states: the agent can observe its current state), $A$ (actions: the agent knows what it can do), $gamma$ (discount factor: a design choice baked in by the engineer), and $r$ (observed rewards: the agent sees the reward signal after each transition).
@@ -541,7 +628,7 @@ Q14: Reinforcement learning addresses the setting where the agent still has an M
   The critical difference: $T$ and $R$ are unknown. The agent cannot compute $sum_{s'} T(s,a,s')[...]$ because it doesn't have access to the transition model or the full reward function. It must learn about the world by actually doing stuff and seeing what happens.
 ]
 
-Q15: Distinguish _offline_ learning from _online_ learning. In your own words illustrate the difference? Which mode do value iteration and policy iteration belong to, and why?
+Q16: Distinguish _offline_ learning from _online_ learning. In your own words illustrate the difference? Which mode do value iteration and policy iteration belong to, and why?
 
 #answer[
   Offline learning separates the "learning" phase from the "acting" phase, you collect data (or are given a model), learn from it, and then deploy. Online learning interleaves learning and acting, every action produces new experience that immediately informs the next decision.
@@ -551,7 +638,7 @@ Q15: Distinguish _offline_ learning from _online_ learning. In your own words il
   Value iteration and policy iteration are offline, they require the complete model $T$ and $R$ to be known in advance. They do all computation before the agent takes a single action in the world.
 ]
 
-Q16: What are the three central challenges of online RL. Explain them in your own words.
+Q17: What are the three central challenges of online RL. Explain them in your own words.
 
 #answer[
   + Unknown transitions: The agent doesn't know $T$, it must figure out what happens when it takes actions through trial and error.
@@ -560,7 +647,7 @@ Q16: What are the three central challenges of online RL. Explain them in your ow
 ]
 
 #pagebreak()
-Q16: In model-based RL the agent estimates the MDP from observed experience, then solves it with standard planning. #sidenote[Course notes: 09-Reinforcement-Learning, Pages 2--3]
+Q18: In model-based RL the agent estimates the MDP from observed experience, then solves it with standard planning. #sidenote[Course notes: 09-Reinforcement-Learning, Pages 2--3]
 
 (a) Define what a _sample_ and an _episode_ are in this context.
 
@@ -589,7 +676,7 @@ Q16: In model-based RL the agent estimates the MDP from observed experience, the
 ]
 #pagebreak()
 
-Q17: Consider the following four episodes in an MDP with states $A, B, C, D, E$ and terminal $T$:
+Q19: Consider the following four episodes in an MDP with states $A, B, C, D, E$ and terminal $T$:
 
 #table(
   columns: 2,
@@ -631,7 +718,7 @@ Q17: Consider the following four episodes in an MDP with states $A, B, C, D, E$ 
 ]
 
 #pagebreak()
-Q18: Model-free RL avoids storing a full transition model by learning values directly from samples. #sidenote[Course notes: 09-Reinforcement-Learning, Pages 4--5] With that in mind, what are the three ways to compute an expected value $E[X]$. Write all three formulas and identify which corresponds to the model-based, model-free, and exact approaches.
+Q20: Model-free RL avoids storing a full transition model by learning values directly from samples. #sidenote[Course notes: 09-Reinforcement-Learning, Pages 4--5] With that in mind, what are the three ways to compute an expected value $E[X]$. Write all three formulas and identify which corresponds to the model-based, model-free, and exact approaches.
 
 #answer[
   + Exact (requires knowing $P$): $E[X] = sum_x x dot P(X = x)$. Used in planning when the full distribution is known.
@@ -641,7 +728,7 @@ Q18: Model-free RL avoids storing a full transition model by learning values dir
   + Sample average / model-free: $E[X] approx frac(1, N) sum_(i=1)^N x_i$ where $x_i$ are observed samples. No model needed, just average what you see. This is the model-free approach, and it works by the law of large numbers as $N -> infinity$.
 ]
 
-Q19: Describe _Direct Evaluation_. What policy does the agent follow, what does it record, and how does it produce $hat(V)^pi$? State the key weakness of direct evaluation that motivates TD learning.
+Q21: Describe _Direct Evaluation_. What policy does the agent follow, what does it record, and how does it produce $hat(V)^pi$? State the key weakness of direct evaluation that motivates TD learning.
 
 #answer[
   In direct evaluation the agent follows a fixed policy $pi$ and runs complete episodes to completion. For each episode, it records the actual total discounted return from every state visited. After many episodes, $hat(V)^pi(s)$ is estimated as the average total return across all episodes that passed through state $s$.
@@ -649,7 +736,7 @@ Q19: Describe _Direct Evaluation_. What policy does the agent follow, what does 
  its weakness is direct evaluation ignores the Markov structure of the MDP. It treats each state independently, the value of $s$ is estimated only from episodes that actually visit $s$, with no information shared between states. This is very sample-inefficient, especially for states visited rarely. TD learning fixes this by bootstrapping, updating $hat(V)(s)$ immediately using the observed next state's current estimate, propagating information backward through the MDP without waiting for complete episodes.
 ]
 
-Q20: _Temporal-Difference Learning_ (TD learning) fixes the weakness you identified in (Q19). Write:
+Q22: _Temporal-Difference Learning_ (TD learning) fixes the weakness you identified in (Q21). Write:
 
 (a) The formula for the _sample value_ $V^pi_"sample"(s)$ implied by a single transition $(s, a, s', r)$.
 
@@ -679,7 +766,7 @@ Q20: _Temporal-Difference Learning_ (TD learning) fixes the weakness you identif
   Direct evaluation ignores this structure entirely: it waits for complete episodes and estimates each state's value from scratch, treating different states as unrelated. TD learning shares information across states through the bootstrapped update, converging in far fewer samples.
 ]
 
-Q21: Q-learning extends TD learning to learn optimal policies without a fixed policy. #sidenote[Course notes: 09-Reinforcement-Learning, Pages 5--6]
+Q23: Q-learning extends TD learning to learn optimal policies without a fixed policy. #sidenote[Course notes: 09-Reinforcement-Learning, Pages 5--6]
 
 (a) Explain why TD learning cannot be directly used to find an _optimal_ policy. What would you have to do each time the policy changes under pure TD learning?
 
@@ -751,4 +838,39 @@ After which sample does $Q(C, arrow.l)$ first become nonzero? After which sample
   Sample 5 ($B,arrow.r,C,0$): $Q(B,arrow.r) <- 0.5 dot 0 + 0.5(0 + 0.9 dot max_a Q(C,a)) = 0.5(0.9 dot 0.5) = 0.225$. $Q(B,arrow.r)$ first becomes nonzero after sample 5.
 
   The reward signal propagates backward one step per pass through the sequence, it reaches $C$ on pass 1, then reaches $B$ on pass 2.
+]
+
+(g) An agent ran Q-learning for 10,000 steps but Q-values have not converged. Three classmates each suspect a different exploration strategy is the cause. For each diagnosis below, state whether the classmate is correct and explain why in one sentence:
+
+- Musty used a fully _greedy_ strategy: always pick $arg max_(a') Q(s, a')$ from the current estimates.
+- Jeffery used a _fixed optimal policy_ $pi^*$: always take the action known to be best from a separate planner.
+- Sam used _$epsilon$-greedy_ with $epsilon = 0.05$: pick randomly 5% of the time, greedily otherwise.
+
+#answer[
+  _Musty (greedy), Correct diagnosis._ A fully greedy strategy never explores: once Q-values tip in any direction, the agent keeps exploiting those estimates and never visits state-action pairs whose current Q-value is not the highest, violating the "every $(s,a)$ visited infinitely often" convergence requirement.
+
+  _Jeffery (fixed $pi^*$), Correct diagnosis._ Following a fixed policy (even an optimal one) covers only the state-action pairs that policy visits; all off-path $(s,a)$ pairs are never sampled, so Q-values for those pairs never update and the algorithm cannot converge globally.
+
+  _Sam ($epsilon$-greedy, $epsilon = 0.05$), Incorrect diagnosis._ $epsilon$-greedy with any fixed $epsilon > 0$ guarantees that every action is selected with positive probability at every state on every visit, satisfying the infinite-visitation condition; Q-values are guaranteed to converge to $Q^*$ given appropriate learning rates.
+]
+
+#pagebreak()
+Q24: Your robot has finished collecting experience and the environment is no longer accessible, you have only a fixed dataset of stored episodes. For each algorithm, answer: (1) Can it continue improving using only the stored dataset? (2) Can it produce an optimal policy $pi^*$ from that dataset alone?
+
+#table(
+  columns: 3,
+  align: (center, center, center),
+  stroke: 0.5pt,
+  [*Algorithm*], [(1) Improves from fixed dataset?], [(2) Produces $pi^*$?],
+  [Model-based RL], [#answer[Yes]], [#answer[Yes]],
+  [Direct Evaluation], [#answer[Yes]], [#answer[No]],
+  [TD Learning], [#answer[Yes]], [#answer[No]],
+  [Q-Learning], [#answer[Yes]], [#answer[Yes]],
+)
+#v(0.5cm)
+
+#answer[
+  All four algorithms can extract information from a fixed dataset: model-based RL builds $hat(T)$ and $hat(R)$ from the stored transitions; direct evaluation and TD learning average returns or bootstrap over stored samples; Q-learning applies its update rule to stored $(s,a,r,s')$ tuples.
+
+  Direct evaluation and TD learning converge to $V^pi$, the value function of the _behavioral policy_ that generated the data, not the optimal policy, without interacting with the environment they cannot evaluate actions the behavior policy never took, so they cannot identify $pi^*$. Model-based RL builds a full transition model from the data and then runs planning to optimality; Q-learning's $max_{a'}$ target bootstraps toward the optimal Q-values regardless of the behavior policy, so both can produce $pi^*$ from the same fixed dataset.
 ]
