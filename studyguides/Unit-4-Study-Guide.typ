@@ -275,7 +275,7 @@ Q18: In model-based RL the agent estimates the MDP from observed experience, the
 (b) Describe the three-step model-based RL procedure. Be precise about how the transition counts are converted into a valid distribution and when the discount factor $gamma$ enters.
 #v(5cm)
 
-(c) Musty the mustang claims: "When estimating $hat(T)(s, a, s')$ from experience, you must keep samples grouped by episode --- mixing transitions across episodes gives you a corrupted transition function." Is Musty correct? Cite the concept that justifies your answer. Then identify one situation where Musty _would_ be right and episode boundaries do matter.
+(c) Musty the mustang claims: "When estimating $hat(T)(s, a, s')$ from experience, you must keep samples grouped by episode, mixing transitions across episodes gives you a corrupted transition function." Is Musty correct? Cite the concept that justifies your answer. Then identify one situation where Musty _would_ be right and episode boundaries do matter.
 #v(3cm)
 #pagebreak()
 
