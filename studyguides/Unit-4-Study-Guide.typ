@@ -167,3 +167,74 @@ Q9: The structure of the Bellman equation should look familiar from earlier in t
 #v(2.5cm)
 
 #pagebreak()
+= Part IV: Value and Policy Iteration
+
+Q10: Value iteration finds the optimal value function by repeatedly applying the Bellman equation as an update rule, without ever fixing a policy in advance. #sidenote[Course notes: 08-MDP-Bellman, Pages 9--10]
+
+(a) Write the value iteration update rule $V^(k+1)(s)$ in full. Why does keeping the $max$ inside the update rule allow the algorithm to work without knowing the optimal policy ahead of time?
+#v(4.5cm)
+
+(b) Value iteration is guaranteed to converge for any finite state space when $gamma < 1$. Explain the contraction argument: why does each round shrink the error between $V^k$ and $V^*$ by at least a factor of $gamma$? What does this say about convergence speed as $gamma -> 1$?
+#v(4.5cm)
+
+(c) After convergence, how do you extract the optimal policy $pi^*$ from the converged values $V^*$? Write the formula. Why does this work, even though $pi^*$ was never explicitly tracked during the iterations?
+#v(3cm)
+#pagebreak()
+
+(d) Consider the relationship between value convergence and policy convergence. In the Roomba MDP from Q4, the action selected at Jammed flipped between rounds 1 and 2 of your value iteration (Q7c). Does the policy need to be fully stable for the values to be correct? Explain what "the relative ordering of actions is often correct early on" means in practice.
+#v(5cm)
+
+
+Q11: Policy iteration is an alternative algorithm that alternates between two steps: _policy evaluation_ and _policy improvement_. #sidenote[Course notes: 08-MDP-Bellman, Pages 12--13]
+
+(a) Describe both steps precisely:
+
+- _Policy evaluation_: Given a fixed policy $pi$, what system of equations do you solve? Why is there no $max$ in this system, and what does that allow you to do?
+#v(4.5cm)
+
+- _Policy improvement_: Given the values $V^pi$ from evaluation, how do you compute a new policy $pi'$? Write the formula. What does it mean if $pi' = pi$?
+#v(2.5cm)
+#pagebreak()
+
+(b) Using the Robot Vacuum MDP from Q4 with $gamma = 0.9$, run one full iteration of policy iteration starting from the all-safe policy $pi^0 = {"Clean": "Charge", "Messy": "Vacuum", "Jammed": "Reset"}$.
+
+(i) _Policy evaluation_: Broken is absorbing with $V^*("Broken") = -200$. For the remaining states, write and solve the three linear equations under $pi^0$. Show how you eliminate variables.
+#v(6cm)
+
+(ii) _Policy improvement_: Using your $V^(pi^0)$ values, compute all Q-values for every non-absorbing state. Fill in the table:
+
+#table(
+  columns: 3,
+  align: (center, center, center),
+  stroke: 0.5pt,
+  [*State*], [*Action*], [$Q(s, a)$ under $V^(pi^0)$],
+  [Clean],  [Patrol],  [],
+  [Clean],  [Charge],  [],
+  [Messy],  [Vacuum],  [],
+  [Messy],  [Explore], [],
+  [Jammed], [Reset],   [],
+  [Jammed], [Force],   [],
+)
+#v(0.5cm)
+
+What is the improved policy $pi^1$? Has it changed from $pi^0$?
+#v(2cm)
+#pagebreak()
+
+(iii) If $pi^1 != pi^0$, one more round of policy evaluation is required. Assuming the policy has stabilized after this round, how would you verify that $pi^1$ is optimal without running another improvement step?
+#v(3.5cm)
+
+Q12: Compare and contrast value iteration and policy iteration. #sidenote[Course notes: 08-MDP-Bellman, Page 13]
+
+(a) Both algorithms are guaranteed to converge to the same $V^*$ and $pi^*$. Describe the key structural difference in _how_ each algorithm reaches that result. In one sentence each: what does value iteration commit to at each step, and what does policy iteration commit to?
+#v(4cm)
+
+(b) Policy iteration is often said to converge in fewer _iterations_ than value iteration, even though each iteration of policy iteration is more expensive. Explain why:
+
+- Policy iteration converges in a finite number of iterations (hint: what is the bound, and why must it terminate?).
+- Value iteration converges asymptotically but may take many rounds before $V^k$ is close enough to $V^*$ to extract the correct policy.
+#v(4.5cm)
+#pagebreak()
+
+(c) Value iteration requires knowing $T$ and $R$ upfront. What algorithmic family handles the case where the agent must _learn_ these from experience instead of having them given?
+#v(1.5cm)
