@@ -339,7 +339,6 @@ Q8: Using the Robot Vacuum MDP from Q4 with $gamma = 0.9$, perform two rounds of
 
   Jammed: $Q^1("Reset") = -5$, $quad Q^1("Force") = 1$ $->$ $V^1("Jammed") = 1$ (Force)
 ]
-#pagebreak()
 
 (b) Compute $V^2(s)$ for all four states. Again show all Q-values at each non-absorbing state. _Hint: notice how $V^1("Broken") = -20$ now feeds into $Q^2("Jammed", "Force")$ via the $0.5 dot V^1("Broken")$ term._
 
@@ -439,6 +438,7 @@ Q9: Now solve for the _true_ $V^*(s)$ directly as a linear system. The optimal p
   $ V^*("Jammed") = -5 + 0.9 times 42.66 approx -5 + 38.39 = 33.39 $
 ]
 
+#pagebreak()
 (f) Verify: compute $Q^*("Jammed", "Force")$ and $Q^*("Messy", "Vacuum")$ using your exact values. Confirm Reset beats Force at Jammed and Explore beats Vacuum at Messy.
 
 #answer[
@@ -453,7 +453,6 @@ Q9: Now solve for the _true_ $V^*(s)$ directly as a linear system. The optimal p
   $V^*("Messy") approx 42.66 > 41.13$ -> Explore wins
 ]
 
-#pagebreak()
 Q10: The structure of the Bellman equation should look familiar from earlier in the course. #sidenote[Course notes: 08-MDP-Bellman, Page 11]
 
 (a) Identify the correspondence between the Bellman equation and an expectimax tree. What do the agent (square) nodes correspond to? What do the Q-state (circle) nodes correspond to?
@@ -579,7 +578,6 @@ Q13: Using the Robot Vacuum MDP from Q4 with $gamma = 0.9$, run one full iterati
 
   This differs from $pi^0$ at Clean (Charge -> Patrol) and Messy (Vacuum -> Explore). Jammed stays on Reset, Force is $-84.5$ vs Reset's $9.21$, not even close.
 ]
-#pagebreak()
 
 (c) If $pi^1 != pi^0$, one more round of policy evaluation is required. Assuming the policy has stabilized after this round, how would you verify that $pi^1$ is optimal without running another improvement step?
 
@@ -598,7 +596,7 @@ Q14: Compare and contrast value iteration and policy iteration. #sidenote[Course
 
   Policy iteration commits to a specific _policy_ at each step, it fully evaluates that policy (exactly), then improves it, alternating between the two.
 ]
-
+#pagebreak()
 (b) Policy iteration is often said to converge in fewer _iterations_ than value iteration, even though each iteration of policy iteration is more expensive. Explain why:
 
 - Policy iteration converges in a finite number of iterations (hint: what is the bound, and why must it terminate?).
@@ -609,7 +607,6 @@ Q14: Compare and contrast value iteration and policy iteration. #sidenote[Course
 
   Value iteration never fixes a policy, it updates real-valued estimates that converge asymptotically. Each round shrinks the error by $gamma$, but when $gamma$ is close to 1 this is slow, and many rounds may pass before the implicit policy (argmax from $V^k$) stabilizes. You might need hundreds of rounds to get close enough to $V^*$ that the argmax produces the correct action everywhere.
 ]
-#pagebreak()
 
 (c) Value iteration requires knowing $T$ and $R$ upfront. What algorithmic family handles the case where the agent must _learn_ these from experience instead of having them given?
 
