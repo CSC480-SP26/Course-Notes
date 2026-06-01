@@ -625,7 +625,7 @@ Q15: Reinforcement learning addresses the setting where the agent still has an M
 #answer[
   The four components that still exist: $S$ (states: the agent can observe its current state), $A$ (actions: the agent knows what it can do), $gamma$ (discount factor: a design choice baked in by the engineer), and $r$ (observed rewards: the agent sees the reward signal after each transition).
 
-  The critical difference: $T$ and $R$ are unknown. The agent cannot compute $sum_{s'} T(s,a,s')[...]$ because it doesn't have access to the transition model or the full reward function. It must learn about the world by actually doing stuff and seeing what happens.
+  The critical difference is that $T$ and $R$ are unknown. The agent cannot compute $sum_{s'} T(s,a,s')[...]$ because it doesn't have access to the transition model or the full reward function. It must learn about the world by actually doing stuff and seeing what happens.
 ]
 
 Q16: Distinguish _offline_ learning from _online_ learning. In your own words illustrate the difference? Which mode do value iteration and policy iteration belong to, and why?
@@ -854,7 +854,6 @@ After which sample does $Q(C, arrow.l)$ first become nonzero? After which sample
   _Sam ($epsilon$-greedy, $epsilon = 0.05$), Incorrect diagnosis._ $epsilon$-greedy with any fixed $epsilon > 0$ guarantees that every action is selected with positive probability at every state on every visit, satisfying the infinite-visitation condition; Q-values are guaranteed to converge to $Q^*$ given appropriate learning rates.
 ]
 
-#pagebreak()
 Q24: Your robot has finished collecting experience and the environment is no longer accessible, you have only a fixed dataset of stored episodes. For each algorithm, answer: (1) Can it continue improving using only the stored dataset? (2) Can it produce an optimal policy $pi^*$ from that dataset alone?
 
 #table(
