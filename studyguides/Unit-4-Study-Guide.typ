@@ -185,9 +185,7 @@ Q10: Value iteration finds the optimal value function by repeatedly applying the
 #v(5cm)
 
 
-Q11: Policy iteration is an alternative algorithm that alternates between two steps: _policy evaluation_ and _policy improvement_. #sidenote[Course notes: 08-MDP-Bellman, Pages 12--13]
-
-(a) Describe both steps precisely:
+Q11: Policy iteration is an alternative algorithm that alternates between two steps: _policy evaluation_ and _policy improvement_. #sidenote[Course notes: 08-MDP-Bellman, Pages 12--13] Describe both steps precisely:
 
 - _Policy evaluation_: Given a fixed policy $pi$, what system of equations do you solve? Why is there no $max$ in this system, and what does that allow you to do?
 #v(4.5cm)
@@ -196,12 +194,12 @@ Q11: Policy iteration is an alternative algorithm that alternates between two st
 #v(2.5cm)
 #pagebreak()
 
-(b) Using the Robot Vacuum MDP from Q4 with $gamma = 0.9$, run one full iteration of policy iteration starting from the all-safe policy $pi^0 = {"Clean": "Charge", "Messy": "Vacuum", "Jammed": "Reset"}$.
+Q12: Using the Robot Vacuum MDP from Q4 with $gamma = 0.9$, run one full iteration of policy iteration starting from the all-safe policy $pi^0 = {"Clean": "Charge", "Messy": "Vacuum", "Jammed": "Reset"}$.
 
-(i) _Policy evaluation_: Broken is absorbing with $V^*("Broken") = -200$. For the remaining states, write and solve the three linear equations under $pi^0$. Show how you eliminate variables.
+(a) _Policy evaluation_: Broken is absorbing with $V^*("Broken") = -200$. For the remaining states, write and solve the three linear equations under $pi^0$. Show how you eliminate variables.
 #v(6cm)
 
-(ii) _Policy improvement_: Using your $V^(pi^0)$ values, compute all Q-values for every non-absorbing state. Fill in the table:
+(b) _Policy improvement_: Using your $V^(pi^0)$ values, compute all Q-values for every non-absorbing state. Fill in the table:
 
 #table(
   columns: 3,
@@ -221,10 +219,10 @@ What is the improved policy $pi^1$? Has it changed from $pi^0$?
 #v(2cm)
 #pagebreak()
 
-(iii) If $pi^1 != pi^0$, one more round of policy evaluation is required. Assuming the policy has stabilized after this round, how would you verify that $pi^1$ is optimal without running another improvement step?
+(c) If $pi^1 != pi^0$, one more round of policy evaluation is required. Assuming the policy has stabilized after this round, how would you verify that $pi^1$ is optimal without running another improvement step?
 #v(3.5cm)
 
-Q12: Compare and contrast value iteration and policy iteration. #sidenote[Course notes: 08-MDP-Bellman, Page 13]
+Q13: Compare and contrast value iteration and policy iteration. #sidenote[Course notes: 08-MDP-Bellman, Page 13]
 
 (a) Both algorithms are guaranteed to converge to the same $V^*$ and $pi^*$. Describe the key structural difference in _how_ each algorithm reaches that result. In one sentence each: what does value iteration commit to at each step, and what does policy iteration commit to?
 #v(4cm)
@@ -238,3 +236,102 @@ Q12: Compare and contrast value iteration and policy iteration. #sidenote[Course
 
 (c) Value iteration requires knowing $T$ and $R$ upfront. What algorithmic family handles the case where the agent must _learn_ these from experience instead of having them given?
 #v(1.5cm)
+
+#pagebreak()
+= Part V: Reinforcement Learning
+
+Q14: Reinforcement learning addresses the setting where the agent still has an MDP but does not know $T$ or $R$. #sidenote[Course notes: 09-Reinforcement-Learning, Page 1] List the four components of the MDP that still exist in the RL setting. What is the one critical difference from the planning setting?
+#v(5.5cm)
+
+Q15: Distinguish _offline_ learning from _online_ learning. In the RL lecture, what analogy was used to illustrate the difference? Which mode do value iteration and policy iteration belong to, and why?
+#v(5cm)
+
+Q16: What are the three central challenges of online RL. Explain them in your own words.
+#v(2.5cm)
+
+#pagebreak()
+Q16: In model-based RL the agent estimates the MDP from observed experience, then solves it with standard planning. #sidenote[Course notes: 09-Reinforcement-Learning, Pages 2--3]
+
+(a) Define what a _sample_ and an _episode_ are in this context. Write the notation for each from the lecture.
+#v(5cm)
+
+(b) Describe the three-step model-based RL procedure. Be precise about how the transition counts are converted into a valid distribution and when the discount factor $gamma$ enters.
+#v(5cm)
+
+(c) Musty the mustang claims: "When estimating $hat(T)(s, a, s')$ from experience, you must keep samples grouped by episode --- mixing transitions across episodes gives you a corrupted transition function." Is Musty correct? Cite the concept that justifies your answer. Then identify one situation where Musty _would_ be right and episode boundaries do matter.
+#v(3cm)
+#pagebreak()
+
+Q17: Consider the following four episodes in an MDP with states $A, B, C, D, E$ and terminal $T$:
+
+#table(
+  columns: 2,
+  align: (left, left),
+  stroke: 0.5pt,
+  [*Episode*], [*Trace*],
+  [1], [$B arrow.r C, -1 quad C arrow.r D, -1 quad D arrow.r T, +10$],
+  [2], [$B arrow.r C, -1 quad C arrow.r D, -1 quad D arrow.r T, +10$],
+  [3], [$E arrow.r C, -1 quad C arrow.r D, -1 quad D arrow.r T, +10$],
+  [4], [$E arrow.r C, -1 quad C arrow.r A, -1 quad A arrow.r T, -10$],
+)
+
+(a) From these samples, estimate $hat(T)(C, "down", D)$ and $hat(T)(C, "down", A)$. Show your count-based calculation.
+#v(5cm)
+
+(b) Estimate $hat(R)(D, "exit", T)$ and $hat(R)(A, "exit", T)$.
+#v(5cm)
+
+(c) Given these estimates and assuming $gamma = 0.9$, what is the model-based agent's optimal policy? (You do not need to solve the full linear system, reason qualitatively from the reward structure.)
+#v(2.5cm)
+
+#pagebreak()
+Q18: Model-free RL avoids storing a full transition model by learning values directly from samples. #sidenote[Course notes: 09-Reinforcement-Learning, Pages 4--5] With that in mind, what are the three ways to compute an expected value $E[X]$. Write all three formulas and identify which corresponds to the model-based, model-free, and exact approaches.
+#v(6.5cm)
+
+Q19: Describe _Direct Evaluation_. What policy does the agent follow, what does it record, and how does it produce $hat(V)^pi$? State the key weakness of direct evaluation that motivates TD learning.
+#v(4cm)
+
+Q20: _Temporal-Difference Learning_ (TD learning) fixes the weakness you identified in (Q19). Write:
+
+(a) The formula for the _sample value_ $V^pi_"sample"(s)$ implied by a single transition $(s, a, s', r)$.
+#v(1.5cm)
+#pagebreak()
+
+(b) The exponential moving-average update rule for $hat(V)^pi(s)$. Identify the _learning rate_ $alpha$ and explain what it controls. What does the update reduce to when $alpha = 0$? When $alpha = 1$?
+#v(5cm)
+
+(c) Why does TD learning converge faster than direct evaluation? What structural fact about MDPs does it exploit that direct evaluation ignores?
+#v(4.5cm)
+
+Q21: Q-learning extends TD learning to learn optimal policies without a fixed policy. #sidenote[Course notes: 09-Reinforcement-Learning, Pages 5--6]
+
+(a) Explain why TD learning cannot be directly used to find an _optimal_ policy. What would you have to do each time the policy changes under pure TD learning?
+#v(2.5cm)
+
+(b) Write the Q-learning update rule for a transition $(s, a, s', r)$. Label every term.
+#v(2.5cm)
+
+(c) Compare the Q-learning update to the TD learning update. What single structural change makes Q-learning _off-policy_ while TD learning is _on-policy_? Where does the $max$ appear, and why does that matter?
+#v(5cm)
+
+(d) Once Q-values have converged, how do you extract the policy $pi(s)$? Write the formula.
+#v(5cm)
+
+(e) Q-learning is guaranteed to converge to the optimal policy given two conditions. State both conditions. Why does "it does not matter how you select actions" hold in the limit, even if early actions are suboptimal?
+#v(4cm)
+#pagebreak()
+
+(f) An agent doing Q-learning in an unknown environment with states $A, B, C$, terminal $T$, and actions $arrow.l$ and $arrow.r$ observes the following repeating sequence (with $alpha = 0.5$, $gamma = 0.9$, all Q-values initialized to 0):
+
+#table(
+  columns: 4,
+  align: (center, center, center, center),
+  stroke: 0.5pt,
+  [*s*], [*a*], [$s'$], [*r*],
+  [$A$], [$arrow.r$], [$B$], [0],
+  [$B$], [$arrow.r$], [$C$], [0],
+  [$C$], [$arrow.l$], [$T$], [1],
+)
+
+After which sample does $Q(C, arrow.l)$ first become nonzero? After which sample does $Q(B, arrow.r)$ first become nonzero? Trace the update for each.
+#v(4cm)
