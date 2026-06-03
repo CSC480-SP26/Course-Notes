@@ -278,7 +278,7 @@ _Note on Grading: This exam is scored on the 0--4 scale. Your score is Schrödin
 
 #pagebreak()
 
-= VI Reinforcement Learning
+=   Reinforcement Learning
 
 #question(points: 0.25)[
   A student applies value iteration to decide whether to study for an exam. The discount factor is $gamma = 0.9$. After many iterations, the student's optimal policy converges to:
