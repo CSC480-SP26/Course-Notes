@@ -543,6 +543,7 @@
 #let leaf-node = metadata("leaf-node")
 #let average-node = metadata("average-node")
 #let highlight-node = metadata("highlight-node")
+#let pruned-node = metadata("pruned-node")
 
 #let minimax-tree = tidy-tree-graph.with(
   draw-node: (
@@ -565,6 +566,9 @@
         ),
         highlight-node: (
           (stroke: 1pt, extrude: (-5pt, -2pt))
+        ),
+        pruned-node: (
+          (stroke: red + 1pt, fill: red.lighten(80%))
         ),
       ),
     ),

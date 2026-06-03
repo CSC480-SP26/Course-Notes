@@ -295,7 +295,7 @@ In this section, consider the state space shown below. Node $A$ is the start sta
       - X #leaf-node
       - #min-node
         - Y #leaf-node
-        - Z #leaf-node #highlight-node
+        -  #text(fill: red)[#strike[Z]] #leaf-node #pruned-node
   ] Such that Y < X
 
 ]
@@ -308,7 +308,7 @@ Interestingly the follwing tree is also acceptable:
     - #max-node
       - #min-node
         - -$oo$ #leaf-node
-        - X #leaf-node #highlight-node
+        -  #text(fill: red)[#strike[X]] #leaf-node #pruned-node
   ]
 ]
 
@@ -324,7 +324,9 @@ Interestingly the follwing tree is also acceptable:
 #question(points: 0.25)[
   Imagine an agent is playing a game and choosing actions based on minimax. However, _unbeknownst to the agent_, their opponent has decided to play suboptimally. Would the actions chosen by the minimax agent in this scenario be better described as _optimistic_ or _pessimistic_? Are there scenarios where the secretly suboptimal adversary will score better than an optimal adversary?
 ]
-#v(1fr)
+
+#answer[In this scenario the agent could be better described as _pessimistic_. Importantly, there are no scenarios for which a secretly sub optimal adversary will score better than if it were an optimal adversary. While our agent playing _pessimistically_ may lose out on some free points, our agent is garetting a minimal threshold for which it will score, any mistakes an opponent makes only serve to allow us to reach above said minimum threshold]
+
 
 #pagebreak()
 For the following questions consider a game with a complex mixture of maximizing, minimizing, and chance nodes (where all chance outcomes are equally likely). In this game, all possible utilities are values in the range $[0,10]$,  and each non-terminal node has at most three successors. When traversing the game tree below, use a left to right tie-breaking order.
@@ -334,16 +336,16 @@ For the following questions consider a game with a complex mixture of maximizing
       - 2 #leaf-node
       - #min-node
         - 2 #leaf-node
-        - #average-node
-          - 9 #leaf-node
-          - 1 #leaf-node
+        - #average-node #pruned-node
+          - #text(fill: red)[#strike[9]] #leaf-node #pruned-node
+          - #text(fill: red)[#strike[1]] #leaf-node #pruned-node
       - #average-node
         - 2 #leaf-node
         - #min-node
           - 4 #leaf-node
           - #max-node
             - 5 #leaf-node #highlight-node
-            - 6 #leaf-node
+            - #text(fill: red)[#strike[6]] #leaf-node #pruned-node
 
   ]
 ]
@@ -351,14 +353,31 @@ For the following questions consider a game with a complex mixture of maximizing
 #question(
   points: 0.25,
 )[What is the game utility value at the root node of the above tree?]
-#v(0.5fr)
+
+#answer[The value of the root node is 3. consider:
+
+$"left most branch: " alpha =2, "Then middle branch is min(2,Chance(...))," $
+
+$beta =2 "prune chance node" (9+1)/2 = 5, alpha "still" = 2$
+
+$"Right most branch":  "chance node of " (2+"Min(...)")/2, " where min equals min(4, max(5,6)) which is 4"$ #sidenote[the leaf node 6 gets pruned here: after seeing 5 at the bottom MAX, alpha = 5 which exceeds the parent MIN's beta = 4, so leaf 6 is cut]
+
+$"Thus our chance node resolves to " (2+4)/2  = 3 "and subsequently our root of max(2,2,3) is 3"
+$
+
+]
+
 
 #question(
   points: 0.25,
 )[Is pruning possible in this game? If not, briefly explain why. If so, cross out the branches that can be pruned.]
-#v(1fr)
 
+#answer[ Yes it is possible, we prune the chance node on the center branch, as well as the leaf node 6 on the right most branch]
 #question(
   points: 0.25,
 )[Whether or not pruning can occur, you can always still calculate values for $alpha$ and $beta$ representing the best expected fallback scores for the maximizer and minimizer respectively at a given search node. What are the values for $alpha$ and $beta$ _after_ processing the highlighted node?]
-#v(1fr)
+
+#answer[$alpha = 5, beta =4$
+
+$alpha$ climbs to 2 after the leftmost leaf, stays 2 after the middle branch returns 2, then the bottom MIN sets $beta$ = 4 from leaf 4, and after the highlighted leaf 5 is processed the bottom MAX updates $alpha$ = max(2, 5) = 5. That $alpha >= beta$ condition is exactly what fires the pruning of leaf 6.
+]
