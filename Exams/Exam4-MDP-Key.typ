@@ -281,7 +281,7 @@
     [$<-$],
   )
   #answer[
-    $F$ and $G$ go right as the $Z$ shortcut nets $+9$ ($+10$ then $-1$) and still routes to $C$ and $A$, so they collect both the bonus _and_ the $+100$. All other states go left since heading toward $A$ directly is faster or the detour to $Z$ is too long to justify.
+    $F$ and $G$ go right as the $Z$ shortcut(through z that is) nets $+9$ ($+10$ then $-1$) and still routes to $C$ and $A$, so they collect both the bonus _and_ the $+100$. All other states go left since heading toward $A$ directly is faster or the detour to $Z$ is too long to justify.
   ]
 ]
 #v(1fr)
