@@ -276,12 +276,12 @@
     [$<-$],
     [$<-$],
     [$<-$],
-    [$<-$],
-    [$<-$],
+    [$->$],
+    [$->$],
     [$<-$],
   )
   #answer[
-    As $gamma -> 1$ discounting disappears and the agent weights all future rewards equally. Since $+100 > +10$ regardless of distance, every state prefers heading toward $A$. The boundary $gamma^(6-2p) = 10$ requires $6-2p -> -infinity$ as $gamma -> 1$, pushing the crossover point past $G$, so all states converge to $<-$.
+    $F$ and $G$ go right as the $Z$ shortcut nets $+9$ ($+10$ then $-1$) and still routes to $C$ and $A$, so they collect both the bonus _and_ the $+100$. All other states go left since heading toward $A$ directly is faster or the detour to $Z$ is too long to justify.
   ]
 ]
 #v(1fr)
